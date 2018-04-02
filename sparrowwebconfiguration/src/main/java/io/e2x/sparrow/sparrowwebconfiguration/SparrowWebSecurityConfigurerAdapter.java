@@ -48,14 +48,17 @@ public class SparrowWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
         this.antPatterns = antPatterns;
         this.filter = filter;
     }
+    protected void initWithValue(){
 
+    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/**").authorizeRequests().antMatchers(getAntPatterns()).permitAll().anyRequest()
+        initWithValue();
+        http.antMatcher(getRoot()).authorizeRequests().antMatchers(getAntPatterns()).permitAll().anyRequest()
                 .authenticated().and().exceptionHandling()
                 .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(getRoot())).and().logout()
                 .logoutSuccessUrl(getRoot()).permitAll().and().csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
-                .addFilterBefore(getFilter(), (Class<? extends Filter>) BasicAuthenticationFilter.class);
+                .addFilterBefore(getFilter(), BasicAuthenticationFilter.class);
     }
 }

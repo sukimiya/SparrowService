@@ -76,7 +76,12 @@
 			<artifactId>tomcat-embed-core</artifactId>
 			<version>8.5.4</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>1.5.11.BUILD-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
