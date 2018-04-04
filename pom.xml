@@ -11,6 +11,11 @@
 	<name>sparrow</name>
 	<description>Basic Service Framework with RESTful, OAuth, MongoDB. And reactive. </description>
 
+	<modules>
+		<module>sparrowwebconfiguration</module>
+		<module>userservice</module>
+	</modules>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
