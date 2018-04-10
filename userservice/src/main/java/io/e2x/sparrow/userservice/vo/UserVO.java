@@ -1,5 +1,5 @@
 /*
- * Project:sparrow sparrowwebconfiguration
+ * Project:sparrow userservice
  * LastModified:18-4-10 下午8:33 by lily
  *
  * Copyright (C) 2018.  e2x.io
@@ -18,19 +18,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.sparrowwebconfiguration;
+package io.e2x.sparrow.userservice.vo;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import lombok.Data;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class SparrowwebconfigurationApplicationTests {
+@Data
+public class UserVO {
+    public String getUsername() {
+        return username;
+    }
 
-	@Test
-	public void contextLoads() {
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
+    private String username;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    private String password;
+    private Boolean active;
+
+    public UserVO(String username, String password, Boolean active) {
+        this.username = username;
+        this.password = password;
+        this.active = active;
+    }
 }

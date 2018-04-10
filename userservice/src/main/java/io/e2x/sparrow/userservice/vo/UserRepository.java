@@ -1,5 +1,5 @@
 /*
- * Project:sparrow sparrowwebconfiguration
+ * Project:sparrow userservice
  * LastModified:18-4-10 下午8:33 by lily
  *
  * Copyright (C) 2018.  e2x.io
@@ -18,19 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.sparrowwebconfiguration;
+package io.e2x.sparrow.userservice.vo;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class SparrowwebconfigurationApplicationTests {
+import java.util.Optional;
 
-	@Test
-	public void contextLoads() {
-	}
+public interface UserRepository extends ReactiveMongoRepository<UserVO, String> {
+    Optional<UserVO> findUserVOByUsername(String username);
 
+    Optional<UserVO> findUserVOByUsernameAndPassword(String username, String password);
 }

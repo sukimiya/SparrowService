@@ -1,5 +1,5 @@
 /*
- * Project:sparrow sparrowwebconfiguration
+ * Project:sparrow nest
  * LastModified:18-4-10 下午8:33 by lily
  *
  * Copyright (C) 2018.  e2x.io
@@ -18,19 +18,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.sparrowwebconfiguration;
+package io.e2x.sparrow.nest;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class SparrowwebconfigurationApplicationTests {
+@SpringBootApplication
+@EnableSwagger2
+public class NestApplication {
 
-	@Test
-	public void contextLoads() {
+
+	public static void main(String[] args) {
+		SpringApplication.run(NestApplication.class, args);
 	}
 
 }
+
