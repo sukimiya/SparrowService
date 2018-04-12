@@ -1,6 +1,6 @@
 /*
  * Project:sparrow nest
- * LastModified:18-4-10 下午8:33 by lily
+ * LastModified:18-4-11 下午10:55 by lily
  *
  * Copyright (C) 2018.  e2x.io
  *
@@ -18,19 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.nest;
+package io.e2x.sparrow.nest.security.repo;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
+import reactor.core.publisher.Mono;
 
-@SpringBootApplication
-@EnableSwagger2
-public class NestApplication {
-	
-	public static void main(String[] args) {
-		SpringApplication.run(NestApplication.class, args);
-	}
+import java.util.Optional;
 
+@EnableReactiveMongoRepositories
+public interface OAuthClientRepository extends MongoRepository<OAuthClientDetail,String> {
+
+    OAuthClientDetail findByClientId(String s);
 }
-
