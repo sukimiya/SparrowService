@@ -19,7 +19,11 @@
  */
 package io.e2x.sparrow.nest.security;
 
+import io.e2x.sparrow.nest.security.controller.OUserServices;
+import io.e2x.sparrow.nest.security.model.OUserDetails;
+import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,14 +33,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.config.annotation.web.configurers.DefaultLoginPageConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+
+import java.util.stream.Stream;
 
 /**
  * This is example class by <a href="http://sgdev-blog.blogspot.jp/2016/04/spring-oauth2-with-jwt-sample.html">sgdev-blog</>
@@ -45,14 +45,23 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    private OUserDetailRepository oUserDetailRepository;
+
+    @Bean
+    CommandLineRunner initUserDetails(OUserDetailRepository oUserDetailRepository){
+        OUserDetails oUserDetails = oUserDetailRepository.findByUsername("sukimiya");
+        if(oUserDetails !=null){
+            return args -> System.out.println("the user aready created.");
+        }
+        return args -> Stream.of("admin,password,true,true,true,false,ADMIN USER","user,password,true,true,true,false,USER","sukimiya,19547047,true,true,true,false,ADMIN USER")
+                .map(user ->user.split(","))
+                .forEach(user->oUserDetailRepository.save(new OUserDetails(user[0],user[1],Boolean.parseBoolean(user[2]),Boolean.parseBoolean(user[3]),Boolean.parseBoolean(user[4]),Boolean.parseBoolean(user[6]),user[6].split(" "))));
+    }
 
     @Autowired
-    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-        BCryptPasswordEncoder encoder = passwordEncoder();
-        auth.inMemoryAuthentication().withUser(User.withUsername("user").password(encoder.encode("password")).roles("USER").build())
-                .withUser(User.withUsername("app_client").password(encoder.encode("")).roles("USER").build())
-                .withUser(User.withUsername("admin").password(encoder.encode("password")).roles("ADMIN").build())
-        ;
+    public SecurityConfiguration(OUserDetailRepository oUserDetailRepository){
+        super();
+        this.oUserDetailRepository = oUserDetailRepository;
     }
 
     private static final String[] AUTH_WHITELIST = {
@@ -79,18 +88,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated()
-                .and().httpBasic();
+                .and()
+                .formLogin()
+                .and().csrf();
         ;
-    }
-
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
     }
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    @Bean
+    public OUserServices getUserServices(){
+        return new OUserServices(oUserDetailRepository);
     }
 
 }

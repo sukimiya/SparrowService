@@ -49,6 +49,11 @@ public class OAuthMappedResources {
         return "hello user";
     }
 
+    @GetMapping("userdetail")
+    public Object userdetail(){
+        return SecurityContextHolder.getContext().getAuthentication().getDetails();
+    }
+
     @ApiOperation(value = "hello admin", notes = "This is a test method need been remove")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value="admin", method=RequestMethod.GET)

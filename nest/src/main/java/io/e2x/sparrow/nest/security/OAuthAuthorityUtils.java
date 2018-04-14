@@ -20,7 +20,7 @@
 
 package io.e2x.sparrow.nest.security;
 
-import io.e2x.sparrow.nest.security.repo.OAuthSimpleGrantedAuthority;
+import io.e2x.sparrow.nest.security.model.OAuthSimpleGrantedAuthority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.StringUtils;
 
@@ -37,12 +37,17 @@ public abstract class OAuthAuthorityUtils {
     }
 
     public static Set<String> authorityListToSet(Collection<? extends GrantedAuthority> userAuthorities) {
-        Set<String> set = new HashSet(userAuthorities.size());
-        Iterator var2 = userAuthorities.iterator();
+        Set<String> set;
+        if(userAuthorities!=null){
+            set = new HashSet(userAuthorities.size());
+            Iterator var2 = userAuthorities.iterator();
 
-        while(var2.hasNext()) {
-            GrantedAuthority authority = (GrantedAuthority)var2.next();
-            set.add(authority.getAuthority());
+            while(var2.hasNext()) {
+                GrantedAuthority authority = (GrantedAuthority)var2.next();
+                set.add(authority.getAuthority());
+            }
+        }else{
+            set=new HashSet();
         }
 
         return set;

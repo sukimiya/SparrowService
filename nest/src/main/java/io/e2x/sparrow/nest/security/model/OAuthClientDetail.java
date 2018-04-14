@@ -18,14 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.nest.security.repo;
+package io.e2x.sparrow.nest.security.model;
 
 import io.e2x.sparrow.nest.security.OAuthAuthorityUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
@@ -136,7 +136,7 @@ public class OAuthClientDetail implements ClientDetails {
         this.autoApprove = true;
         this.accessTokenValiditySeconds = 7200;
         this.additionalInformation = Map.of();
-        this.lastOp = new Date().getTime();
+        this.lastOp = System.currentTimeMillis();
         this.resourceIds = Set.of();
         this.authorities = OAuthAuthorityUtils.createAuthorityList("ROLE_TRUSTED_CLIENT");
         this.authorizedGrantTypes = Set.of("authorization_code","implicit");

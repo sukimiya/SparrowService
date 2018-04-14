@@ -20,31 +20,22 @@
 
 package io.e2x.sparrow.nest.security;
 
-import com.mongodb.reactivestreams.client.MongoClient;
-import io.e2x.sparrow.nest.security.repo.OAuthClientDetail;
-import io.e2x.sparrow.nest.security.repo.OAuthClientDetailsServices;
-import io.e2x.sparrow.nest.security.repo.OAuthClientRepository;
+import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
+import io.e2x.sparrow.nest.security.controller.OAuthClientDetailsServices;
+import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
-import javax.sql.CommonDataSource;
-import javax.sql.DataSource;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -95,13 +86,13 @@ public class OAuthServiceConfiguration extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+
         oauthServer.tokenKeyAccess("isAnonymous() || hasAuthority('ROLE_TRUSTED_CLIENT')")
                 .checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-
         clients.withClientDetails(getClientDetails()).build();
         //JdbcTokenStore
         //JdbcClientDetailsServiceBuilder

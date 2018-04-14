@@ -1,6 +1,6 @@
 /*
  * Project:sparrow nest
- * LastModified:18-4-10 下午8:33 by lily
+ * LastModified:18-4-14 上午3:52 by lily
  *
  * Copyright (C) 2018.  e2x.io
  *
@@ -18,9 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.nest;
+package io.e2x.sparrow.nest.web;
 
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-public class SparrowServiceConfigAdapter extends WebMvcConfigurerAdapter {
+@Configuration
+@EnableWebMvc
+@ComponentScan
+public class NestWebConfig {
 }

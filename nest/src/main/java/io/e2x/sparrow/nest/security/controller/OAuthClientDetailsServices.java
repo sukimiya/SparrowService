@@ -1,6 +1,6 @@
 /*
  * Project:sparrow nest
- * LastModified:18-4-12 下午6:43 by lily
+ * LastModified:18-4-12 下午11:15 by lily
  *
  * Copyright (C) 2018.  e2x.io
  *
@@ -18,25 +18,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.nest.security.repo;
+package io.e2x.sparrow.nest.security.controller;
 
-import org.bouncycastle.asn1.cms.TimeStampAndCRL;
-import org.reactivestreams.Subscriber;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.auditing.CurrentDateTimeProvider;
-import org.springframework.data.auditing.DateTimeProvider;
+import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
+import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
-import reactor.core.publisher.Mono;
 
-import javax.sql.DataSource;
-import java.security.Timestamp;
-import java.sql.Time;
 import java.util.Date;
-import java.util.Set;
-import java.util.stream.Stream;
 
 public class OAuthClientDetailsServices implements ClientDetailsService {
 
@@ -49,7 +39,7 @@ public class OAuthClientDetailsServices implements ClientDetailsService {
     @Override
     public ClientDetails loadClientByClientId(String s) throws ClientRegistrationException {
         OAuthClientDetail clientDetails = clientRepository.findByClientId(s);
-        return clientDetails.of(new Date().getTime());
+        return clientDetails.of(System.currentTimeMillis());
 
 
     }
