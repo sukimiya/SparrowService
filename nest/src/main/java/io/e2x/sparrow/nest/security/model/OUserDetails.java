@@ -23,8 +23,12 @@ package io.e2x.sparrow.nest.security.model;
 import io.e2x.sparrow.nest.security.OAuthAuthorityUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Generated;
 import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Role;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
 import org.springframework.security.config.annotation.authentication.configurers.provisioning.UserDetailsManagerConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,6 +45,7 @@ import java.util.UUID;
 public class OUserDetails implements UserDetails {
 
     @Id
+    @GeneratedValue(strategy= GenerationStrategy.UNIQUE)
     private String id;
     private String username;
     private String password;
@@ -50,8 +55,13 @@ public class OUserDetails implements UserDetails {
     private boolean enabled;
     private List<GrantedAuthority> authorities;
 
-    public OUserDetails(String username, String password, boolean enabled, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, String... authorities) {
-        this.id = Integer.toString(UUID.randomUUID().hashCode());
+    public OUserDetails(){
+
+    }
+    public OUserDetails(String username){
+        this.username = username;
+    }
+    public OUserDetails(String username, String password, boolean enabled, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, String[] authorities) {
         this.username = username;
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         this.password = encoder.encode(password);

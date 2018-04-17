@@ -127,12 +127,12 @@ public class OAuthClientDetail implements ClientDetails {
     }
     private long lastOp;
 
-    public OAuthClientDetail(Integer id, String clientId, String clientSecret, Set<String> scope) {
+    public OAuthClientDetail(Integer id, String clientId, String clientSecret, String[] scope) {
         this.id = id;
         this.clientId = clientId;
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         this.clientSecret = encoder.encode(clientSecret);
-        this.scope = scope;
+        this.scope = Set.of(scope);
         this.autoApprove = true;
         this.accessTokenValiditySeconds = 7200;
         this.additionalInformation = Map.of();

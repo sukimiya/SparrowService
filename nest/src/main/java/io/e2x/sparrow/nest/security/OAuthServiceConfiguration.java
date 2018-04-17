@@ -66,10 +66,10 @@ public class OAuthServiceConfiguration extends AuthorizationServerConfigurerAdap
     @Bean
     CommandLineRunner initData(OAuthClientRepository oAuthClientRepository){
         //clientRepository = oAuthClientRepository;
-        return args -> Stream.of("100001,clientNo1,65EADF92D174C67A03EAB015A8416F6F,read write","100002,clientNo2,65EADF92D174C67A03EAB015A8416F6F,read,write")
+        return args -> Stream.of("100001,clientNo1,65EADF92D174C67A03EAB015A8416F6F,read write","100002,clientNo2,65EADF92D174C67A03EAB015A8416F6F,read write")
                 .map(tpl -> tpl.split(","))
                 .forEach(tpl ->
-                        oAuthClientRepository.save(new OAuthClientDetail(Integer.parseInt(tpl[0]),tpl[1],tpl[2], Set.of(tpl[3].split(" ")))
+                        oAuthClientRepository.save(new OAuthClientDetail(Integer.parseInt(tpl[0]),tpl[1],tpl[2], tpl[3].split(" "))
                                 .setResourceIds(resourceId)
                                 .setAuthorities("ROLE_TRUSTED_CLIENT")
                         ));

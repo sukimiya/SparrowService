@@ -1,6 +1,6 @@
 /*
  * Project:sparrow nest
- * LastModified:18-4-14 上午3:52 by lily
+ * LastModified:18-4-17 下午5:02 by sukimiya
  *
  * Copyright (C) 2018.  e2x.io
  *
@@ -18,14 +18,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.nest.web;
+package io.e2x.sparrow.nest.users.vo;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+public class UserCurrency {
+    public UserCurrency(long cash, long insurence) {
+        this.cash = cash;
+        this.insurence = insurence;
+    }
 
-@Configuration
-@EnableWebMvc
-@ComponentScan
-public class NestWebConfig {
+    public long getCash() {
+        return cash;
+    }
+
+    public void setCash(long cash) {
+        this.cash = cash;
+    }
+
+    public long getInsurence() {
+        return insurence;
+    }
+
+    public void setInsurence(long insurence) {
+        this.insurence = insurence;
+    }
+
+    private long cash;
+    private long insurence;
 }

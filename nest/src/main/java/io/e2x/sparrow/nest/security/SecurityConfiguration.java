@@ -34,6 +34,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.DefaultLoginPageConfigurer;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.stream.Stream;
@@ -47,16 +48,14 @@ import java.util.stream.Stream;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private OUserDetailRepository oUserDetailRepository;
 
-    @Bean
-    CommandLineRunner initUserDetails(OUserDetailRepository oUserDetailRepository){
-        OUserDetails oUserDetails = oUserDetailRepository.findByUsername("sukimiya");
-        if(oUserDetails !=null){
-            return args -> System.out.println("the user aready created.");
-        }
-        return args -> Stream.of("admin,password,true,true,true,false,ADMIN USER","user,password,true,true,true,false,USER","sukimiya,19547047,true,true,true,false,ADMIN USER")
-                .map(user ->user.split(","))
-                .forEach(user->oUserDetailRepository.save(new OUserDetails(user[0],user[1],Boolean.parseBoolean(user[2]),Boolean.parseBoolean(user[3]),Boolean.parseBoolean(user[4]),Boolean.parseBoolean(user[6]),user[6].split(" "))));
-    }
+//    @Bean
+//    CommandLineRunner initUserDetails(OUserDetailRepository oUserDetailRepository){
+//
+//            return args -> Stream.of("admin,password,true,true,true,false,ADMIN USER","user,password,true,true,true,false,USER","sukimiya,19547047,true,true,true,true,ADMIN USER GUARDER")
+//                    .map(user ->user.split(","))
+//                    .forEach(user->oUserDetailRepository.save(new OUserDetails(user[0],user[1],Boolean.parseBoolean(user[2]),Boolean.parseBoolean(user[3]),Boolean.parseBoolean(user[4]),Boolean.parseBoolean(user[6]),user[6].split(" "))));
+//
+//    }
 
     @Autowired
     public SecurityConfiguration(OUserDetailRepository oUserDetailRepository){
@@ -71,7 +70,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/v2/api-docs",
             "/webjars/**",
-            "/oauth/*"
+            "/oauth/*",
+            "/static/**",
+            "/login"
     };
 
     @Override
@@ -87,9 +88,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
+                .anyRequest().authenticated().and()
+                .formLogin().loginPage("/login").defaultSuccessUrl("/index")
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login")
                 .and().csrf();
         ;
     }

@@ -1,6 +1,6 @@
 /*
  * Project:sparrow nest
- * LastModified:18-4-14 上午4:20 by lily
+ * LastModified:18-4-17 下午4:36 by sukimiya
  *
  * Copyright (C) 2018.  e2x.io
  *
@@ -20,35 +20,20 @@
 
 package io.e2x.sparrow.nest.web.controller;
 
-
-import java.security.Principal;
-import java.util.Locale;
-
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.unbescape.html.HtmlEscape;
+import org.springframework.web.bind.annotation.GetMapping;
 
-/**
- * Application home page and login.
- * ref:https://www.jianshu.com/p/a8e317e82425
- */
+import java.security.Principal;
+
 @Controller
-@RequestMapping("/")
-public class MainController {
+public class UserController {
 
-    @GetMapping({"/", "/index", "/home"})
-    public String root(){
-        return "index";
+    @GetMapping("/user")
+    public String user(@AuthenticationPrincipal Principal principal, Model model){
+        model.addAttribute("username", principal.getName());
+        return "user/user";
     }
-
-    @GetMapping("/login")
-    public String login(){
-        return "login";
-    }
-
 
 }
-

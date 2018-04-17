@@ -85,7 +85,7 @@ public class OAuthMappedResources {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_TRUSTED_CLIENT')")
+    @PreAuthorize("hasRole('ROLE_GUARDER')")
     @GetMapping("localstring")
     public String localStr(){
         return "Hello!";
