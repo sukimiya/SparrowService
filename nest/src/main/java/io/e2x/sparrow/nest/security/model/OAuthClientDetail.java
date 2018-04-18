@@ -147,6 +147,28 @@ public class OAuthClientDetail implements ClientDetails {
 
     }
 
+    public OAuthClientDetail(Integer id, String clientId, Set<String> resourceIds, boolean secretRequired, String clientSecret, boolean scoped, Set<String> scope, Set<String> authorizedGrantTypes, Set<String> registeredRedirectUri, List<GrantedAuthority> authorities, Integer accessTokenValiditySeconds, Integer refreshTokenValiditySeconds, boolean autoApprove, Map<String, Object> additionalInformation, long lastOp) {
+        this.id = id;
+        this.clientId = clientId;
+        this.resourceIds = resourceIds;
+        this.secretRequired = secretRequired;
+        this.clientSecret = clientSecret;
+        this.scoped = scoped;
+        this.scope = scope;
+        this.authorizedGrantTypes = authorizedGrantTypes;
+        this.registeredRedirectUri = registeredRedirectUri;
+        this.authorities = authorities;
+        this.accessTokenValiditySeconds = accessTokenValiditySeconds;
+        this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;
+        this.autoApprove = autoApprove;
+        this.additionalInformation = additionalInformation;
+        this.lastOp = lastOp;
+    }
+
+    public OAuthClientDetail() {
+
+    }
+
     @Override
     public String getClientId() {
         return clientId;

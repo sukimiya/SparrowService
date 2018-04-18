@@ -90,8 +90,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated().and()
                 .formLogin().loginPage("/login").defaultSuccessUrl("/index")
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login")
-                .and().csrf();
+                .and().httpBasic()
+                .and().csrf().and().logout().logoutUrl("/logout").logoutSuccessUrl("/login")
+
         ;
     }
     @Bean

@@ -34,22 +34,22 @@ public class AdministratorHomeEvent {
         timestamp = System.currentTimeMillis();
     }
 
-    public Page<OAuthClientDetail> getClients() {
+    public List<OAuthClientDetail> getClients() {
         return clients;
     }
 
-    public void setClients(Page<OAuthClientDetail> clients) {
+    public void setClients(List<OAuthClientDetail> clients) {
         this.clients = clients;
     }
 
-    public Page<OUserDetails> getUsers() {
+    public List<OUserDetails> getUsers() {
         return users;
     }
 
-    public void setUsers(Page<OUserDetails> users) {
+    public void setUsers(List<OUserDetails> users) {
         this.users = users;
     }
 
-    private Page<OAuthClientDetail> clients;
-    private Page<OUserDetails> users;
+    private List<OAuthClientDetail> clients;
+    private List<OUserDetails> users;
 }

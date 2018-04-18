@@ -33,6 +33,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,23 +57,23 @@ public class AdminRestController {
         this.oUserDetailRepository = oUserDetailRepository;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("adminall")
     public AdministratorHomeEvent adminHomeAll(){
 
         AdministratorHomeEvent adminHomeEvent = new AdministratorHomeEvent();
-        adminHomeEvent.setClients(oAuthClientRepository.findAll(Pageable.unpaged().first()));
-        adminHomeEvent.setUsers(oUserDetailRepository.findAll(Pageable.unpaged().first()));
+        Pageable pageable = new PageRequest(0,LIST_PAGE_SIZE);
+        adminHomeEvent.setClients(oAuthClientRepository.findAll());
+        adminHomeEvent.setUsers(oUserDetailRepository.findAll());
         return adminHomeEvent;
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_GUARDER')")
     @GetMapping("clientsbypage/{page}")
     public Page<OAuthClientDetail> getClients(@PathVariable("page") Integer page){
         if(page<=0) page=0;
         Pageable pageable = new PageRequest(page,LIST_PAGE_SIZE,Sort.Direction.DESC,"id");
         return oAuthClientRepository.findAll(pageable);
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_GUARDER')")
     @GetMapping("usersbypage/{page}")
     public Page<OUserDetails> getUsers(@PathVariable("page") Integer page){
         if(page<=0) page=0;
@@ -80,7 +81,7 @@ public class AdminRestController {
         return oUserDetailRepository.findAll(pageable);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_GUARDER')")
     @PostMapping("client/{clientid}")
     public OAuthClientDetail postClientById(@PathVariable("clientid") String clientid,@JsonProperty("secret") String secret){
         if (secret==null) secret = clientid;
@@ -93,12 +94,12 @@ public class AdminRestController {
         oAuthClientRepository.save(oAuthClientDetail);
         return oAuthClientDetail;
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_GUARDER')")
     @GetMapping("client/{clientid}")
     public OAuthClientDetail getClientById(@PathVariable("clientid") String clientid){
         return oAuthClientRepository.findByClientId(clientid);
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("hello")
     public String hello(){
         return "hello";
