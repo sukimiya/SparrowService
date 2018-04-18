@@ -37,7 +37,7 @@
     <div class="row-fluid">
         <div class="span12 row">
             <div class="btn-group btn-group-vertical text-left col-md-3">
-                <a class="btn btn-default text-left" th:href="@{/admin/clients}">Clients</a>
+                <a class="btn btn-default text-left active" th:href="@{/admin/clients}">Clients</a>
                 <a class="btn btn-default text-left" th:href="@{/admin/users}" >Users</a>
                 <a class="btn btn-default text-left"  th:href="@{/admin/unregs}">Permission</a>
                 <a class="btn btn-default text-left"  th:href="@{/admin/bills}">Bills</a>
@@ -50,25 +50,21 @@
                     <div class="panel-body">
 
                     </div>
-                    <div class="panel-footer"><div th:text="${summery.client}"></div></div>
+                    <div class="panel-footer"></div>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Users</h3>
+                <div class="list-group">
+                    <div th:each="entry : ${listmap}" class="list-group-item">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-8 text-left" style="height: 15px;"><div th:text="${entry.id}" style="font-size: x-small"></div></div>
+                                <div class="col-md-3 text-right" style="height: 15px;"><div th:text="${entry.lastOp}" style="font-size: x-small"></div></div>
+                                <div class="col-md-8 text-left"><h3 th:text="${entry.clientId}"></h3></div>
+                                <div class="col-md-4 text-right"><svg class="icon" width="32px" height="32.00px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M266.7 960c-10.3 0-20.5-4.4-27.6-12.9-12.8-15.2-10.8-37.9 4.4-50.7L701.7 512 243.5 127.6c-15.2-12.8-17.2-35.5-4.4-50.7 12.8-15.2 35.5-17.2 50.7-4.4l490.7 411.7c6.6 5.5 11 13.3 12.4 21.7l0.1 0.6c2.1 12.5-2.6 25.2-12.4 33.4L289.9 951.6c-6.8 5.6-15 8.4-23.2 8.4z" fill="#1296db" /></svg></div>
+                                <div class="col-md-8 text-left" style="font-size: x-small"></div>
+                                <div class="col-md-3 text-right" style="height: 10px;font-size: x-small;margin-top: 0px"><a class="" th:href="@{/admin/clientsOp/}+${entry.clientId}">Setting</a> </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="panel-body">
-
-                    </div>
-                    <div class="panel-footer"><div th:text="${summery.user}"></div></div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Unregistered User</h3>
-                    </div>
-                    <div class="panel-body">
-
-                    </div>
-                    <div class="panel-footer"><div th:text="${summery.unreg}"></div></div>
                 </div>
             </div>
         </div>

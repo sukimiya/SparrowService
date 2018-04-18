@@ -36,6 +36,10 @@ import java.util.*;
 @NoArgsConstructor
 public class OAuthClientDetail implements ClientDetails {
 
+    public Integer getId() {
+        return id;
+    }
+
     private Integer id;
 
     public OAuthClientDetail setClientId(String clientId) {
@@ -147,7 +151,7 @@ public class OAuthClientDetail implements ClientDetails {
 
     }
 
-    public OAuthClientDetail(Integer id, String clientId, Set<String> resourceIds, boolean secretRequired, String clientSecret, boolean scoped, Set<String> scope, Set<String> authorizedGrantTypes, Set<String> registeredRedirectUri, List<GrantedAuthority> authorities, Integer accessTokenValiditySeconds, Integer refreshTokenValiditySeconds, boolean autoApprove, Map<String, Object> additionalInformation, long lastOp) {
+    public OAuthClientDetail(Integer id) {
         this.id = id;
         this.clientId = clientId;
         this.resourceIds = resourceIds;

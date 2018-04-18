@@ -21,15 +21,16 @@
 package io.e2x.sparrow.nest.web.controller;
 
 
-import java.security.Principal;
-import java.util.Locale;
+import java.time.Instant;
+import java.util.*;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
+import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
+import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
+import io.e2x.sparrow.nest.users.UnregistedUserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.unbescape.html.HtmlEscape;
 
 /**
  * Application home page and login.
@@ -38,6 +39,16 @@ import org.unbescape.html.HtmlEscape;
 @Controller
 @RequestMapping("/")
 public class MainController {
+
+    private OAuthClientRepository oAuthClientRepository;
+    private OUserDetailRepository oUserDetailRepository;
+    private UnregistedUserRepository unregistedUserRepository;
+
+    public MainController(OAuthClientRepository oAuthClientRepository, OUserDetailRepository oUserDetailRepository, UnregistedUserRepository unregistedUserRepository) {
+        this.oAuthClientRepository = oAuthClientRepository;
+        this.oUserDetailRepository = oUserDetailRepository;
+        this.unregistedUserRepository = unregistedUserRepository;
+    }
 
     @GetMapping({"/", "/index", "/home"})
     public String root(){
@@ -49,6 +60,24 @@ public class MainController {
         return "login";
     }
 
-
+    @GetMapping("/admin/index")
+    public String adminIndex(final Model model){
+        long numUser = oUserDetailRepository.count();
+        long numClient = oAuthClientRepository.count();
+        long numUnreg = unregistedUserRepository.count();
+        Map<String,String> props = new HashMap<>(10);
+        props.put("user",String.valueOf(numUser));
+        props.put("client",String.valueOf(numClient));
+        props.put("unreg",String.valueOf(numUnreg));
+        model.addAttribute("summery", props);
+        return "/admin/adminhome";
+    }
+    @GetMapping("/admin/clients")
+    public String adminClients(final Model model){
+        List<OAuthClientDetail> listmap = oAuthClientRepository.findAll();
+        model.addAttribute("listmap", listmap);
+        Date.from(Instant.ofEpochSecond(9948484)).toLocaleString();
+        return "/admin/adminclients";
+    }
 }
 

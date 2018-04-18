@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ~ Project:sparrow nest
-  ~ LastModified:18-4-17 下午7:32 by sukimiya
+  ~ LastModified:18-4-18 下午4:20 by sukimiya
   ~
   ~ Copyright (C) 2018.  e2x.io
   ~
@@ -19,16 +19,18 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Error</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Administrat The Clients</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    Not allowed access.
-    <p>
-        ${errorMessage}
-    </p>
-    <a th:href="@{/index}">Go back</a>
+<div th:insert="~{header :: nav}"></div>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.14.3/esm/popper.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>

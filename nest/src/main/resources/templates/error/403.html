@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+  ~ Project:sparrow nest
+  ~ LastModified:18-4-18 下午1:40 by sukimiya
+  ~
+  ~ Copyright (C) 2018.  e2x.io
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Error</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Oh! There're sometime go wrong. The server says.</h1>
+    <div class="panel">
+        <div class="error container">
+            <div class="row">
+                <p class="title"><h3 class="text-warning" th:text="${status}"></h3>非常抱歉，访问受限</p>
+            </div>
+            <div class="row">
+                <div class="well">
+                    <div th:text="${#dates.format(timestamp,'yyyy-MM-dd HH:mm:ss')}"></div>
+                    <div th:text="${messages}"></div>
+                    <div th:text="${error}"></div>
+                </div>
+            </div>
+            <div class="row">
+                <a href="/" class="btn btn-default text-center">
+                    <div style="margin:10px;height: 16px;">
+                        <svg class="icon" width="20px" height="20.00px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" style="margin-top: 0px;float:  left;"><path d="M671.968 912c-12.288 0-24.576-4.672-33.952-14.048L286.048 545.984c-18.752-18.72-18.752-49.12 0-67.872l351.968-352c18.752-18.752 49.12-18.752 67.872 0 18.752 18.72 18.752 49.12 0 67.872l-318.016 318.048 318.016 318.016c18.752 18.752 18.752 49.12 0 67.872C696.544 907.328 684.256 912 671.968 912z" fill="#1296db"></path></svg>
+                        <div style="height: 20px;padding-top:7xp;float:left;">返回首页</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.14.3/esm/popper.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
