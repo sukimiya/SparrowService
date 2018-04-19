@@ -39,9 +39,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@Api(value = "/admin",tags = "admin Services")
+@Api(value = "/nest",tags = "admin Services")
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/nest")
 public class AdminRestController {
 
     @Value("${resource.id:spring-boot-application}")

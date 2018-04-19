@@ -24,10 +24,12 @@ package io.e2x.sparrow.nest.web.controller;
 import java.time.Instant;
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
 import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
 import io.e2x.sparrow.nest.users.UnregistedUserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,6 +44,9 @@ import javax.annotation.security.RolesAllowed;
 @Controller
 @RequestMapping("/")
 public class MainController {
+
+    @Value("${resource.id:spring-boot-application}")
+    private String resourceId;
 
     private OAuthClientRepository oAuthClientRepository;
     private OUserDetailRepository oUserDetailRepository;
@@ -81,6 +86,16 @@ public class MainController {
         List<OAuthClientDetail> listmap = oAuthClientRepository.findAll();
         model.addAttribute("listmap", listmap);
         Date.from(Instant.ofEpochSecond(9948484)).toLocaleString();
+        return "/admin/adminclients";
+    }
+    @PreAuthorize("hasAuthority('GUARDER')")
+    @PostMapping("/admin/client")
+    public String clientPut(@RequestParam("clientid") String clientid,@RequestParam("secret") String secret,@RequestParam("domain") String domain){
+        Integer id = (int) oAuthClientRepository.count();
+        String[] scope={"read","write"};
+        OAuthClientDetail oAuthClientDetail = new OAuthClientDetail(id,clientid,secret,scope);
+        oAuthClientDetail.setDomain(domain);
+        oAuthClientRepository.save(oAuthClientDetail);
         return "/admin/adminclients";
     }
 }

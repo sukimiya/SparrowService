@@ -117,6 +117,16 @@ public class OAuthClientDetail implements ClientDetails {
     private boolean autoApprove;
     private Map<String, Object> additionalInformation;
 
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    private String domain;
+
     public long getLastOp() {
         return lastOp;
     }
