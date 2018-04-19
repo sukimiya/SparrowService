@@ -39,6 +39,9 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import java.util.Set;
 import java.util.stream.Stream;
 
+/**
+ * OAuth安全认证服务配置，共享Web安全配置(SecurityConfiguration)的authenticationManager
+ */
 @Configuration
 @EnableAuthorizationServer
 public class OAuthServiceConfiguration extends AuthorizationServerConfigurerAdapter {
@@ -63,19 +66,6 @@ public class OAuthServiceConfiguration extends AuthorizationServerConfigurerAdap
         return new JwtAccessTokenConverter();
     }
 
-
-    @Bean
-    CommandLineRunner initData(OAuthClientRepository oAuthClientRepository){
-        //clientRepository = oAuthClientRepository;
-        return args -> Stream.of("100001,clientNo1,65EADF92D174C67A03EAB015A8416F6F,read write","100002,clientNo2,65EADF92D174C67A03EAB015A8416F6F,read write")
-                .map(tpl -> tpl.split(","))
-                .forEach(tpl ->
-                        oAuthClientRepository.save(new OAuthClientDetail(Integer.parseInt(tpl[0]),tpl[1],tpl[2], tpl[3].split(" "))
-                                .setResourceIds(resourceId)
-                                .setAuthorities("ROLE_TRUSTED_CLIENT")
-                        ));
-    }
-
     @Bean
     public OAuthClientDetailsServices getClientDetails(){
         return new OAuthClientDetailsServices(clientRepository);
@@ -95,24 +85,6 @@ public class OAuthServiceConfiguration extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.withClientDetails(getClientDetails()).build();
-        //JdbcTokenStore
-        //JdbcClientDetailsServiceBuilder
-        //https://github.com/spring-projects/spring-security-oauth/blob/master/spring-security-oauth2/src/test/resources/schema.sql
-        //clients.inMemory()
-//                .withClient("normal-app")
-//                .authorizedGrantTypes("authorization_code", "implicit").autoApprove(true)
-//                .authorities("ROLE_CLIENT")
-//                .scopes("read", "write")
-//                .resourceIds(resourceId)
-//                .accessTokenValiditySeconds(accessTokenValiditySeconds)
-//                .and()
-//                .withClient("trusted-app")
-//                .authorizedGrantTypes("client_credentials", "password")
-//                .authorities("ROLE_TRUSTED_CLIENT")
-//                .scopes("read", "write")
-//                .resourceIds(resourceId)
-//                .accessTokenValiditySeconds(accessTokenValiditySeconds)
-//                .secret("secret").and().build();
     }
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {

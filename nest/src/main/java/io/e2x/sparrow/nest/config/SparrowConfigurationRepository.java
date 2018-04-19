@@ -1,6 +1,6 @@
 /*
  * Project:sparrow nest
- * LastModified:18-4-13 上午11:55 by lily
+ * LastModified:18-4-19 下午10:06 by sukimiya
  *
  * Copyright (C) 2018.  e2x.io
  *
@@ -18,14 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.nest.security.model;
+package io.e2x.sparrow.nest.config;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@EnableMongoRepositories
-public interface OUserDetailRepository extends MongoRepository<OUserDetails,String> {
-    OUserDetails findByUsername(String s);
-
-    boolean existsByUsername(String s);
+public interface SparrowConfigurationRepository extends MongoRepository<SparrowConfiguration,String> {
 }

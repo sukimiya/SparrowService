@@ -19,11 +19,15 @@
  */
 package io.e2x.sparrow.nest.security;
 
+import io.e2x.sparrow.nest.config.ConfigureLoader;
+import io.e2x.sparrow.nest.config.SparrowConfiguration;
+import io.e2x.sparrow.nest.config.SparrowConfigurationRepository;
 import io.e2x.sparrow.nest.security.controller.OUserServices;
 import io.e2x.sparrow.nest.security.model.OUserDetails;
 import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -41,26 +45,34 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.stream.Stream;
 
 /**
- * This is example class by <a href="http://sgdev-blog.blogspot.jp/2016/04/spring-oauth2-with-jwt-sample.html">sgdev-blog</>
+ * Web安全配置，安全配置的第一道墙
  */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private OUserDetailRepository oUserDetailRepository;
 
-//    @Bean
-//    CommandLineRunner initUserDetails(OUserDetailRepository oUserDetailRepository){
-//
-//            return args -> Stream.of("admin,password,true,true,true,false,ADMIN USER","user,password,true,true,true,false,USER","sukimiya,19547047,true,true,true,true,ADMIN USER GUARDER")
-//                    .map(user ->user.split(","))
-//                    .forEach(user->oUserDetailRepository.save(new OUserDetails(user[0],user[1],Boolean.parseBoolean(user[2]),Boolean.parseBoolean(user[3]),Boolean.parseBoolean(user[4]),Boolean.parseBoolean(user[6]),user[6].split(" "))));
-//
-//    }
+    private ConfigureLoader configureLoader;
 
     @Autowired
-    public SecurityConfiguration(OUserDetailRepository oUserDetailRepository){
+    public SparrowConfigurationRepository s_config;
+
+    /**
+     * Web安全配置Constructor
+     * 如果数据库里面没有Admin，Constructor会新建一个叫admin的用户，密码：{YWRtaW46VnJh.}. 请先自行修改admin密码.
+     * @param oUserDetailRepository
+     */
+    @Autowired
+    public SecurityConfiguration(OUserDetailRepository oUserDetailRepository,SparrowConfigurationRepository s_config){
         super();
         this.oUserDetailRepository = oUserDetailRepository;
+        if(!oUserDetailRepository.existsByUsername("admin")){
+            String[] roles = {"ADMIN","USER"};
+            s_config.save(new SparrowConfiguration());
+            this.s_config = s_config;
+            configureLoader = new ConfigureLoader(s_config);
+            oUserDetailRepository.save(new OUserDetails(configureLoader.getAdmin_name(),configureLoader.getAdmin_password(),true,true,true,true,roles));
+        }
     }
 
     private static final String[] AUTH_WHITELIST = {
@@ -71,19 +83,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/v2/api-docs",
             "/webjars/**",
             "/oauth/*",
-            "/static/**",
-            "/login"
+            "/static/**"
     };
 
+    /**
+     * 安全规则：
+     * 1.白名单
+     * 2.HttpMethod.OPTIONS
+     * 3.正常的安全验证
+     * 4.Disable csrf for REST
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers(AUTH_WHITELIST).permitAll()
-//                .antMatchers(HttpMethod.OPTIONS).permitAll()
-//                .anyRequest().authenticated()
-//                .and().httpBasic()
-//                .and().csrf().disable();
+
         http
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
@@ -95,6 +109,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         ;
     }
+
+    /**
+     * 密码的编码器，这个是安全系统必须提供的
+     * @return
+     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -104,10 +123,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
-    @Autowired//注意这个方法是注入的
+
+    /**
+     * 注入系统的UserService
+     * @param auth
+     * @throws Exception
+     */
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(getUserServices());
     }
+
+    /**
+     * 从MongoDB创建一个UserService实例
+     * @return OUserServices
+     */
     @Bean
     public OUserServices getUserServices(){
         return new OUserServices(oUserDetailRepository);
