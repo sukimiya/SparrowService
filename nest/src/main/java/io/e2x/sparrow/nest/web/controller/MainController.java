@@ -28,9 +28,12 @@ import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
 import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
 import io.e2x.sparrow.nest.users.UnregistedUserRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 
 /**
  * Application home page and login.
@@ -59,7 +62,7 @@ public class MainController {
     public String login(){
         return "login";
     }
-
+    @PreAuthorize("hasAuthority('GUARDER')")
     @GetMapping("/admin/index")
     public String adminIndex(final Model model){
         long numUser = oUserDetailRepository.count();
@@ -72,6 +75,7 @@ public class MainController {
         model.addAttribute("summery", props);
         return "/admin/adminhome";
     }
+    @PreAuthorize("hasAuthority('GUARDER')")
     @GetMapping("/admin/clients")
     public String adminClients(final Model model){
         List<OAuthClientDetail> listmap = oAuthClientRepository.findAll();

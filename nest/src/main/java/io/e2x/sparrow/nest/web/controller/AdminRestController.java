@@ -66,14 +66,14 @@ public class AdminRestController {
         adminHomeEvent.setUsers(oUserDetailRepository.findAll());
         return adminHomeEvent;
     }
-//    @PreAuthorize("hasRole('ROLE_GUARDER')")
+    @PreAuthorize("hasAuthority('GUARDER')")
     @GetMapping("clientsbypage/{page}")
     public Page<OAuthClientDetail> getClients(@PathVariable("page") Integer page){
         if(page<=0) page=0;
         Pageable pageable = new PageRequest(page,LIST_PAGE_SIZE,Sort.Direction.DESC,"id");
         return oAuthClientRepository.findAll(pageable);
     }
-//    @PreAuthorize("hasRole('ROLE_GUARDER')")
+    @PreAuthorize("hasAuthority('GUARDER')")
     @GetMapping("usersbypage/{page}")
     public Page<OUserDetails> getUsers(@PathVariable("page") Integer page){
         if(page<=0) page=0;
@@ -81,7 +81,7 @@ public class AdminRestController {
         return oUserDetailRepository.findAll(pageable);
     }
 
-//    @PreAuthorize("hasRole('ROLE_GUARDER')")
+    @PreAuthorize("hasAuthority('GUARDER')")
     @PostMapping("client/{clientid}")
     public OAuthClientDetail postClientById(@PathVariable("clientid") String clientid,@JsonProperty("secret") String secret){
         if (secret==null) secret = clientid;
@@ -94,12 +94,12 @@ public class AdminRestController {
         oAuthClientRepository.save(oAuthClientDetail);
         return oAuthClientDetail;
     }
-//    @PreAuthorize("hasRole('ROLE_GUARDER')")
+    @PreAuthorize("hasAuthority('GUARDER')")
     @GetMapping("client/{clientid}")
     public OAuthClientDetail getClientById(@PathVariable("clientid") String clientid){
         return oAuthClientRepository.findByClientId(clientid);
     }
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("hello")
     public String hello(){
         return "hello";

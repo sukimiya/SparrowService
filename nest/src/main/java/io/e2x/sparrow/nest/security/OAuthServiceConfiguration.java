@@ -49,6 +49,7 @@ public class OAuthServiceConfiguration extends AuthorizationServerConfigurerAdap
     @Value("${access_token.validity_period:3600}")
     int accessTokenValiditySeconds = 3600;
 
+    @Autowired
     private AuthenticationManager authenticationManager;
     private OAuthClientRepository clientRepository;
 

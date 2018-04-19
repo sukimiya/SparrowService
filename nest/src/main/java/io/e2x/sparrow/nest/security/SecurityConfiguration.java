@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -44,7 +45,6 @@ import java.util.stream.Stream;
  */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private OUserDetailRepository oUserDetailRepository;
 
@@ -89,15 +89,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated().and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/index")
+                .formLogin().loginPage("/login").defaultSuccessUrl("/index").permitAll()
                 .and().httpBasic()
-                .and().csrf().and().logout().logoutUrl("/logout").logoutSuccessUrl("/login")
+                .and().csrf().disable().logout().logoutUrl("/logout").logoutSuccessUrl("/login")
 
         ;
     }
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    @Bean
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+    @Autowired//注意这个方法是注入的
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(getUserServices());
     }
     @Bean
     public OUserServices getUserServices(){
