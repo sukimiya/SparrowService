@@ -1,6 +1,8 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 
+*.DS_Store
+.DS_Store
 ### STS ###
 .apt_generated
 .classpath
@@ -23,3 +25,7 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+nest/src/main/resources/templates/.DS_Store
+nest/src/main/resources/templates/.DS_Store
+nest/src/main/resources/templates/.DS_Store
+nest/src/main/resources/templates/.DS_Store

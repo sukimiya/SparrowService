@@ -1,6 +1,6 @@
 body {
-    font-family: sans;
-    font-size: 1em;
+    font-family: Helvetica, Tahoma, Arial, "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei";
+    font-family: Helvetica, Tahoma, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei";
 }
 
 p.error {
@@ -10,4 +10,80 @@ p.error {
 
 div.logout {
     float: right;
+}
+@font-face {font-family: 'iconfont';
+    src: url('./fonts/iconfont.eot');
+    src: url('./fonts/iconfont.eot?#iefix') format('embedded-opentype'),
+    url('./fonts/iconfont.woff') format('woff'),
+    url('./fonts/iconfont.ttf') format('truetype'),
+    url('./fonts/iconfont.svg#iconfont') format('svg');
+}
+body{
+    color: #2699FB;
+    background-color:#EAEAEA;
+}
+label{
+    font-size: 0.5em;
+}
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;}
+.modal-header .close{
+    float: left;
+    margin: 0px;
+    opacity:1;
+    color: #2699FB;
+}
+.navbar-light .navbar-brand {
+    color: #2699FB;
+}
+.navbar-light .navbar-nav .active>.nav-link {
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
+}
+.page-header{
+    height: 180px;
+}
+.page-header .option-btn-group{
+    margin-top: 160px;
+}
+.page-header .option-btn-group .option-btn{
+    width:42px;height:42px
+}
+.icon-16px{
+    width:16px;height:16px;
+}
+.modal-title-blue{
+    color: #2699FB;
+}
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    color: #2699FB;
+    border: 1px solid #BCE0FD;
+}
+.text-muted {
+    color: #CCCCCC!important;
+}
+.form-check-label {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+.btn {
+    padding: .75rem 1rem;
+    font-size: 0.8rem;
+}
+.modal-dialog{max-width:500px;margin:1.75rem auto;margin-top:0px;margin-bottom:0px;}
+.modal-footer{border-top: 0px solid transparent;}
+.modal-header{border-bottom: 0px solid transparent;}
+.modal-content{background-color: #F6F7F8;border: 0px solid transparent;}
+.modal-backdrop.show {
+    opacity: 1;
+}
+.modal-backdrop{
+    background-color: #F6F7F8;
 }

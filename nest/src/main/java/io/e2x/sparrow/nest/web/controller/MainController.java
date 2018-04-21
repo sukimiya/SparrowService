@@ -98,5 +98,10 @@ public class MainController {
         oAuthClientRepository.save(oAuthClientDetail);
         return "/admin/adminclients";
     }
+
+    @GetMapping("testpage")
+    public String getBootstrapTest(){
+        return "/bootstraptest";
+    }
 }
 
