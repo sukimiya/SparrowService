@@ -18,96 +18,102 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BackEnd Manager Page</title>
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-<div th:insert="~{header :: nav}"></div>
-<div class="container-fluid">
-    <h1>&nbsp;</h1>
-    <div class="row-fluid">
-        <div class="span12">
+<%
+include("../header.btl",{title:"Sparrow Nest"}){}
+%>
+<%
+include("../topnav.btl"){}
+%>
+<div class="row bg-light">
+    <div class="container d-flex justify-content-between page-header">
+        <h1 class="p-2 align-self-center current-title">
+        </h1>
+        <div class="option-btn-group">
+            <button type="button" class="btn btn-primary p-2 justify-content-end shadow mb-5 rounded-circle option-btn" data-toggle="modal" data-target="#clientaddModel">
+                <span class="iconfont float-btn" aria-hidden="true">&#xe6ca;</span>
+            </button>
         </div>
     </div>
-    <div class="row-fluid">
-        <div class="span12 row">
-            <div class="btn-group btn-group-vertical text-left col-md-3">
-                <a class="btn btn-default text-left active" th:href="@{/admin/clients}">Clients</a>
-                <a class="btn btn-default text-left" th:href="@{/admin/users}" >Users</a>
-                <a class="btn btn-default text-left"  th:href="@{/admin/unregs}">Permission</a>
-                <a class="btn btn-default text-left"  th:href="@{/admin/bills}">Bills</a>
-            </div>
-            <div class="col-md-9">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Clients</h3>
+</div>
+        <div class="container s-page-content">
+            <div class="row justify-content-md-center">
+                <div class="list-group col col-lg-2">
+                    <div class="list-group-item">
+                        <form action="${ctxPath}/admin/clientsSearch">
+                            <div class="">
+                                <div class="input-group">
+                                    <%
+                                        var thekey = "";
+                                        if(isEmpty("searchkey")) thekey = searchkey;
+                                    %>
+                                    <input type="text" class="form-control search-box" name="key" placeholder="Search for..." value="${searchkey}">
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-secondary" type="button">Go!</button>
+                                  </span>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <div class="panel-body">
-                        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#clientaddModel">
-                            add
-                        </button>
-                    </div>
-                    <div class="panel-footer"></div>
-                </div>
-                <div class="list-group">
-                    <div th:each="entry : ${listmap}" class="list-group-item">
+                    <% for(entry in listmap){%>
+                    <div class="list-group-item">
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-8 text-left" style="height: 15px;"><div th:text="${entry.id}" style="font-size: x-small"></div></div>
-                                <div class="col-md-3 text-right" style="height: 15px;"><div th:text="${entry.lastOp}" style="font-size: x-small"></div></div>
-                                <div class="col-md-8 text-left"><h3 th:text="${entry.clientId}"></h3></div>
+                                <div class="col-md-8 text-left" style="height: 15px;"><div style="font-size: x-small">${entry.id}</div></div>
+                                <div class="col-md-3 text-right" style="height: 15px;"><div style="font-size: x-small">${entry.lastOp}</div></div>
+                                <div class="col-md-8 text-left"><h3>${entry.clientId}</h3></div>
                                 <div class="col-md-4 text-right"><svg class="icon" width="32px" height="32.00px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M266.7 960c-10.3 0-20.5-4.4-27.6-12.9-12.8-15.2-10.8-37.9 4.4-50.7L701.7 512 243.5 127.6c-15.2-12.8-17.2-35.5-4.4-50.7 12.8-15.2 35.5-17.2 50.7-4.4l490.7 411.7c6.6 5.5 11 13.3 12.4 21.7l0.1 0.6c2.1 12.5-2.6 25.2-12.4 33.4L289.9 951.6c-6.8 5.6-15 8.4-23.2 8.4z" fill="#1296db" /></svg></div>
                                 <div class="col-md-8 text-left" style="font-size: x-small"></div>
-                                <div class="col-md-3 text-right" style="height: 10px;font-size: x-small;margin-top: 0px"><a class="" th:href="@{/admin/clientsOp/}+${entry.clientId}">Setting</a> </div>
+                                <div class="col-md-3 text-right" style="height: 10px;font-size: x-small;margin-top: 0px"><a class="" href="${ctxPath}/admin/clientsOp/+${entry.clientId}">Setting</a> </div>
                             </div>
                         </div>
                     </div>
+                    <%}%>
                 </div>
+            </div>
+        </div>
+<!-- Modal -->
+<div class="modal fade" id="clientaddModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="ModelDialog" class="modal-dialog bg-light d-flex flex-column" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between">
+                <button type="button" class="close align-self-left" data-dismiss="modal" aria-label="Close">
+                    <span class="iconfont" aria-hidden="true">&#xe679;</span>
+                </button>
+                <h5 class="modal-title-blue align-self-center">Modal title</h5>
+                <a class="modal-title-blue align-self-right" href="#"></a>
+            </div>
+            <div class="modal-body">
+                <form id="addclientform" action="${ctxPath}/admin/client" method="post">
+                    <div class="form-group">
+                        <label for="clientid">https://localhost/client/</label>
+                        <input type="text" class="form-control" id="clientid" name="clientid" aria-describedby="clientidHelp" placeholder="Enter clientId">
+                        <small id="clientidHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="secret">Password</label>
+                        <input type="text" class="form-control" id="secret" name="secret" placeholder="Secret">
+                    </div>
+                    <div class="form-group">
+                        <label for="domain">Domain</label>
+                        <input type="text" class="form-control" id="domain" name="domain" placeholder="Domain">
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input js-switch" id="clientEnabled" name="clientEnabled">
+                        <label class="form-check-label" for="clientEnabled">is client enabled?</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">ADD</button>
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade" tabindex="-1" role="dialog" id="clientaddModel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Add a client</h4>
-            </div>
-            <div class="modal-body">
-                <div class="container form">
-                    <form id="addclientform" action="/admin/client" method="post">
-                        <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon3">https://localhost/client/</span>
-                            <input type="text" class="form-control" id="clientid" aria-describedby="basic-addon3" name="clientid">
-                        </div>
-                        <div class="input-group">
-                            <span>Secret:</span>
-                            <input type="text" class="form-control" id="secret" name="secret">
-                        </div>
-                        <div class="input-group">
-                            <span>Domain:</span>
-                            <input type="text" class="form-control" id="domain" name="domain">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Add</button>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<div th:insert="~{footer :: nav}"></div>
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/popper.js/1.14.3/esm/popper.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</body>
-</html>
+<%
+include("../scripts.btl"){}
+%>
+<%
+include("../footer.btl"){}
+%>

@@ -21,6 +21,7 @@
 package io.e2x.sparrow.nest.web.controller;
 
 
+import java.security.Principal;
 import java.time.Instant;
 import java.util.*;
 
@@ -30,7 +31,13 @@ import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
 import io.e2x.sparrow.nest.users.UnregistedUserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Example;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -59,13 +66,17 @@ public class MainController {
     }
 
     @GetMapping({"/", "/index", "/home"})
-    public String root(){
-        return "index";
+    public String root(final Model model){
+        return getPages("/index.html",model);
     }
 
     @GetMapping("/login")
-    public String login(){
-        return "login";
+    public String login(final Throwable throwable, @AuthenticationPrincipal Principal principal, final Model model){
+        if(throwable!=null)
+            model.addAttribute("error",throwable.getMessage());
+        else
+            model.addAttribute("error",null);
+        return getPages("login.html",model);
     }
     @PreAuthorize("hasAuthority('GUARDER')")
     @GetMapping("/admin/index")
@@ -78,30 +89,56 @@ public class MainController {
         props.put("client",String.valueOf(numClient));
         props.put("unreg",String.valueOf(numUnreg));
         model.addAttribute("summery", props);
-        return "/admin/adminhome";
+        return getPages("/admin/adminhome.html",model);
     }
     @PreAuthorize("hasAuthority('GUARDER')")
     @GetMapping("/admin/clients")
     public String adminClients(final Model model){
         List<OAuthClientDetail> listmap = oAuthClientRepository.findAll();
         model.addAttribute("listmap", listmap);
+        model.addAttribute("searchkey",null);
         Date.from(Instant.ofEpochSecond(9948484)).toLocaleString();
-        return "/admin/adminclients";
+        return getPages("/admin/adminclients.html",model);
+    }
+    @PreAuthorize("hasAuthority('GUARDER')")
+    @GetMapping("/admin/clientsSearch")
+    public String clientsSearch(@RequestParam("key") String key, final Model model){
+
+        List<OAuthClientDetail> listmap = oAuthClientRepository.findByClientIdLikeAndDomainLike(key);
+        model.addAttribute("listmap", listmap);
+        model.addAttribute("searchkey",key);
+        Date.from(Instant.ofEpochSecond(9948484)).toLocaleString();
+        return getPages("/admin/adminclients.html",model);
     }
     @PreAuthorize("hasAuthority('GUARDER')")
     @PostMapping("/admin/client")
-    public String clientPut(@RequestParam("clientid") String clientid,@RequestParam("secret") String secret,@RequestParam("domain") String domain){
+    public String clientPut(@RequestParam("clientid") String clientid,@RequestParam("secret") String secret,@RequestParam("domain") String domain,final Model model){
         Integer id = (int) oAuthClientRepository.count();
         String[] scope={"read","write"};
         OAuthClientDetail oAuthClientDetail = new OAuthClientDetail(id,clientid,secret,scope);
         oAuthClientDetail.setDomain(domain);
         oAuthClientRepository.save(oAuthClientDetail);
-        return "/admin/adminclients";
+        return getPages("/admin/adminclients.html",model);
     }
 
     @GetMapping("testpage")
     public String getBootstrapTest(){
-        return "/bootstraptest";
+        return "/bootstraptest.html";
+    }
+
+
+    private boolean checkLogin(Model model){
+        Object principal= SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal!=null){
+            model.addAttribute("isAuthenticated",true);
+            return true;
+        }
+        model.addAttribute("isAuthenticated",false);
+        return false;
+    }
+    private String getPages(String page, Model model){
+        checkLogin(model);
+        return page;
     }
 }
 

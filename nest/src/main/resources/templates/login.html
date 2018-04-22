@@ -18,14 +18,12 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:include="header::header">
-</head>
-
-<body style="background-color: #f1f1f1; padding-bottom: 0">
-
-<div th:insert="~{header :: nav}"></div>
-
+<%
+include("/header.btl",{title:"Sparrow Nest"}){}
+%>
+<%
+include("/topnav.btl"){}
+%>
 <div class="container" style="margin-top: 60px">
 
     <div class="row" style="margin-top: 100px">
@@ -50,12 +48,14 @@
                             </div>
                         </div>
                         <br>
-                        <div th:if="${param.error}">
-                            <p style="text-align: center" class="text-danger">登录失败，账号或密码错误!</p>
-                        </div>
-                        <div th:if="${result}">
-                            <p style="text-align: center" class="text-success" th:text="${result}"></p>
-                        </div>
+                        <%
+                            if(error!=null){
+                                %>
+                                <p style="text-align: center" class="text-danger">登录失败，账号或密码错误!</p>
+                                <span>${error}</span>
+                                <%
+                            }
+                        %>
                         <div class="form-group">
                             <div class="input-group col-md-6 col-md-offset-3 col-xs-12 ">
                                 <button type="submit" class="btn btn-primary btn-block">登录</button>
@@ -73,6 +73,9 @@
     </div>
 
 </div>
-</body>
-
-</html>
+<%
+include("/scripts.btl"){}
+%>
+<%
+include("/footer.btl"){}
+%>

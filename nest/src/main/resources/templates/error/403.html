@@ -18,43 +18,52 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Error</title>
-    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="/css/switchery.min.css" rel="stylesheet" type="text/css">
-    <link href="/css/main.css" rel="stylesheet" type="text/css">
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Any-Security</title>
+    <link href="${ctxPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="${ctxPath}/css/switchery.min.css" rel="stylesheet" type="text/css">
+    <link href="${ctxPath}/css/main.css" rel="stylesheet" type="text/css">
 <body>
-    <h1>Oh! There're sometime go wrong. The server says.</h1>
-    <div class="panel">
-        <div class="error container">
-            <div class="row">
-                <p class="title"><h3 class="text-warning" th:text="${status}"></h3>非常抱歉，访问受限</p>
-            </div>
-            <div class="row">
-                <div class="well">
-                    <div th:text="${#dates.format(timestamp,'yyyy-MM-dd HH:mm:ss')}"></div>
-                    <div th:text="${messages}"></div>
-                    <div th:text="${error}"></div>
-                </div>
-            </div>
-            <div class="row">
-                <a href="/" class="btn btn-default text-center">
-                    <div style="margin:10px;height: 16px;">
-                        <svg class="icon" width="20px" height="20.00px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" style="margin-top: 0px;float:  left;"><path d="M671.968 912c-12.288 0-24.576-4.672-33.952-14.048L286.048 545.984c-18.752-18.72-18.752-49.12 0-67.872l351.968-352c18.752-18.752 49.12-18.752 67.872 0 18.752 18.72 18.752 49.12 0 67.872l-318.016 318.048 318.016 318.016c18.752 18.752 18.752 49.12 0 67.872C696.544 907.328 684.256 912 671.968 912z" fill="#1296db"></path></svg>
-                        <div style="height: 20px;padding-top:7xp;float:left;">返回首页</div>
-                    </div>
-                </a>
+<h1>Oh! There're sometime go wrong. The server says.</h1>
+<div class="panel">
+    <div class="error container">
+        <div class="row">
+            <p class="title"><h3 class="text-warning">${status}</h3>非常抱歉，访问受限</p>
+        </div>
+        <div class="row">
+            <div class="well">
+                <div>${dates.format(timestamp,'yyyy-MM-dd HH:mm:ss')}</div>
+                <div>${messages}</div>
+                <div>${error}</div>
             </div>
         </div>
+        <div class="row">
+            <a href="/" class="btn btn-default text-center">
+                <div style="margin:10px;height: 16px;">
+                    <svg class="icon" width="20px" height="20.00px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" style="margin-top: 0px;float:  left;"><path d="M671.968 912c-12.288 0-24.576-4.672-33.952-14.048L286.048 545.984c-18.752-18.72-18.752-49.12 0-67.872l351.968-352c18.752-18.752 49.12-18.752 67.872 0 18.752 18.72 18.752 49.12 0 67.872l-318.016 318.048 318.016 318.016c18.752 18.752 18.752 49.12 0 67.872C696.544 907.328 684.256 912 671.968 912z" fill="#1296db"></path></svg>
+                    <div style="height: 20px;padding-top:7xp;float:left;">返回首页</div>
+                </div>
+            </a>
+        </div>
     </div>
-    <script src="/js/jquery.min.js" type="text/javascript"></script>
-    <script src="/js/popper.min.js" type="text/javascript"></script>
-    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="/js/switchery.min.js" type="text/javascript"></script>
+</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <span style="font-size: x-small">Copyright (C) 2018.  e2x.io</span>
+    </a>
+    <div class="collapse navbar-collapse show" id="navbarSupportedContent2">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="tel:18667144772">联系我们</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://mp.wechat.qq.com">WeChat</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 </body>
 </html>

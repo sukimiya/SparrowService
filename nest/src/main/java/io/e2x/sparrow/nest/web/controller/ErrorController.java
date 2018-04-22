@@ -37,6 +37,7 @@ import javax.servlet.ServletException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.rmi.UnexpectedException;
+import java.util.Date;
 
 @ControllerAdvice
 public class ErrorController {
@@ -45,24 +46,25 @@ public class ErrorController {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String exception500(final Throwable throwable, final Model model) {
-        logger.error("Exception during execution of SpringSecurity application", throwable);
-        String errorMessage = (throwable != null ? throwable.getMessage() : "Unknown error");
-        model.addAttribute("errorMessage", errorMessage);
-        return "/error/500";
+        return getPages("/error/500.html",500,throwable,model);
     }
 
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public String AccessDeniedException(final Throwable throwable,final Model model){
-        String errorMessage = (throwable != null ? throwable.getMessage() : "Access Denied error");
-        model.addAttribute("errorMessage", errorMessage);
-        return "/error/403";
+        return getPages("/error/403.html",403,throwable,model);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String notFoundException(final Throwable throwable,final Model model){
+        return getPages("/error/404.html",404,throwable,model);
+    }
+    private String getPages(String pages,int status, Throwable throwable,Model model){
         String errorMessage = (throwable != null ? throwable.getMessage() : "Not Found error");
-        model.addAttribute("errorMessage", errorMessage);
-        return "/error/404";
+        model.addAttribute("status",status);
+        model.addAttribute("dates",new Date());
+        model.addAttribute("messages",errorMessage);
+        model.addAttribute("error",throwable.getStackTrace().toString());
+        return pages;
     }
 }

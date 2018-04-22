@@ -24,8 +24,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
+import java.util.List;
+
 @EnableMongoRepositories
 public interface OAuthClientRepository extends MongoRepository<OAuthClientDetail,String> {
 
     OAuthClientDetail findByClientId(String s);
+
+    List<OAuthClientDetail> findByClientIdLikeAndDomainLike(String s);
 }

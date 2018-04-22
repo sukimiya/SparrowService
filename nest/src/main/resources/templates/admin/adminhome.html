@@ -19,15 +19,12 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BackEnd Manager Page</title>
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-<div th:insert="~{header :: nav}"></div>
+<%
+include("../header.btl",{title:"Sparrow Nest"}){}
+%>
+<%
+include("../topnav.btl"){}
+%>
 <div class="container-fluid">
     <h1>&nbsp;</h1>
     <div class="row-fluid">
@@ -37,46 +34,18 @@
     <div class="row-fluid">
         <div class="span12 row">
             <div class="btn-group btn-group-vertical text-left col-md-3">
-                <a class="btn btn-default text-left" th:href="@{/admin/clients}">Clients</a>
-                <a class="btn btn-default text-left" th:href="@{/admin/users}" >Users</a>
-                <a class="btn btn-default text-left"  th:href="@{/admin/unregs}">Permission</a>
-                <a class="btn btn-default text-left"  th:href="@{/admin/bills}">Bills</a>
+                <a class="btn btn-default text-left" href="${ctxPath}/admin/clients">Clients</a>
+                <a class="btn btn-default text-left" href="${ctxPath}/admin/users" >Users</a>
+                <a class="btn btn-default text-left" href="${ctxPath}/admin/applys">Permission</a>
+                <a class="btn btn-default text-left" href="${ctxPath}/admin/bills">Bills</a>
             </div>
-            <div class="col-md-9">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Clients</h3>
-                    </div>
-                    <div class="panel-body">
 
-                    </div>
-                    <div class="panel-footer"><div th:text="${summery.client}"></div></div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Users</h3>
-                    </div>
-                    <div class="panel-body">
-
-                    </div>
-                    <div class="panel-footer"><div th:text="${summery.user}"></div></div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Unregistered User</h3>
-                    </div>
-                    <div class="panel-body">
-
-                    </div>
-                    <div class="panel-footer"><div th:text="${summery.unreg}"></div></div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
-<div th:insert="~{footer :: nav}"></div>
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/popper.js/1.14.3/esm/popper.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</body>
-</html>
+<%
+include("../scripts.btl"){}
+%>
+<%
+include("../footer.btl"){}
+%>

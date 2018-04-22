@@ -21,6 +21,7 @@
 package io.e2x.sparrow.nest.web.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,8 +33,26 @@ public class UserController {
 
     @GetMapping("/user")
     public String user(@AuthenticationPrincipal Principal principal, Model model){
-        model.addAttribute("username", principal.getName());
-        return "user/user";
+        if(principal!=null){
+            model.addAttribute("username", principal.getName());
+        }else {
+            return "redirect:/login";
+        }
+
+        return getPages("user/user.html",model);
+    }
+    private boolean checkLogin(Model model){
+        Object principal= SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal!=null){
+            model.addAttribute("isAuthenticated",true);
+            return true;
+        }
+        model.addAttribute("isAuthenticated",false);
+        return false;
+    }
+    private String getPages(String page, Model model){
+        checkLogin(model);
+        return page;
     }
 
 }
