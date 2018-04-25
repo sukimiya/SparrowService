@@ -20,12 +20,14 @@
 
 package io.e2x.sparrow.nest.web.controller;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
 import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetails;
 import io.e2x.sparrow.nest.web.controller.event.AdministratorHomeEvent;
+import io.e2x.sparrow.nest.web.events.OAuthClientDetailSetEvent;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -33,15 +35,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Api(value = "/nest",tags = "admin Services")
 @RestController
-@RequestMapping("/nest")
+@RequestMapping(value = "/nest")
 public class AdminRestController {
 
     @Value("${resource.id:spring-boot-application}")
@@ -82,7 +86,7 @@ public class AdminRestController {
     }
 
     @PreAuthorize("hasAuthority('GUARDER')")
-    @PostMapping("client/{clientid}")
+    @PostMapping(value = "client/{clientid}",consumes = "application/json")
     public OAuthClientDetail postClientById(@PathVariable("clientid") String clientid,@JsonProperty("secret") String secret){
         if (secret==null) secret = clientid;
         Integer id = UUID.randomUUID().hashCode();
@@ -98,6 +102,17 @@ public class AdminRestController {
     @GetMapping("client/{clientid}")
     public OAuthClientDetail getClientById(@PathVariable("clientid") String clientid){
         return oAuthClientRepository.findByClientId(clientid);
+    }
+    @PreAuthorize("hasAuthority('GUARDER')")
+    @RequestMapping(method = RequestMethod.POST, value = "adminSetClientActive",consumes = "application/json")
+    public Map<String,String> adminSetClientActive(@RequestBody OAuthClientDetailSetEvent jdoc, @JsonProperty(value = "enabled") String enabled, @JsonProperty(value = "clientid") String clientid){
+        OAuthClientDetail oclient= oAuthClientRepository.findByClientId(jdoc.clientid);
+        oclient.setEnabled(Boolean.getBoolean(jdoc.enabled));
+        oAuthClientRepository.save(oclient);
+        Map<String,String> returnmap = new HashMap<String,String>();
+        returnmap.put("clientId",oclient.getClientId());
+        returnmap.put("enabled",oclient.getEnabled().toString());
+        return returnmap;
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("hello")

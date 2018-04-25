@@ -1,6 +1,6 @@
 /*
  * Project:sparrow nest
- * LastModified:18-4-11 下午10:55 by lily
+ * LastModified:18-4-25 下午2:22 by sukimiya
  *
  * Copyright (C) 2018.  e2x.io
  *
@@ -18,20 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.nest.security.model;
+package io.e2x.sparrow.nest.web.events;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
-@EnableMongoRepositories
-public interface OAuthClientRepository extends MongoRepository<OAuthClientDetail,String> {
-
-    OAuthClientDetail findByClientId(String s);
-
-    List<OAuthClientDetail> findAllByClientIdLike(String s);
-
-    List<OAuthClientDetail> findAllByDomainLike(String s);
+@JsonView
+@Document
+public class OAuthClientDetailSetEvent {
+    @JsonProperty("clientid")
+    public String clientid;
+    @JsonProperty("enabled")
+    public String enabled;
 }

@@ -32,6 +32,7 @@ import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
 import io.e2x.sparrow.nest.users.UnregistedUserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
@@ -104,7 +105,9 @@ public class MainController {
     @GetMapping("/admin/clientsSearch")
     public String clientsSearch(@RequestParam("key") String key, final Model model){
 
-        List<OAuthClientDetail> listmap = oAuthClientRepository.findByClientIdLikeAndDomainLike(key);
+        List<OAuthClientDetail> listmap = oAuthClientRepository.findAllByClientIdLike(key);
+        List<OAuthClientDetail> listmap2 = oAuthClientRepository.findAllByDomainLike(key);
+        listmap.addAll(listmap2);
         model.addAttribute("listmap", listmap);
         model.addAttribute("searchkey",key);
         Date.from(Instant.ofEpochSecond(9948484)).toLocaleString();
@@ -118,6 +121,8 @@ public class MainController {
         OAuthClientDetail oAuthClientDetail = new OAuthClientDetail(id,clientid,secret,scope);
         oAuthClientDetail.setDomain(domain);
         oAuthClientRepository.save(oAuthClientDetail);
+        model.addAttribute("searchkey",null);
+        model.addAttribute("listmap",oAuthClientRepository.findAll(Sort.by(Sort.Direction.DESC,"lastOp")));
         return getPages("/admin/adminclients.html",model);
     }
 

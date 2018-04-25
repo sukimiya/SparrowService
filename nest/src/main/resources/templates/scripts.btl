@@ -25,6 +25,11 @@
 <script src="${ctxPath}/js/switchery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+
+        var topheight = $(".navbar")[0].clientHeight;
+        var bottomheight = $(".navbar")[1].clientHeight;
+        $(".body-content").css("height",window.innerHeight - bottomheight-topheight);
+
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
 
         elems.forEach(function(html) {
