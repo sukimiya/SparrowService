@@ -161,11 +161,13 @@ include("../scripts.btl"){}
                             println(e);
                             return;
                         }
+                        var postData = JSON.stringify({enabled:option.toString(),clientid:id});
+                        console.log("/nest/adminSetClientActive[POST]:"+postData);
                         $.ajax({
                             type:"POST",
                             contentType:"application/json",
                             url:"/nest/adminSetClientActive",
-                            data:'{"enabled":"'+option+'","clientid":"'+id+'"}',
+                            data:postData,
                             datType:"json",
                             async: false,
                             success:function (data) {

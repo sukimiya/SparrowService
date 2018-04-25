@@ -30,5 +30,5 @@ public class OAuthClientDetailSetEvent {
     @JsonProperty("clientid")
     public String clientid;
     @JsonProperty("enabled")
-    public String enabled;
+    public Boolean enabled;
 }

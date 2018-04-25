@@ -85,19 +85,19 @@ public class AdminRestController {
         return oUserDetailRepository.findAll(pageable);
     }
 
-    @PreAuthorize("hasAuthority('GUARDER')")
-    @PostMapping(value = "client/{clientid}",consumes = "application/json")
-    public OAuthClientDetail postClientById(@PathVariable("clientid") String clientid,@JsonProperty("secret") String secret){
-        if (secret==null) secret = clientid;
-        Integer id = UUID.randomUUID().hashCode();
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String[] scope = {"read","write"};
-        OAuthClientDetail oAuthClientDetail = new OAuthClientDetail(id,clientid,encoder.encode(secret),scope);
-        oAuthClientDetail.setResourceIds(resourceId);
-        oAuthClientDetail.setAuthorities("TRUSTED_CLIENT");
-        oAuthClientRepository.save(oAuthClientDetail);
-        return oAuthClientDetail;
-    }
+//    @PreAuthorize("hasAuthority('GUARDER')")
+//    @PostMapping(value = "client/{clientid}",consumes = "application/json")
+//    public OAuthClientDetail postClientById(@PathVariable("clientid") String clientid,@JsonProperty("secret") String secret){
+//        if (secret==null) secret = clientid;
+//        Integer id = UUID.randomUUID().hashCode();
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        String[] scope = {"read","write"};
+//        OAuthClientDetail oAuthClientDetail = new OAuthClientDetail(id,clientid,encoder.encode(secret),scope);
+//        oAuthClientDetail.setResourceIds(resourceId);
+//        oAuthClientDetail.setAuthorities("TRUSTED_CLIENT");
+//        oAuthClientRepository.save(oAuthClientDetail);
+//        return oAuthClientDetail;
+//    }
     @PreAuthorize("hasAuthority('GUARDER')")
     @GetMapping("client/{clientid}")
     public OAuthClientDetail getClientById(@PathVariable("clientid") String clientid){
@@ -107,7 +107,7 @@ public class AdminRestController {
     @RequestMapping(method = RequestMethod.POST, value = "adminSetClientActive",consumes = "application/json")
     public Map<String,String> adminSetClientActive(@RequestBody OAuthClientDetailSetEvent jdoc, @JsonProperty(value = "enabled") String enabled, @JsonProperty(value = "clientid") String clientid){
         OAuthClientDetail oclient= oAuthClientRepository.findByClientId(jdoc.clientid);
-        oclient.setEnabled(Boolean.getBoolean(jdoc.enabled));
+        oclient.setEnabled(jdoc.enabled);
         oAuthClientRepository.save(oclient);
         Map<String,String> returnmap = new HashMap<String,String>();
         returnmap.put("clientId",oclient.getClientId());
