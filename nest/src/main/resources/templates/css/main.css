@@ -19,8 +19,8 @@
  */
 
 .logo{
-    width:62px;
-    height: 62px;
+    width:90px;
+    height: 90px;
     background-image: url("/img/logo2.svg");
     align-self: center!important;
 }
@@ -76,9 +76,13 @@ label{
 }
 .page-header .option-btn-group{
     margin-top: 160px;
+    position: absolute;
+    right: 40px;
 }
 .page-header .option-btn-group .option-btn{
-    width:42px;height:42px
+    width:42px;height:42px;
+    position: absolute;
+    right: 40px;
 }
 .icon-16px{
     width:16px;height:16px;
@@ -148,10 +152,17 @@ label{
     height: 100%;
 }
 
+.list-group {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/*Loading Bar*/
 .loadingBar {
-    top: 0px;
-    left: 0px;
     position: absolute;
+    bottom: 0px;
+    right: 0px;
+    overflow: hidden;
     display: flex;
     flex-direction: row;
     border-bottom: 0px solid #F6F7F8;
@@ -160,68 +171,141 @@ label{
     text-align: center;
     width:100%;
     height: 100%;
-    background: #ffffff;
-    opacity: 0.5;
+    background: #2699FB;
+    z-index: 2000;
 }
-
-/*Typing Loader*/
-.load_typing{
+.warpLogo{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    flex-flow: row;
+    align-self: center;
+}
+.warpLog-row{
     align-self: center!important;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    -webkit-animation: typing 1s linear infinite alternate;
-    -moz-animation: Typing 1s linear infinite alternate;
-    animation: typing 1s linear infinite alternate;
-    margin: 20px 17px; /* Not necessary- its only for layouting*/
+    align-items: center;
+    display: flex;
+    flex-flow: column;
+    width: 100%;
 }
-@-webkit-keyframes typing{
-    0%{
-        background-color: rgba(35,57,139, 1);
-        box-shadow: 12px 0px 0px 0px rgba(35,57,139,0.2),
-        24px 0px 0px 0px rgba(35,57,139,0.2);
-    }
-    25%{
-        background-color: rgba(35,57,139, 0.4);
-        box-shadow: 12px 0px 0px 0px rgba(35,57,139,2),
-        24px 0px 0px 0px rgba(35,57,139,0.2);
-    }
-    75%{ background-color: rgba(35,57,139, 0.4);
-        box-shadow: 12px 0px 0px 0px rgba(35,57,139,0.2),
-        24px 0px 0px 0px rgba(35,57,139,1);
+.showbox {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 5%;
+}
+
+.loader {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    overflow: hidden;
+    margin: 20px 20px;
+    width: 42px;
+}
+.loader:before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+}
+
+.circular {
+    -webkit-animation: rotate 2s linear infinite;
+    animation: rotate 2s linear infinite;
+    height: 100%;
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.path {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    -webkit-animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    stroke-linecap: round;
+}
+
+@-webkit-keyframes rotate {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
 }
 
-@-moz-keyframes typing{
-    0%{
-        background-color: rgba(35,57,139, 1);
-        box-shadow: 12px 0px 0px 0px rgba(35,57,139,0.2),
-        24px 0px 0px 0px rgba(35,57,139,0.2);
-    }
-    25%{
-        background-color: rgba(35,57,139, 0.4);
-        box-shadow: 12px 0px 0px 0px rgba(35,57,139,2),
-        24px 0px 0px 0px rgba(35,57,139,0.2);
-    }
-    75%{ background-color: rgba(35,57,139, 0.4);
-        box-shadow: 12px 0px 0px 0px rgba(35,57,139,0.2),
-        24px 0px 0px 0px rgba(35,57,139,1);
+@keyframes rotate {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
 }
-
-@keyframes typing{
-    0%{
-        background-color: rgba(35,57,139, 1);
-        box-shadow: 12px 0px 0px 0px rgba(35,57,139,0.2),
-        24px 0px 0px 0px rgba(35,57,139,0.2);
+@-webkit-keyframes dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
     }
-    25%{
-        background-color: rgba(35,57,139, 0.4);
-        box-shadow: 12px 0px 0px 0px rgba(35,57,139,2),
-        24px 0px 0px 0px rgba(35,57,139,0.2);
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
     }
-    75%{ background-color: rgba(35,57,139, 0.4);
-        box-shadow: 12px 0px 0px 0px rgba(35,57,139,0.2),
-        24px 0px 0px 0px rgba(35,57,139,1);
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+    }
+}
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+    }
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+    }
+}
+@-webkit-keyframes color {
+    100%,
+    0% {
+        stroke: white;
+    }
+    40% {
+        stroke: white;
+    }
+    66% {
+        stroke: white;
+    }
+    80%,
+    90% {
+        stroke: white;
+    }
+}
+@keyframes color {
+    100%,
+    0% {
+        stroke: white;
+    }
+    40% {
+        stroke: white;
+    }
+    66% {
+        stroke: white;
+    }
+    80%,
+    90% {
+        stroke: white;
     }
 }

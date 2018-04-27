@@ -56,21 +56,18 @@
     function showLoading(element) {
         var loadingEl = document.createElement("div");
         loadingEl.classList.add("loadingBar");
-        // var loadingCEL = document.createElement("div");
-        // loadingCEL.classList.add("d-flex");
-        // loadingCEL.classList.add("flex-row");
-        var logoEl = document.createElement("div");
-        logoEl.classList.add("logo");
-        var typeEl = document.createElement("div");
-        typeEl.classList.add("load_typing");
-        // loadingEl.appendChild(loadingCEL);
-        loadingEl.appendChild(logoEl);
-        loadingEl.appendChild(typeEl);
+        loadingEl.classList.add("fade");
+
+
+        var loader = document.createElement("div");
+        loadingEl.innerHTML = '<div class="warpLogo"><div class="warpLog-row"><div class="logo"></div></div></div><div class="loader"><svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/></svg></div>';
+
         if(element!=null){
             element.appendChild(loadingEl);
         }else{
-            element.body.appendChild(loadingEl);
+            document.body.appendChild(loadingEl);
         }
+        loadingEl.classList.add("show");
     }
     function removeLoading(element) {
         if(element!=null){

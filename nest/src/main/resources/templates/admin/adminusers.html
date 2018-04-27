@@ -24,7 +24,7 @@ include("../header.btl",{title:"Sparrow Nest"}){}
 <%
 include("../topnav.btl"){}
 %>
-<div class="row bg-light">
+<div class="bg-light">
     <div class="container d-flex justify-content-between page-header">
         <h1 class="p-2 align-self-center current-title">
         </h1>
@@ -36,7 +36,7 @@ include("../topnav.btl"){}
     </div>
 </div>
         <div class="container s-page-content">
-            <div class="row justify-content-md-center">
+            <div class="justify-content-md-center">
                 <div class="list-group col-lg">
                     <div class="list-group-item search-box fully">
                         <form action="${ctxPath}/admin/usersSearch">
@@ -182,7 +182,7 @@ include("../scripts.btl"){}
         var userEnabled = $("#userEnabled").attr("checked")?true:false;
         var datastr = JSON.stringify({username:username,password:password,firstname:firstname,lastname:lastname,email:email,enabled:userEnabled});
         $("form").attr("disabled",true);
-        showLoading(document.getElementById("useraddModel"));
+        showLoading();
         // $.ajax({
         //     type:"POST",
         //     contentType:"application/json",
@@ -192,7 +192,7 @@ include("../scripts.btl"){}
         //     async: false,
         //     success:function (data) {
         //         $("form").removeAttr("disabled");
-        //         removeLoading(document.getElementById("useraddModel"));
+        //         removeLoading();
         //         if(data.id>0){
         //             $('#useraddModel').modal({show:false});
         //         }

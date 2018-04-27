@@ -61,7 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         super();
         this.oUserDetailRepository = oUserDetailRepository;
         if(!oUserDetailRepository.existsByUsername("admin")){
-            String[] roles = {"ADMIN","USER"};
+            String[] roles = {"ADMIN","USER","GUARDER"};
             s_config.save(new SparrowConfiguration());
             this.s_config = s_config;
             configureLoader = new ConfigureLoader(s_config);

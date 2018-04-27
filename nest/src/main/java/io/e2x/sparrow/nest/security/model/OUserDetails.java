@@ -41,7 +41,6 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class OUserDetails implements UserDetails {
 
     @Id

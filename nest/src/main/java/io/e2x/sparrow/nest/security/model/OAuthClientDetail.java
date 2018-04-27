@@ -33,7 +33,6 @@ import java.util.*;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class OAuthClientDetail implements ClientDetails {
 
     public Integer getId() {
