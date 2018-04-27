@@ -24,20 +24,21 @@ public class UserSocialInformations {
     public UserSocialInformations(){
 
     }
-    public UserSocialInformations(String nikename, String wechatID, String email, String mobilePhone, String qQNumber) {
-        this.nikename = nikename;
+    public UserSocialInformations(String firstname,String lastname, String wechatID, String email, String mobilePhone, String qQNumber) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.wechatID = wechatID;
         this.email = email;
         this.mobilePhone = mobilePhone;
         this.qQNumber = qQNumber;
     }
 
-    public String getNikename() {
-        return nikename;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setNikename(String nikename) {
-        this.nikename = nikename;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
     public String getWechatID() {
@@ -72,7 +73,17 @@ public class UserSocialInformations {
         this.qQNumber = qQNumber;
     }
 
-    private String nikename;
+    private String firstname;
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    private String lastname;
     private String wechatID;
     private String email;
     private String mobilePhone;

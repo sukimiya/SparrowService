@@ -20,13 +20,23 @@
 
 package io.e2x.sparrow.nest.users.vo;
 
+import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Data
+@Document
 public class UserInformations {
     public UserInformations(String id, UserCurrency userCurrency, UserSocialInformations userSocialInformations) {
         this.id = id;
         this.userCurrency = userCurrency;
         this.userSocialInformations = userSocialInformations;
+    }
+
+    public UserInformations(String id) {
+        this.id = id;
+        this.userCurrency = new UserCurrency(0,0);
+        this.userSocialInformations = new UserSocialInformations();
     }
 
     public String getId() {

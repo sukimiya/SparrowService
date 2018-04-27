@@ -29,10 +29,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
 import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
+import io.e2x.sparrow.nest.security.model.OUserDetails;
 import io.e2x.sparrow.nest.users.UnregistedUserRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
@@ -52,6 +52,8 @@ import javax.annotation.security.RolesAllowed;
 @Controller
 @RequestMapping("/")
 public class MainController {
+
+    private final int LIST_PAGE_SIZE = 20;
 
     @Value("${resource.id:spring-boot-application}")
     private String resourceId;
@@ -121,9 +123,26 @@ public class MainController {
         OAuthClientDetail oAuthClientDetail = new OAuthClientDetail(id,clientid,secret,scope);
         oAuthClientDetail.setDomain(domain);
         oAuthClientRepository.save(oAuthClientDetail);
-        model.addAttribute("searchkey",null);
+        model.addAttribute("searchkey","");
         model.addAttribute("listmap",oAuthClientRepository.findAll(Sort.by(Sort.Direction.DESC,"lastOp")));
         return getPages("/admin/adminclients.html",model);
+    }
+
+    @PreAuthorize("hasAuthority('GUARDER')")
+    @GetMapping("/admin/users")
+    public String allusers(@RequestParam(value = "page",required = false) String page,final Model model){
+        int thepage = 0;
+        if(page!=null&&Integer.valueOf(page)>0){
+            thepage = Integer.valueOf(page);
+        }
+        Pageable pageable = new PageRequest(thepage,LIST_PAGE_SIZE,Sort.Direction.DESC,"id");
+        Page<OUserDetails> users= oUserDetailRepository.findAll(pageable);
+        List<OUserDetails> userDetailsList = users.getContent();
+        model.addAttribute("listmap",userDetailsList);
+        model.addAttribute("listTotal",users.getTotalPages());
+        model.addAttribute("listPage",users.getNumber());
+        model.addAttribute("key",null);
+        return getPages("/admin/adminusers.html",model);
     }
 
     @GetMapping("testpage")

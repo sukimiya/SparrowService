@@ -29,6 +29,6 @@ public class UserUtils {
         return new UserInformations(id,new UserCurrency(0,0),generateNewUserSocial(attributes));
     }
     public static final UserSocialInformations generateNewUserSocial(String...attributs){
-        return new UserSocialInformations(attributs[0],attributs[1],attributs[2],attributs[3],attributs[4]);
+        return new UserSocialInformations(attributs[0],attributs[1],attributs[2],attributs[3],attributs[4],attributs[5]);
     }
 }

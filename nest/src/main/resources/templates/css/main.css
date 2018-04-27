@@ -18,6 +18,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+.logo{
+    width:62px;
+    height: 62px;
+    background-image: url("/img/logo2.svg");
+    align-self: center!important;
+}
+
 body {
     font-family: Helvetica, Tahoma, Arial, "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei";
     font-family: Helvetica, Tahoma, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei";
@@ -141,3 +148,80 @@ label{
     height: 100%;
 }
 
+.loadingBar {
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 0px solid #F6F7F8;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    text-align: center;
+    width:100%;
+    height: 100%;
+    background: #ffffff;
+    opacity: 0.5;
+}
+
+/*Typing Loader*/
+.load_typing{
+    align-self: center!important;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    -webkit-animation: typing 1s linear infinite alternate;
+    -moz-animation: Typing 1s linear infinite alternate;
+    animation: typing 1s linear infinite alternate;
+    margin: 20px 17px; /* Not necessary- its only for layouting*/
+}
+@-webkit-keyframes typing{
+    0%{
+        background-color: rgba(35,57,139, 1);
+        box-shadow: 12px 0px 0px 0px rgba(35,57,139,0.2),
+        24px 0px 0px 0px rgba(35,57,139,0.2);
+    }
+    25%{
+        background-color: rgba(35,57,139, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(35,57,139,2),
+        24px 0px 0px 0px rgba(35,57,139,0.2);
+    }
+    75%{ background-color: rgba(35,57,139, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(35,57,139,0.2),
+        24px 0px 0px 0px rgba(35,57,139,1);
+    }
+}
+
+@-moz-keyframes typing{
+    0%{
+        background-color: rgba(35,57,139, 1);
+        box-shadow: 12px 0px 0px 0px rgba(35,57,139,0.2),
+        24px 0px 0px 0px rgba(35,57,139,0.2);
+    }
+    25%{
+        background-color: rgba(35,57,139, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(35,57,139,2),
+        24px 0px 0px 0px rgba(35,57,139,0.2);
+    }
+    75%{ background-color: rgba(35,57,139, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(35,57,139,0.2),
+        24px 0px 0px 0px rgba(35,57,139,1);
+    }
+}
+
+@keyframes typing{
+    0%{
+        background-color: rgba(35,57,139, 1);
+        box-shadow: 12px 0px 0px 0px rgba(35,57,139,0.2),
+        24px 0px 0px 0px rgba(35,57,139,0.2);
+    }
+    25%{
+        background-color: rgba(35,57,139, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(35,57,139,2),
+        24px 0px 0px 0px rgba(35,57,139,0.2);
+    }
+    75%{ background-color: rgba(35,57,139, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(35,57,139,0.2),
+        24px 0px 0px 0px rgba(35,57,139,1);
+    }
+}

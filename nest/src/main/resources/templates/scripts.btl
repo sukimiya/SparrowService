@@ -21,7 +21,7 @@
 
 <script src="${ctxPath}/js/jquery.min.js" type="text/javascript"></script>
 <script src="${ctxPath}/js/popper.min.js" type="text/javascript"></script>
-<script src="${ctxPath}/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="${ctxPath}/js/bootstrap.bundle.min.js" type="text/javascript"></script>
 <script src="${ctxPath}/js/switchery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -53,4 +53,30 @@
             nvitem.textContent = cryary[cryary.length-1];
         }
     });
+    function showLoading(element) {
+        var loadingEl = document.createElement("div");
+        loadingEl.classList.add("loadingBar");
+        // var loadingCEL = document.createElement("div");
+        // loadingCEL.classList.add("d-flex");
+        // loadingCEL.classList.add("flex-row");
+        var logoEl = document.createElement("div");
+        logoEl.classList.add("logo");
+        var typeEl = document.createElement("div");
+        typeEl.classList.add("load_typing");
+        // loadingEl.appendChild(loadingCEL);
+        loadingEl.appendChild(logoEl);
+        loadingEl.appendChild(typeEl);
+        if(element!=null){
+            element.appendChild(loadingEl);
+        }else{
+            element.body.appendChild(loadingEl);
+        }
+    }
+    function removeLoading(element) {
+        if(element!=null){
+            element.removeChild(element.getElementsByClassName("loadingBar"));
+        }else{
+            document.body.removeChild(document.body.getElementsByClassName("loadingBar"));
+        }
+    }
 </script>

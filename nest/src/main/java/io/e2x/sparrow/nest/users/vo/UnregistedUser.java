@@ -30,8 +30,8 @@ public class UnregistedUser extends UserSocialInformations{
         this.password = password;
     }
 
-    public UnregistedUser(String username, String password, String nikename, String wechatID, String email, String mobilePhone, String qQNumber,long time) {
-        super(nikename, wechatID, email, mobilePhone, qQNumber);
+    public UnregistedUser(String username, String password, String firstname, String lastname, String wechatID, String email, String mobilePhone, String qQNumber,long time) {
+        super(firstname,lastname, wechatID, email, mobilePhone, qQNumber);
         this.username = username;
         this.password = password;
         this.reqtimestamp = time;
