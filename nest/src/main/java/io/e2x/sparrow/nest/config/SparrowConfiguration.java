@@ -48,4 +48,7 @@ public class SparrowConfiguration {
 
     private String domain="localhost";
     private String siteName="Sparrow";
+
+
+    public String[] authoritiesTypes = {"USER","ADMIN","GUARDER"};
 }

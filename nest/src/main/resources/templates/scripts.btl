@@ -67,13 +67,16 @@
         }else{
             document.body.appendChild(loadingEl);
         }
-        loadingEl.classList.add("show");
+        var onLoadingClick = function(event){
+            element.removeChild(loadingEl);
+            event.currentTarget.removeEventListener("click",onLoadingClick);
+        }
+        loadingEl.addEventListener("click",onLoadingClick);
+        setTimeout(function(){
+                        loadingEl.classList.add("show");
+                    },100);
     }
     function removeLoading(element) {
-        if(element!=null){
-            element.removeChild(element.getElementsByClassName("loadingBar"));
-        }else{
-            document.body.removeChild(document.body.getElementsByClassName("loadingBar"));
-        }
+        $(".loadingBar").remove();
     }
 </script>

@@ -22,13 +22,21 @@ package io.e2x.sparrow.nest.web.controller;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.e2x.sparrow.nest.config.SparrowConfigurationRepository;
 import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
 import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetails;
+import io.e2x.sparrow.nest.users.UserInfoRepository;
+import io.e2x.sparrow.nest.users.vo.UserCurrency;
+import io.e2x.sparrow.nest.users.vo.UserInformations;
+import io.e2x.sparrow.nest.users.vo.UserSocialInformations;
 import io.e2x.sparrow.nest.web.controller.event.AdministratorHomeEvent;
 import io.e2x.sparrow.nest.web.events.OAuthClientDetailSetEvent;
+import io.e2x.sparrow.nest.web.events.UserDetailAddEvent;
 import io.swagger.annotations.Api;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +44,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.server.ServerResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,15 +58,20 @@ import java.util.UUID;
 @RequestMapping(value = "/nest")
 public class AdminRestController {
 
+    @Autowired
+    public SparrowConfigurationRepository s_config;
+
     @Value("${resource.id:spring-boot-application}")
     private String resourceId;
 
     private OAuthClientRepository oAuthClientRepository;
     private OUserDetailRepository oUserDetailRepository;
+    private UserInfoRepository userInfoRepository;
 
     private final int LIST_PAGE_SIZE=20;
 
-    public AdminRestController(OAuthClientRepository oAuthClientRepository, OUserDetailRepository oUserDetailRepository) {
+    public AdminRestController(OAuthClientRepository oAuthClientRepository, OUserDetailRepository oUserDetailRepository,UserInfoRepository userInfoRepository) {
+        this.userInfoRepository = userInfoRepository;
         this.oAuthClientRepository = oAuthClientRepository;
         this.oUserDetailRepository = oUserDetailRepository;
     }
@@ -84,7 +99,28 @@ public class AdminRestController {
         Pageable pageable = new PageRequest(page,LIST_PAGE_SIZE,Sort.Direction.DESC,"id");
         return oUserDetailRepository.findAll(pageable);
     }
-
+    @PreAuthorize("hasAuthority('GUARDER')")
+    @PostMapping(value = "user/add")
+    public UserDetailAddEvent useradd(@RequestBody UserDetailAddEvent user){
+        if(user.username!=null&&user.password!=null&user.email!=null){
+            String[] roles = {"USER"};
+            if(oUserDetailRepository.existsByUsername(user.username)){
+                return null;
+            }
+            OUserDetails newUserDetails = new OUserDetails(user.username,user.password,user.enabled,true,true,true,roles);
+            oUserDetailRepository.save(newUserDetails);
+            String id = newUserDetails.getId();
+            UserInformations userInformations = new UserInformations(id,new UserCurrency(0,0),new UserSocialInformations(user.firstname,user.lastname,"",user.email,"",""));
+            userInfoRepository.save(userInformations);
+            return new UserDetailAddEvent(userInformations.getUserSocialInformations().getFirstname(),
+                    userInformations.getUserSocialInformations().getLastname(),
+                    newUserDetails.getUsername(),null,
+                    userInformations.getUserSocialInformations().getEmail(),
+                    true,
+                    newUserDetails.getId());
+        }
+        return null;
+    }
 //    @PreAuthorize("hasAuthority('GUARDER')")
 //    @PostMapping(value = "client/{clientid}",consumes = "application/json")
 //    public OAuthClientDetail postClientById(@PathVariable("clientid") String clientid,@JsonProperty("secret") String secret){

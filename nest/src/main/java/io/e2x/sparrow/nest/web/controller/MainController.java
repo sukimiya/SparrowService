@@ -26,11 +26,14 @@ import java.time.Instant;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.e2x.sparrow.nest.config.SparrowConfiguration;
+import io.e2x.sparrow.nest.config.SparrowConfigurationRepository;
 import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
 import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetails;
 import io.e2x.sparrow.nest.users.UnregistedUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -44,6 +47,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.management.relation.Role;
 
 /**
  * Application home page and login.
@@ -52,6 +56,9 @@ import javax.annotation.security.RolesAllowed;
 @Controller
 @RequestMapping("/")
 public class MainController {
+
+    @Autowired
+    public SparrowConfigurationRepository s_config;
 
     private final int LIST_PAGE_SIZE = 20;
 
@@ -138,6 +145,8 @@ public class MainController {
         Pageable pageable = new PageRequest(thepage,LIST_PAGE_SIZE,Sort.Direction.DESC,"id");
         Page<OUserDetails> users= oUserDetailRepository.findAll(pageable);
         List<OUserDetails> userDetailsList = users.getContent();
+        SparrowConfiguration config = this.s_config.findAll().get(0);
+        model.addAttribute("authorities",config.authoritiesTypes);
         model.addAttribute("listmap",userDetailsList);
         model.addAttribute("listTotal",users.getTotalPages());
         model.addAttribute("listPage",users.getNumber());

@@ -43,6 +43,10 @@ import java.util.UUID;
 @AllArgsConstructor
 public class OUserDetails implements UserDetails {
 
+    public String getId() {
+        return id;
+    }
+
     @Id
     @GeneratedValue(strategy= GenerationStrategy.UNIQUE)
     private String id;
