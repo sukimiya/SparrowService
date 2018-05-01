@@ -17,7 +17,7 @@ public class UserDetailAddEvent {
     public String password;
     @JsonProperty("email")
     public String email;
-    @JsonProperty("enabled")
+    @JsonProperty("isenabled")
     public Boolean enabled = true;
 
     @JsonProperty(value = "id",required = false,access = JsonProperty.Access.READ_ONLY)

@@ -23,15 +23,16 @@ package io.e2x.sparrow.nest.web.controller;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.e2x.sparrow.nest.config.SparrowConfigurationRepository;
-import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
-import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
-import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
-import io.e2x.sparrow.nest.security.model.OUserDetails;
+import io.e2x.sparrow.nest.security.OAuthAuthorityUtils;
+import io.e2x.sparrow.nest.security.model.*;
 import io.e2x.sparrow.nest.users.UserInfoRepository;
 import io.e2x.sparrow.nest.users.vo.UserCurrency;
 import io.e2x.sparrow.nest.users.vo.UserInformations;
 import io.e2x.sparrow.nest.users.vo.UserSocialInformations;
+import io.e2x.sparrow.nest.web.controller.event.AdminSettingUserAuthEvent;
 import io.e2x.sparrow.nest.web.controller.event.AdministratorHomeEvent;
+import io.e2x.sparrow.nest.web.controller.event.ResultEventTypes;
+import io.e2x.sparrow.nest.web.controller.event.StandardResponseEvent;
 import io.e2x.sparrow.nest.web.events.OAuthClientDetailSetEvent;
 import io.e2x.sparrow.nest.web.events.UserDetailAddEvent;
 import io.swagger.annotations.Api;
@@ -43,15 +44,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Api(value = "/nest",tags = "admin Services")
 @RestController
@@ -141,14 +142,39 @@ public class AdminRestController {
     }
     @PreAuthorize("hasAuthority('GUARDER')")
     @RequestMapping(method = RequestMethod.POST, value = "adminSetClientActive",consumes = "application/json")
-    public Map<String,String> adminSetClientActive(@RequestBody OAuthClientDetailSetEvent jdoc, @JsonProperty(value = "enabled") String enabled, @JsonProperty(value = "clientid") String clientid){
+    public Map<String,String> adminSetClientActive(@RequestBody OAuthClientDetailSetEvent jdoc, @JsonProperty(value = "isenabled") String enabled, @JsonProperty(value = "clientid") String clientid){
         OAuthClientDetail oclient= oAuthClientRepository.findByClientId(jdoc.clientid);
         oclient.setEnabled(jdoc.enabled);
         oAuthClientRepository.save(oclient);
         Map<String,String> returnmap = new HashMap<String,String>();
         returnmap.put("clientId",oclient.getClientId());
-        returnmap.put("enabled",oclient.getEnabled().toString());
+        returnmap.put("isenabled",oclient.getEnabled().toString());
         return returnmap;
+    }
+    @PreAuthorize("hasAuthority('GUARDER')")
+    @RequestMapping(method = RequestMethod.POST, value = "adminSetUserAuth",consumes = "application/json")
+    public ResultEventTypes adminSetUserAuth(@RequestBody AdminSettingUserAuthEvent jdoc){
+
+        OUserDetails user = oUserDetailRepository.findByUsername(jdoc.username);
+        if(user!=null){
+
+                user.getAuthorities();
+                for(GrantedAuthority auth : user.getAuthorities()){
+                    if(auth.getAuthority() == jdoc.authority){
+                        return ResultEventTypes.OK.setReason("Authority exist.");
+                    }
+                }
+            if(jdoc.enabled) {
+                user.addARoleWithName(jdoc.authority);
+            }else {
+                user.removeARoleWithName(jdoc.authority);
+            }
+            oUserDetailRepository.save(user);
+
+            return ResultEventTypes.OK;
+        }
+
+        return ResultEventTypes.UNKWON_ERROR;
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("hello")

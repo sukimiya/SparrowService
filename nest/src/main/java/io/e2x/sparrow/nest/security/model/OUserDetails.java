@@ -56,6 +56,11 @@ public class OUserDetails implements UserDetails {
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
+
+    public void setAuthorities(List<GrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
+
     private List<GrantedAuthority> authorities;
 
     public OUserDetails(){
@@ -79,7 +84,20 @@ public class OUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
     }
-
+    public void addARoleWithName(String role){
+        this.authorities.add(new OAuthSimpleGrantedAuthority(role));
+    }
+    public void removeARoleWithName(String role){
+        OAuthSimpleGrantedAuthority removeauth = null;
+        for(GrantedAuthority auth:this.authorities){
+            if(auth.getAuthority().equals(role)){
+                removeauth = (OAuthSimpleGrantedAuthority) auth;
+                break;
+            }
+        }
+        if(removeauth!=null)
+            this.authorities.remove(removeauth);
+    }
     @Override
     public String getPassword() {
         return this.password;

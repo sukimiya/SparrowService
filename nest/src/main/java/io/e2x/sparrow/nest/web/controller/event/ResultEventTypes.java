@@ -1,6 +1,6 @@
 /*
  * Project:sparrow nest
- * LastModified:18-4-25 下午2:22 by sukimiya
+ * LastModified:18-4-28 下午6:14 by sukimiya
  *
  * Copyright (C) 2018.  e2x.io
  *
@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.nest.web.events;
+package io.e2x.sparrow.nest.web.controller.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -26,9 +26,22 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @JsonView
 @Document
-public class OAuthClientDetailSetEvent {
-    @JsonProperty("clientid")
-    public String clientid;
-    @JsonProperty("isenabled")
-    public Boolean enabled;
+public enum  ResultEventTypes {
+    OK(0,"OK"),
+    UNKWON_ERROR(1,"Unkwon error.")
+    ;
+
+    @JsonProperty("result")
+    public int result;
+    @JsonProperty("reason")
+    public String reasonPhrase;
+
+    ResultEventTypes(int value, String reasonPhrase) {
+        this.result = value;
+        this.reasonPhrase = reasonPhrase;
+    }
+    public ResultEventTypes setReason(String reason){
+        this.reasonPhrase = reason;
+        return this;
+    }
 }

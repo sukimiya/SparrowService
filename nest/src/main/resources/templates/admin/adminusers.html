@@ -38,30 +38,6 @@ var currentUser = {username:"",firstname:"",lastname:"",email:"",authorities:[]}
         </div>
     </div>
 </div>
-<div class="d-flex flex-row">
-    <div id="userAuthorities" class="container s-page-content hide">
-        <div class="d-flex flex-row">
-            <input type="hidden" id="allauthorities" value="${authorities}">
-            <div>${currentUser.firstname}&nbsp;${currentUser.lastname}</div>
-            <div>ID:${currentUser.username}&nbsp;</div>
-            <div>Email:${currentUser.email}&nbsp;</div>
-            <div class="list-group">
-                <% for(auth in authorities){
-                var isActChecked="";
-                /*if(currentUser.authorities.indexOf(auth)>=0)
-                    isActChecked="checked";*/
-                %>
-                <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input js-switch" id="authoritie_${auth}" ${isActChecked} onclick="onUserAuthChange(event)">
-                    <label class="form-check-label" for="authoritie_${auth}">${auth}</label>
-                </div>
-                <%}%>
-                <div class="form-group form-check">
-                    <a class="btn btn-primary" onclick="onUserAuthSubmit()">CHANGE</a>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="container s-page-content fully">
         <div class="justify-content-md-center">
             <div class="list-group col-lg">
@@ -105,7 +81,7 @@ var currentUser = {username:"",firstname:"",lastname:"",email:"",authorities:[]}
                                         &#xe6a5;
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Authorise</a>
+                                        <a class="dropdown-item" href="${ctxPath}/admin/users/${entry.username}/auth">Authorise</a>
                                         <a class="dropdown-item" href="#">Edit</a>
                                         <a class="dropdown-item" href="#">Delete</a>
                                     </div>
@@ -118,7 +94,6 @@ var currentUser = {username:"",firstname:"",lastname:"",email:"",authorities:[]}
             </div>
         </div>
     </div>
-</div>
 
 <!-- Modal -->
 <div class="modal fade" id="useraddModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

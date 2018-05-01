@@ -25,7 +25,6 @@ import java.security.Principal;
 import java.time.Instant;
 import java.util.*;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.e2x.sparrow.nest.config.SparrowConfiguration;
 import io.e2x.sparrow.nest.config.SparrowConfigurationRepository;
 import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
@@ -33,21 +32,17 @@ import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetails;
 import io.e2x.sparrow.nest.users.UnregistedUserRepository;
+import io.e2x.sparrow.nest.web.controller.event.AuthorityTypeSettingVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.security.RolesAllowed;
-import javax.management.relation.Role;
 
 /**
  * Application home page and login.
@@ -145,7 +140,7 @@ public class MainController {
         Pageable pageable = new PageRequest(thepage,LIST_PAGE_SIZE,Sort.Direction.DESC,"id");
         Page<OUserDetails> users= oUserDetailRepository.findAll(pageable);
         List<OUserDetails> userDetailsList = users.getContent();
-        SparrowConfiguration config = this.s_config.findAll().get(0);
+        SparrowConfiguration config = getConfig();
         model.addAttribute("authorities",config.authoritiesTypes);
         model.addAttribute("listmap",userDetailsList);
         model.addAttribute("listTotal",users.getTotalPages());
@@ -153,7 +148,38 @@ public class MainController {
         model.addAttribute("key",null);
         return getPages("/admin/adminusers.html",model);
     }
+    @PreAuthorize("hasAuthority('GUARDER')")
+    @GetMapping("/admin/users/{username}/auth")
+    public String adminUserAuth(@PathVariable("username") String username,Model model){
+        OUserDetails userDetails = oUserDetailRepository.findByUsername(username);
+        SparrowConfiguration config = getConfig();
+        List<AuthorityTypeSettingVO> typelist = new ArrayList<AuthorityTypeSettingVO>();
+        for(int i=0;i<config.authoritiesTypes.length;i++){
+            String atype = config.authoritiesTypes[i];
+            AuthorityTypeSettingVO authset = new AuthorityTypeSettingVO();
+            authset.setAuthority(atype);
 
+            if(isContainAuth(userDetails.getAuthorities(),atype)){
+                authset.setEnabled(true);
+            }else{
+                authset.setEnabled(false);
+            }
+            typelist.add(authset);
+
+        }
+        model.addAttribute("currentUser",userDetails);
+        model.addAttribute("listmap",typelist);
+        return getPages("/admin/usersetauth.html",model);
+    }
+    private boolean isContainAuth(Collection<? extends GrantedAuthority> authorities, String auth){
+        List<GrantedAuthority> auths = (List<GrantedAuthority>) authorities;
+        for (GrantedAuthority authority: auths){
+            if(authority.getAuthority().equals(auth)){
+                return true;
+            }
+        }
+        return false;
+    }
     @GetMapping("testpage")
     public String getBootstrapTest(){
         return "/bootstraptest.html";
@@ -172,6 +198,12 @@ public class MainController {
     private String getPages(String page, Model model){
         checkLogin(model);
         return page;
+    }
+    private SparrowConfiguration config;
+    private SparrowConfiguration getConfig(){
+        if(config==null)
+            config = this.s_config.findAll().get(0);
+        return config;
     }
 }
 
