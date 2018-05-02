@@ -124,7 +124,8 @@ label{
 .s-page-content{
     margin-top: 40px;
     margin-bottom: 40px;
-    overflow-x: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
     /*增加滚动的流畅性能*/
     touch-action: pan-y;
     -webkit-overflow-scrolling: touch;
