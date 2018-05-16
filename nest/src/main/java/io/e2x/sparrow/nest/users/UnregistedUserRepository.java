@@ -28,4 +28,5 @@ import java.util.Optional;
 public interface UnregistedUserRepository extends MongoRepository<UnregistedUser,String> {
 
     UnregistedUser findByUsername(String s);
+    void deleteByUsername(String s);
 }
