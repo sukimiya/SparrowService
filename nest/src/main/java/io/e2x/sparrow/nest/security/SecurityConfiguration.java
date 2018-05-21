@@ -23,7 +23,7 @@ import io.e2x.sparrow.nest.config.ConfigureLoader;
 import io.e2x.sparrow.nest.config.SparrowConfiguration;
 import io.e2x.sparrow.nest.config.SparrowConfigurationRepository;
 import io.e2x.sparrow.nest.security.controller.OUserServices;
-import io.e2x.sparrow.nest.security.model.OUserDetails;
+import io.e2x.sparrow.nest.security.model.OUserDetail;
 import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -34,9 +34,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * Web安全配置，安全配置的第一道墙
@@ -65,7 +63,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             s_config.save(new SparrowConfiguration());
             this.s_config = s_config;
             configureLoader = new ConfigureLoader(s_config);
-            oUserDetailRepository.save(new OUserDetails(configureLoader.getAdmin_name(),configureLoader.getAdmin_password(),true,true,true,true,roles));
+            oUserDetailRepository.save(new OUserDetail(configureLoader.getAdmin_name(),configureLoader.getAdmin_password(),true,true,true,true,roles));
         }
     }
 

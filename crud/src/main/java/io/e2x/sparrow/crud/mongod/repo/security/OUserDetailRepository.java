@@ -18,14 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.nest.security.model;
+package io.e2x.sparrow.crud.mongod.repo.security;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import io.e2x.sparrow.crud.mongod.vo.security.OUserDetail;
+import org.springframework.data.domain.Example;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
+import org.springframework.security.core.userdetails.UserDetails;
+import reactor.core.publisher.Mono;
 
-@EnableMongoRepositories
-public interface OUserDetailRepository extends MongoRepository<OUserDetail,String> {
-    OUserDetail findByUsername(String s);
+@EnableReactiveMongoRepositories
+public interface OUserDetailRepository extends ReactiveMongoRepository<OUserDetail,String> {
+    Mono<OUserDetail> findByUsername(String s);
 
-    boolean existsByUsername(String s);
+    Mono<Boolean> existsByUsername(String s);
 }

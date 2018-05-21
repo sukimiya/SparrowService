@@ -21,10 +21,8 @@
 package io.e2x.sparrow.nest.web.controller.event;
 
 import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
-import io.e2x.sparrow.nest.security.model.OUserDetails;
-import org.springframework.data.domain.Page;
+import io.e2x.sparrow.nest.security.model.OUserDetail;
 
-import java.util.Date;
 import java.util.List;
 
 public class AdministratorHomeEvent {
@@ -42,14 +40,14 @@ public class AdministratorHomeEvent {
         this.clients = clients;
     }
 
-    public List<OUserDetails> getUsers() {
+    public List<OUserDetail> getUsers() {
         return users;
     }
 
-    public void setUsers(List<OUserDetails> users) {
+    public void setUsers(List<OUserDetail> users) {
         this.users = users;
     }
 
     private List<OAuthClientDetail> clients;
-    private List<OUserDetails> users;
+    private List<OUserDetail> users;
 }

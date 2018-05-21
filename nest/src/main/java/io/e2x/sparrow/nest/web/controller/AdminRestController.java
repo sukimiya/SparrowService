@@ -20,10 +20,8 @@
 
 package io.e2x.sparrow.nest.web.controller;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.e2x.sparrow.nest.config.SparrowConfigurationRepository;
-import io.e2x.sparrow.nest.security.OAuthAuthorityUtils;
 import io.e2x.sparrow.nest.security.model.*;
 import io.e2x.sparrow.nest.users.UserInfoRepository;
 import io.e2x.sparrow.nest.users.vo.UserCurrency;
@@ -32,11 +30,9 @@ import io.e2x.sparrow.nest.users.vo.UserSocialInformations;
 import io.e2x.sparrow.nest.web.controller.event.AdminSettingUserAuthEvent;
 import io.e2x.sparrow.nest.web.controller.event.AdministratorHomeEvent;
 import io.e2x.sparrow.nest.web.controller.event.ResultEventTypes;
-import io.e2x.sparrow.nest.web.controller.event.StandardResponseEvent;
 import io.e2x.sparrow.nest.web.events.OAuthClientDetailSetEvent;
 import io.e2x.sparrow.nest.web.events.UserDetailAddEvent;
 import io.swagger.annotations.Api;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -45,13 +41,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.server.ServerResponse;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Api(value = "/nest",tags = "admin Services")
@@ -95,7 +86,7 @@ public class AdminRestController {
     }
     @PreAuthorize("hasAuthority('GUARDER')")
     @GetMapping("usersbypage/{page}")
-    public Page<OUserDetails> getUsers(@PathVariable("page") Integer page){
+    public Page<OUserDetail> getUsers(@PathVariable("page") Integer page){
         if(page<=0) page=0;
         Pageable pageable = new PageRequest(page,LIST_PAGE_SIZE,Sort.Direction.DESC,"id");
         return oUserDetailRepository.findAll(pageable);
@@ -108,7 +99,7 @@ public class AdminRestController {
             if(oUserDetailRepository.existsByUsername(user.username)){
                 return null;
             }
-            OUserDetails newUserDetails = new OUserDetails(user.username,user.password,user.enabled,true,true,true,roles);
+            OUserDetail newUserDetails = new OUserDetail(user.username,user.password,user.enabled,true,true,true,roles);
             oUserDetailRepository.save(newUserDetails);
             String id = newUserDetails.getId();
             UserInformations userInformations = new UserInformations(id,new UserCurrency(0,0),new UserSocialInformations(user.firstname,user.lastname,"",user.email,"",""));
@@ -155,7 +146,7 @@ public class AdminRestController {
     @RequestMapping(method = RequestMethod.POST, value = "adminSetUserAuth",consumes = "application/json")
     public ResultEventTypes adminSetUserAuth(@RequestBody AdminSettingUserAuthEvent jdoc){
 
-        OUserDetails user = oUserDetailRepository.findByUsername(jdoc.username);
+        OUserDetail user = oUserDetailRepository.findByUsername(jdoc.username);
         if(user!=null){
 
                 user.getAuthorities();

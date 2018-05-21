@@ -22,7 +22,7 @@ package io.e2x.sparrow.nest.users;
 
 
 import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
-import io.e2x.sparrow.nest.security.model.OUserDetails;
+import io.e2x.sparrow.nest.security.model.OUserDetail;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,8 +40,8 @@ public class UsersController {
     }
 
     @GetMapping("all")
-    public List<OUserDetails> allUsers(){
-        List<OUserDetails> allUsers = oUserDetailRepository.findAll();
+    public List<OUserDetail> allUsers(){
+        List<OUserDetail> allUsers = oUserDetailRepository.findAll();
         return allUsers;
     }
 }

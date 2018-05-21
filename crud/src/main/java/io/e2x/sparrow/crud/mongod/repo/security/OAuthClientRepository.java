@@ -1,6 +1,6 @@
 /*
  * Project:sparrow nest
- * LastModified:18-4-13 上午11:55 by lily
+ * LastModified:18-4-11 下午10:55 by lily
  *
  * Copyright (C) 2018.  e2x.io
  *
@@ -18,14 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.e2x.sparrow.nest.security.model;
+package io.e2x.sparrow.crud.mongod.repo.security;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import io.e2x.sparrow.crud.mongod.vo.security.OAuthClientDetail;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-@EnableMongoRepositories
-public interface OUserDetailRepository extends MongoRepository<OUserDetail,String> {
-    OUserDetail findByUsername(String s);
-
-    boolean existsByUsername(String s);
+@EnableReactiveMongoRepositories
+public interface OAuthClientRepository extends ReactiveMongoRepository<OAuthClientDetail,String>{
+    Mono<OAuthClientDetail> findByClientId(String s);
+    Flux<OAuthClientDetail> findAllByClientIdLike(String s);
+    Flux<OAuthClientDetail> findAllByDomainLike(String s);
 }

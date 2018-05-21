@@ -30,7 +30,7 @@ import io.e2x.sparrow.nest.config.SparrowConfigurationRepository;
 import io.e2x.sparrow.nest.security.model.OAuthClientDetail;
 import io.e2x.sparrow.nest.security.model.OAuthClientRepository;
 import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
-import io.e2x.sparrow.nest.security.model.OUserDetails;
+import io.e2x.sparrow.nest.security.model.OUserDetail;
 import io.e2x.sparrow.nest.users.UnregistedUserRepository;
 import io.e2x.sparrow.nest.web.controller.event.AuthorityTypeSettingVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,8 +138,8 @@ public class MainController {
             thepage = Integer.valueOf(page);
         }
         Pageable pageable = new PageRequest(thepage,LIST_PAGE_SIZE,Sort.Direction.DESC,"id");
-        Page<OUserDetails> users= oUserDetailRepository.findAll(pageable);
-        List<OUserDetails> userDetailsList = users.getContent();
+        Page<OUserDetail> users= oUserDetailRepository.findAll(pageable);
+        List<OUserDetail> userDetailsList = users.getContent();
         SparrowConfiguration config = getConfig();
         model.addAttribute("authorities",config.authoritiesTypes);
         model.addAttribute("listmap",userDetailsList);
@@ -151,7 +151,7 @@ public class MainController {
     @PreAuthorize("hasAuthority('GUARDER')")
     @GetMapping("/admin/users/{username}/auth")
     public String adminUserAuth(@PathVariable("username") String username,Model model){
-        OUserDetails userDetails = oUserDetailRepository.findByUsername(username);
+        OUserDetail userDetails = oUserDetailRepository.findByUsername(username);
         SparrowConfiguration config = getConfig();
         List<AuthorityTypeSettingVO> typelist = new ArrayList<AuthorityTypeSettingVO>();
         for(int i=0;i<config.authoritiesTypes.length;i++){
