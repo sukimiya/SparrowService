@@ -31,4 +31,6 @@ public interface OAuthClientRepository extends ReactiveMongoRepository<OAuthClie
     Mono<OAuthClientDetail> findByClientId(String s);
     Flux<OAuthClientDetail> findAllByClientIdLike(String s);
     Flux<OAuthClientDetail> findAllByDomainLike(String s);
+
+    Flux<OAuthClientDetail> findAllByClientIdOrDomainLike(String s);
 }

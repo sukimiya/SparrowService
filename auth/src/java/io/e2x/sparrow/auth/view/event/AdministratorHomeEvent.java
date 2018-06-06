@@ -1,0 +1,53 @@
+/*
+ * Project:sparrow auth
+ * LastModified:18-5-21 下午6:17 by sukimiya
+ *
+ * Copyright (C) 2018.  e2x.io
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package io.e2x.sparrow.auth.view.event;
+
+import io.e2x.sparrow.crud.mongod.vo.security.OAuthClientDetail;
+import io.e2x.sparrow.crud.mongod.vo.security.OUserDetail;
+
+import java.util.List;
+
+public class AdministratorHomeEvent {
+    private long timestamp;
+
+    public AdministratorHomeEvent() {
+        timestamp = System.currentTimeMillis();
+    }
+
+    public List<OAuthClientDetail> getClients() {
+        return clients;
+    }
+
+    public void setClients(List<OAuthClientDetail> clients) {
+        this.clients = clients;
+    }
+
+    public List<OUserDetail> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<OUserDetail> users) {
+        this.users = users;
+    }
+
+    private List<OAuthClientDetail> clients;
+    private List<OUserDetail> users;
+}

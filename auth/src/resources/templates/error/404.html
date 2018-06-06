@@ -1,0 +1,205 @@
+<!--
+  ~ Project:sparrow auth
+  ~ LastModified:18-4-23 下午3:53 by sukimiya
+  ~
+  ~ Copyright (C) 2018.  e2x.io
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Any-Security 404</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        /*
+ * Project:sparrow nest
+ * LastModified:18-4-21 上午3:19 by sukimiya
+ *
+ * Copyright (C) 2018.  e2x.io
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+        body {
+            font-family: Helvetica, Tahoma, Arial, "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei";
+            font-family: Helvetica, Tahoma, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei";
+        }
+
+        p.error {
+            font-weight: bold;
+            color: red;
+        }
+
+        div.logout {
+            float: right;
+        }
+        body{
+            color: #2699FB;
+            background-color:#EAEAEA;
+        }
+        label{
+            font-size: 0.5em;
+        }
+        .modal-header .close{
+            float: left;
+            margin: 0px;
+            opacity:1;
+            color: #2699FB;
+        }
+        .navbar-light .navbar-brand {
+            color: #2699FB;
+        }
+        .navbar-light .navbar-nav .active>.nav-link {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+        }
+        .page-header{
+            height: 180px;
+        }
+        .page-header .option-btn-group{
+            margin-top: 160px;
+        }
+        .page-header .option-btn-group .option-btn{
+            width:42px;height:42px
+        }
+        .icon-16px{
+            width:16px;height:16px;
+        }
+        .modal-title-blue{
+            color: #2699FB;
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 0.8rem;
+            color: #2699FB;
+            border: 1px solid #BCE0FD;
+        }
+        .text-muted {
+            color: #CCCCCC!important;
+        }
+        .form-check-label {
+            margin-left: 1em;
+            margin-right: 1em;
+        }
+        .btn {
+            padding: .75rem 1rem;
+            font-size: 0.8rem;
+        }
+        .modal-dialog{max-width:500px;margin:1.75rem auto;margin-top:0px;margin-bottom:0px;}
+        .modal-footer{border-top: 0px solid transparent;}
+        .modal-header{border-bottom: 0px solid transparent;}
+        .modal-content{background-color: #F6F7F8;border: 0px solid transparent;}
+        .modal-backdrop.show {
+            opacity: 1;
+        }
+        .modal-backdrop{
+            background-color: #F6F7F8;
+        }
+        .float-btn{
+            z-index: 100;
+        }
+        .s-page-content{
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        .navbar-toggler{
+            border: 0px solid transparent;
+        }
+        .search-box{
+            padding: 0rem 0rem;
+        }
+        .list-group-item.fully{
+            padding:0rem 0rem;
+            border:1px solid rgba(0,0,0,.125);
+        }
+        .search-box form div input{
+            border:1px solid transparent;
+            padding: .75rem 1.25rem;
+            border-bottom-left-radius:0px;
+            border-bottom-right-radius: 0px;
+            -webkit-border-bottom-left-radius: 0px;
+            -webkit-border-bottom-right-radius: 0px;
+        }
+        .search-box form .btn{
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            z-index: 100;
+            border: 0px solid transparent;
+            height: 100%;
+        }
+
+
+    </style>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light top-navbar">
+    <a class="navbar-brand" href="/">
+        <img src="../img/logo2.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+        Sparrow nest
+    </a>
+</nav>
+<div class="row bg-light d-flex flex-column error-content">
+    <div class="p-2" style="margin-left: 15%;">
+        <p class="title"><h1 class="text-warning">404&nbsp;</h1></p>
+    </div>
+    <div class="p-2" style="margin-left: 15%;">
+        <p class="title"><h3 class="text-warning">非常抱歉，没有找到您要的资源</h3></p>
+    </div>
+    <div class="p-2" style="margin-left: 15%;">
+        <h5 class="title_en">Sorry, Not found</h5>
+    </div>
+</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light bottom-navbar">
+    <a class="navbar-brand" href="http://www.miitbeian.gov.cn">
+        <span style="font-size: x-small">Copyright (C) 2018.  e2x.io</span>
+    </a>
+    <div class="collapse navbar-collapse show" userid="navbarSupportedContent2">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="tel:18667144772">联系我们</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://mp.wechat.qq.com">WeChat</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var topheight = $(".top-navbar")[0].clientHeight;
+        var bottomheight = $(".bottom-navbar")[0].clientHeight;
+        $(".error-content").css("height",window.innerHeight - bottomheight-topheight);
+    })
+</script>
+</body>
+</html>

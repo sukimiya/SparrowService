@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!--
+  ~ Project:sparrow auth
+  ~ LastModified:18-5-3 上午10:22 by sukimiya
+  ~
+  ~ Copyright (C) 2018.  e2x.io
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<%
+include("../header.btl",{title:"Sparrow Nest"}){}
+%>
+<%
+include("../topnav.btl"){}
+%>
+<%
+var currentUser = {username:"",firstname:"",lastname:"",email:"",authorities:[]};
+%>
+<div class="bg-light">
+    <div class="container d-flex justify-content-between page-header">
+        <h1 class="p-2 align-self-center current-title">
+        </h1>
+        <div class="option-btn-group">
+            <button type="button" class="btn btn-primary p-2 justify-content-end shadow mb-5 rounded-circle option-btn" data-toggle="modal" data-target="#useraddModel">
+                <span class="iconfont float-btn" aria-hidden="true">&#xe6ca;</span>
+            </button>
+        </div>
+    </div>
+</div>
+    <div class="container s-page-content fully">
+        <div class="justify-content-md-center">
+            <div class="list-group col-lg">
+                <div class="list-group-item search-box fully">
+                    <form action="${ctxPath}/admin/usersSearch">
+                        <div class="input-group">
+                            <%
+                            var thekey = "";
+                            if(isEmpty("searchkey")) thekey = searchkey;
+                            %>
+                            <input type="text" class="form-control search-box" name="key" placeholder="Search for..." value="${thekey}">
+                            <!--<span class="input-group-btn">-->
+
+                            <!--</span>-->
+                        </div>
+                        <button class="btn btn-default iconfont navbar-toggler" type="submit">&#xe65c;</button>
+                    </form>
+                </div>
+                <% for(entry in listmap){
+                var isActChecked="";
+                if(entry.enabled)
+                isActChecked="checked";
+                %>
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex flex-column justify-content-center col-md-6">
+                            <div class="text-left"><h5>${entry.username}</h5></div>
+                        </div>
+                        <div class="d-flex flex-row justify-centent-between col-md-3">
+                            <div class="text-left align-self-center" style="font-size: x-small">${entry.authorities}</div>
+                        </div>
+                        <div class="d-flex flex-column justify-content-between col-md-2">
+                            <label class="form-check-label" for="userActive_${entry.username}">active</label>
+                            <input type="checkbox" class="form-check-input js-switch" userid="userActive_${entry.username}" name="userActive" ${isActChecked}>
+                            <label class="form-check-label">&nbsp;</label>
+                        </div>
+                        <div class="d-flex flex-row-reverse col-md-1">
+                            <div class="text-right align-self-center">
+                                <div class="dropdown">
+                                    <button class="btn btn-default navbar-toggler iconfont" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        &#xe6a5;
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="${ctxPath}/admin/users/${entry.username}/auth">Authorise</a>
+                                        <a class="dropdown-item" href="#">Edit</a>
+                                        <a class="dropdown-item" href="#">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%}%>
+            </div>
+        </div>
+    </div>
+
+<!-- Modal -->
+<div class="modal fade" userid="useraddModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div userid="ModelDialog" class="modal-dialog bg-light d-flex flex-column" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between">
+                <button type="button" class="close align-self-left" data-dismiss="modal" aria-label="Close">
+                    <span class="iconfont" aria-hidden="true">&#xe679;</span>
+                </button>
+                <h5 class="modal-title-blue align-self-center">Add a Client</h5>
+                <a class="modal-title-blue align-self-right" href="#">
+                    <span class="iconfont" aria-hidden="true" style="color:transparent;">&#xe679;</span>
+                </a>
+            </div>
+            <form userid="adduserform" action="${ctxPath}/admin/user" method="post">
+            <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="firstname">Firstname</label>
+                        <input type="text" class="form-control" userid="firstname" name="firstname" aria-describedby="firstnameHelp" placeholder="Enter firstname">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastname">Lastname</label>
+                        <input type="text" class="form-control" userid="lastname" name="lastname" aria-describedby="lastnameHelp" placeholder="Enter lastname">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">User ID*</label>
+                        <input type="text" class="form-control" userid="username" name="username" aria-describedby="usernameHelp" placeholder="Enter username">
+                        <small userid="usernameHelp" class="form-text text-muted">The username need be unique.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password*</label>
+                        <input type="password" class="form-control" userid="password" name="password" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email*</label>
+                        <input type="text" class="form-control" userid="email" name="email" placeholder="yourname@email.com">
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input js-switch" userid="userEnabled" checked name="userEnabled">
+                        <label class="form-check-label" for="userEnabled">is client enabled?</label>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary form-control" onclick="submitAddUserForm(event)">ADD</a>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<%
+include("../scripts.btl"){}
+%>
+<script type="text/javascript">
+
+    function showPopup(jtarget,title,content,placement="left",trigger="manual"){
+        jtarget.popover({
+            content:content,
+            title:title,
+            placement:placement,
+            trigger:trigger
+        });
+        jtarget.popover('show');
+        jtarget.change(function () {
+            jtarget.popover('hide');
+            jtarget.popover('dispose');
+            jtarget.change(function () {});
+        });
+    }
+    var popupUserAddModal = function(){
+        $("#username").val("");
+        $("#password").val("");
+        $("#firstname").val("");
+        $("#lastname").val("");
+        $("#email").val("");
+        $('#useraddModel').modal('hide');
+    }
+    var onUserAuthSubmit = function () {
+        $("#userAuthorities").addClass("hide");
+    }
+    var onShowUserAuth = function () {
+        $("#userAuthorities").removeClass("hide");
+    }
+    var onUserAuthChange = function (event) {
+
+    }
+    var submitAddUserForm = function (event) {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var firstname = $("#firstname").val();
+        var lastname = $("#lastname").val();
+        var email = $("#email").val();
+        if(username==null||username==""){
+            showPopup($("#username"),"Username is required","You need input username.");
+            return;
+        }
+        if(password==null||password==""){
+            showPopup($("#password"),"Password is required","You need input Password.");
+            return;
+        }
+        if(email==null||email==""){
+            showPopup($("#email"),"Email is required","You need input your email in this field.");
+            return;
+        }
+        var userEnabled = $("#userEnabled").attr("checked")?true:false;
+        var postData = JSON.stringify({username:username,password:password,firstname:firstname,lastname:lastname,email:email,enabled:userEnabled});
+        $("form").attr("disabled",true);
+        showLoading();
+        $(event.currentTarget).attr("disabled",true);
+        $(event.currentTarget).addClass("disable");
+        $.ajax({
+            type:"POST",
+            contentType:"application/json",
+            url:"/nest/user/add",
+            data:postData,
+            datType:"json",
+            success:function (data) {
+                $("form").removeAttr("disabled");
+                popupUserAddModal();
+                $(event.currentTarget).removeAttr("disabled");
+                $(event.currentTarget).removeClass("disable");
+                removeLoading();
+            }
+        });
+
+
+        // $('#useraddModel').on('show.bs.modal', function (event) {});
+    }
+    
+    $(document).ready(function () {
+        var jsswitchs = $(".switchery");
+        for(var i=0;i<jsswitchs.length;i++){
+            jswcpm = jsswitchs[i];
+            jsw = jsswitchs[i].previousSibling;
+            var jswid = jsw.userid;
+            if(jswid){
+                var userid = jswid.split("_")[1];
+                if(userid!=null){
+                    jswcpm.userid = "switcheryof_"+jsw.userid;
+                    jswcpm.onclick = function(event) {
+                        var option = event.currentTarget.previousSibling.checked?"true":"false";
+                        try{
+                            var userid = event.currentTarget.userid.split("_")[2];
+                        }catch (e){
+                            println(e);
+                            return;
+                        }
+                        var postData = JSON.stringify({enabled:option.toString(),username:userid});
+                        console.log("/nest/SetUserEnabled[POST]:"+postData);
+                        $.ajax({
+                            type:"POST",
+                            contentType:"application/json",
+                            url:"/nest/adminSetUserActive",
+                            data:postData,
+                            datType:"json",
+                            async: false,
+                            success:function (data) {
+                                if(!data.enabled)
+                                    event.currentTarget.previousSibling.checked = false;
+                                else
+                                    event.currentTarget.previousSibling.checked = true;
+                            }
+                        });
+                    };
+                }
+            }
+        }
+    });
+</script>
+<%
+include("../footer.btl"){}
+%>

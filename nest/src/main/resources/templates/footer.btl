@@ -2,7 +2,7 @@
     <a class="navbar-brand" href="#">
         <span style="font-size: x-small">Copyright (C) 2018.  e2x.io</span>
     </a>
-    <div class="collapse navbar-collapse show" id="navbarSupportedContent2">
+    <div class="collapse navbar-collapse show" userid="navbarSupportedContent2">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="tel:18667144772">联系我们</a>

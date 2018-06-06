@@ -1,0 +1,37 @@
+<!--
+  ~ Project:sparrow auth
+  ~ LastModified:18-4-23 上午12:46 by sukimiya
+  ~
+  ~ Copyright (C) 2018.  e2x.io
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <span style="font-size: x-small">Copyright (C) 2018.  e2x.io</span>
+    </a>
+    <div class="collapse navbar-collapse show" userid="navbarSupportedContent2">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="tel:18667144772">联系我们</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://mp.wechat.qq.com">WeChat</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+</body>
+</html>

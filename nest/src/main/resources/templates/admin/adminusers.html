@@ -71,7 +71,7 @@ var currentUser = {username:"",firstname:"",lastname:"",email:"",authorities:[]}
                         </div>
                         <div class="d-flex flex-column justify-content-between col-md-2">
                             <label class="form-check-label" for="userActive_${entry.username}">active</label>
-                            <input type="checkbox" class="form-check-input js-switch" id="userActive_${entry.username}" name="userActive" ${isActChecked}>
+                            <input type="checkbox" class="form-check-input js-switch" userid="userActive_${entry.username}" name="userActive" ${isActChecked}>
                             <label class="form-check-label">&nbsp;</label>
                         </div>
                         <div class="d-flex flex-row-reverse col-md-1">
@@ -96,8 +96,8 @@ var currentUser = {username:"",firstname:"",lastname:"",email:"",authorities:[]}
     </div>
 
 <!-- Modal -->
-<div class="modal fade" id="useraddModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div id="ModelDialog" class="modal-dialog bg-light d-flex flex-column" role="document">
+<div class="modal fade" userid="useraddModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div userid="ModelDialog" class="modal-dialog bg-light d-flex flex-column" role="document">
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-between">
                 <button type="button" class="close align-self-left" data-dismiss="modal" aria-label="Close">
@@ -108,32 +108,32 @@ var currentUser = {username:"",firstname:"",lastname:"",email:"",authorities:[]}
                     <span class="iconfont" aria-hidden="true" style="color:transparent;">&#xe679;</span>
                 </a>
             </div>
-            <form id="adduserform" action="${ctxPath}/admin/user" method="post">
+            <form userid="adduserform" action="${ctxPath}/admin/user" method="post">
             <div class="modal-body">
 
                     <div class="form-group">
                         <label for="firstname">Firstname</label>
-                        <input type="text" class="form-control" id="firstname" name="firstname" aria-describedby="firstnameHelp" placeholder="Enter firstname">
+                        <input type="text" class="form-control" userid="firstname" name="firstname" aria-describedby="firstnameHelp" placeholder="Enter firstname">
                     </div>
                     <div class="form-group">
                         <label for="lastname">Lastname</label>
-                        <input type="text" class="form-control" id="lastname" name="lastname" aria-describedby="lastnameHelp" placeholder="Enter lastname">
+                        <input type="text" class="form-control" userid="lastname" name="lastname" aria-describedby="lastnameHelp" placeholder="Enter lastname">
                     </div>
                     <div class="form-group">
                         <label for="username">User ID*</label>
-                        <input type="text" class="form-control" id="username" name="username" aria-describedby="usernameHelp" placeholder="Enter username">
-                        <small id="usernameHelp" class="form-text text-muted">The username need be unique.</small>
+                        <input type="text" class="form-control" userid="username" name="username" aria-describedby="usernameHelp" placeholder="Enter username">
+                        <small userid="usernameHelp" class="form-text text-muted">The username need be unique.</small>
                     </div>
                     <div class="form-group">
                         <label for="password">Password*</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                        <input type="password" class="form-control" userid="password" name="password" placeholder="Password">
                     </div>
                     <div class="form-group">
                         <label for="email">Email*</label>
-                        <input type="text" class="form-control" id="email" name="email" placeholder="yourname@email.com">
+                        <input type="text" class="form-control" userid="email" name="email" placeholder="yourname@email.com">
                     </div>
                     <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input js-switch" id="userEnabled" checked name="userEnabled">
+                        <input type="checkbox" class="form-check-input js-switch" userid="userEnabled" checked name="userEnabled">
                         <label class="form-check-label" for="userEnabled">is client enabled?</label>
                     </div>
 
@@ -229,20 +229,20 @@ include("../scripts.btl"){}
         for(var i=0;i<jsswitchs.length;i++){
             jswcpm = jsswitchs[i];
             jsw = jsswitchs[i].previousSibling;
-            var jswid = jsw.id;
+            var jswid = jsw.userid;
             if(jswid){
-                var id = jswid.split("_")[1];
-                if(id!=null){
-                    jswcpm.id = "switcheryof_"+jsw.id;
+                var userid = jswid.split("_")[1];
+                if(userid!=null){
+                    jswcpm.userid = "switcheryof_"+jsw.userid;
                     jswcpm.onclick = function(event) {
                         var option = event.currentTarget.previousSibling.checked?"true":"false";
                         try{
-                            var id = event.currentTarget.id.split("_")[2];
+                            var userid = event.currentTarget.userid.split("_")[2];
                         }catch (e){
                             println(e);
                             return;
                         }
-                        var postData = JSON.stringify({enabled:option.toString(),username:id});
+                        var postData = JSON.stringify({enabled:option.toString(),username:userid});
                         console.log("/nest/SetUserEnabled[POST]:"+postData);
                         $.ajax({
                             type:"POST",

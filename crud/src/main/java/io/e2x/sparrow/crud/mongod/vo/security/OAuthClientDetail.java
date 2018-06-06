@@ -101,8 +101,9 @@ public class OAuthClientDetail implements ClientDetails {
         return enabled;
     }
 
-    public void setEnabled(Boolean enabled) {
+    public OAuthClientDetail setEnabled(Boolean enabled) {
         this.enabled = enabled;
+        return this;
     }
 
     private Boolean enabled = true;
