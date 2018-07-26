@@ -30,11 +30,12 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class SSOFilter implements Filter {
-
+    Logger logger = Logger.getLogger(SSOFilter.class.getName());
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
@@ -44,8 +45,8 @@ public class SSOFilter implements Filter {
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Key, Authorization");
-
-
+        logger.info("filter :\n"+request.getMethod()+":"+request.getRequestURI());
+        logger.info("filter :\n"+request.getMethod()+":"+request.getRequestURI());
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
         } else {

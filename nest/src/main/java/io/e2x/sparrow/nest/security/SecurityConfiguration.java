@@ -108,6 +108,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //        http.headers().frameOptions().disable().and()
 //                .rememberMe().tokenRepository(reMemberMeRepository);
 
+//        http.authorizeRequests().antMatchers("/**").permitAll().and().httpBasic().and().csrf().disable();
         http
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()

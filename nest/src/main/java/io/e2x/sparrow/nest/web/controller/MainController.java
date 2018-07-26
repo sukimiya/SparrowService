@@ -24,6 +24,7 @@ package io.e2x.sparrow.nest.web.controller;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.*;
+import java.util.logging.Logger;
 
 import io.e2x.sparrow.nest.config.SparrowConfiguration;
 import io.e2x.sparrow.nest.config.SparrowConfigurationRepository;
@@ -51,6 +52,8 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/")
 public class MainController {
+
+    Logger logger = Logger.getLogger(MainController.class.getName());
 
     @Autowired
     public SparrowConfigurationRepository s_config;
@@ -171,6 +174,25 @@ public class MainController {
         model.addAttribute("listmap",typelist);
         return getPages("/admin/usersetauth.html",model);
     }
+    @PostMapping("sitereview.jsp")
+    public String sitereview(@RequestParam("url") String url, final Model model){
+        logger.info("sitereview: "+url);
+        String[] strings = url.split(":9080");
+        String path = strings[1];
+
+        return getPages(path,model);
+    }
+
+    @PostMapping("v2x-service/terminal/data/report")
+    public String v2xService(final Model model,
+                             @RequestParam("latitude") String lat,
+                             @RequestParam("longitude") String lng,
+                             @RequestParam("speed") String speed,
+                             @RequestParam("heading") String heading
+                             ){
+        logger.info("POST v2x-service/terminal/data/report:\nlat:"+lat+" lng:"+lng);
+        return getPages("index.html",model);
+    }
     private boolean isContainAuth(Collection<? extends GrantedAuthority> authorities, String auth){
         List<GrantedAuthority> auths = (List<GrantedAuthority>) authorities;
         for (GrantedAuthority authority: auths){
@@ -184,6 +206,7 @@ public class MainController {
     public String getBootstrapTest(){
         return "/bootstraptest.html";
     }
+
 
 
     private boolean checkLogin(Model model){
