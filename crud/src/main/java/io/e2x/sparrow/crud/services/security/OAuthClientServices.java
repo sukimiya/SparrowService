@@ -22,5 +22,5 @@ public class OAuthClientServices implements ClientDetailsService {
         clientDetail.of(System.currentTimeMillis());
         return clientDetail;
     }
-} 
+}
 
