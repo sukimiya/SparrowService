@@ -32,13 +32,12 @@ import io.e2x.sparrow.nest.web.controller.event.AdministratorHomeEvent;
 import io.e2x.sparrow.nest.web.controller.event.ResultEventTypes;
 import io.e2x.sparrow.nest.web.events.OAuthClientDetailSetEvent;
 import io.e2x.sparrow.nest.web.events.UserDetailAddEvent;
+import io.e2x.sparrow.nest.web.events.UserDetailEditEvent;
 import io.swagger.annotations.Api;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
@@ -85,6 +84,23 @@ public class AdminRestController {
         return oAuthClientRepository.findAll(pageable);
     }
     @PreAuthorize("hasAuthority('GUARDER')")
+    @RequestMapping(method = RequestMethod.POST, value = "getUserByUsername")
+    public UserDetailEditEvent getUserInfoByUsername(@RequestParam("username") String username){
+        OUserDetail userDetail = oUserDetailRepository.findByUsername(username);
+        if(userDetail != null){
+            UserInformations userInformations = userInfoRepository.findUserInformationsByUserDetailId(userDetail.getId());
+            if(userInformations != null){
+                UserSocialInformations userSocialInformations = userInformations.getUserSocialInformations();
+                return new UserDetailEditEvent(userSocialInformations.getFirstname(),
+                        userSocialInformations.getLastname(),userDetail.getUsername(),
+                        "",
+                        userSocialInformations.getEmail(),
+                        userDetail.getId());
+            }
+        }
+        return null;
+    }
+    @PreAuthorize("hasAuthority('GUARDER')")
     @GetMapping("usersbypage/{page}")
     public Page<OUserDetail> getUsers(@PathVariable("page") Integer page){
         if(page<=0) page=0;
@@ -99,10 +115,10 @@ public class AdminRestController {
             if(oUserDetailRepository.existsByUsername(user.username)){
                 return null;
             }
-            OUserDetail newUserDetails = new OUserDetail(user.username,user.password,user.enabled,true,true,true,roles);
+            OUserDetail newUserDetails = new OUserDetail(user.username,UUID.randomUUID().toString(), user.password,user.enabled,true,true,true,roles);
             oUserDetailRepository.save(newUserDetails);
             String id = newUserDetails.getId();
-            UserInformations userInformations = new UserInformations(id,new UserCurrency(0,0),new UserSocialInformations(user.firstname,user.lastname,"",user.email,"",""));
+            UserInformations userInformations = new UserInformations(newUserDetails, new UserCurrency(0,0),new UserSocialInformations(user.firstname,user.lastname,"",user.email,"",""));
             userInfoRepository.save(userInformations);
             return new UserDetailAddEvent(userInformations.getUserSocialInformations().getFirstname(),
                     userInformations.getUserSocialInformations().getLastname(),
@@ -165,6 +181,22 @@ public class AdminRestController {
             return ResultEventTypes.OK;
         }
 
+        return ResultEventTypes.UNKWON_ERROR;
+    }
+    @PreAuthorize("hasAuthority('GUARDER')")
+    @PostMapping(value = "user/edit")
+    public ResultEventTypes adminEditUser(@RequestBody UserDetailEditEvent jdoc){
+        OUserDetail user = oUserDetailRepository.findByUsername(jdoc.username);
+        UserInformations userInformations = userInfoRepository.findUserInformationsByUserDetailId(user.getId());
+        if(user!=null){
+            user.setPassword(jdoc.password);
+            userInformations.getUserSocialInformations().setFirstname(jdoc.firstname);
+            userInformations.getUserSocialInformations().setLastname(jdoc.lastname);
+            userInformations.getUserSocialInformations().setEmail(jdoc.email);
+            userInfoRepository.save(userInformations);
+            oUserDetailRepository.save(user);
+            return ResultEventTypes.OK;
+        }
         return ResultEventTypes.UNKWON_ERROR;
     }
     @PreAuthorize("hasAuthority('ADMIN')")

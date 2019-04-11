@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Role;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.security.config.annotation.authentication.configurers.provisioning.UserDetailsManagerConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,6 +51,16 @@ public class OUserDetail implements UserDetails {
     @Id
     @GeneratedValue(strategy= GenerationStrategy.UNIQUE)
     private String id;
+
+    public String getSsn() {
+        return ssn;
+    }
+
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
+    }
+
+    private String ssn;
     private String username;
     private String password;
     private boolean accountNonExpired;
@@ -68,9 +79,11 @@ public class OUserDetail implements UserDetails {
     }
     public OUserDetail(String username){
         this.username = username;
+        this.ssn = UUID.randomUUID().toString();
     }
-    public OUserDetail(String username, String password, boolean enabled, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, String[] authorities) {
+    public OUserDetail(String username,String ssn, String password, boolean enabled, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, String[] authorities) {
         this.username = username;
+        this.ssn = ssn;
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         this.password = encoder.encode(password);
         this.enabled = enabled;
@@ -126,5 +139,10 @@ public class OUserDetail implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.enabled;
+    }
+
+    public void setPassword(String password){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        this.password = encoder.encode(password);
     }
 }

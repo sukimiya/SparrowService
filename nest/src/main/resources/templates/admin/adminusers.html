@@ -71,7 +71,7 @@ var currentUser = {username:"",firstname:"",lastname:"",email:"",authorities:[]}
                         </div>
                         <div class="d-flex flex-column justify-content-between col-md-2">
                             <label class="form-check-label" for="userActive_${entry.username}">active</label>
-                            <input type="checkbox" class="form-check-input js-switch" userid="userActive_${entry.username}" name="userActive" ${isActChecked}>
+                            <input type="checkbox" class="form-check-input js-switch" id="userActive_${entry.username}" name="userActive" ${isActChecked}>
                             <label class="form-check-label">&nbsp;</label>
                         </div>
                         <div class="d-flex flex-row-reverse col-md-1">
@@ -82,7 +82,7 @@ var currentUser = {username:"",firstname:"",lastname:"",email:"",authorities:[]}
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <a class="dropdown-item" href="${ctxPath}/admin/users/${entry.username}/auth">Authorise</a>
-                                        <a class="dropdown-item" href="#">Edit</a>
+                                        <a class="dropdown-item" href="#" id="dropItemEdit_${entry.username}" onclick="popupUserEditModal('${entry.username}');">Edit</a>
                                         <a class="dropdown-item" href="#">Delete</a>
                                     </div>
                                 </div>
@@ -96,8 +96,8 @@ var currentUser = {username:"",firstname:"",lastname:"",email:"",authorities:[]}
     </div>
 
 <!-- Modal -->
-<div class="modal fade" userid="useraddModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div userid="ModelDialog" class="modal-dialog bg-light d-flex flex-column" role="document">
+<div class="modal fade" id="useraddModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="ModelDialog" class="modal-dialog bg-light d-flex flex-column" role="document">
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-between">
                 <button type="button" class="close align-self-left" data-dismiss="modal" aria-label="Close">
@@ -108,32 +108,32 @@ var currentUser = {username:"",firstname:"",lastname:"",email:"",authorities:[]}
                     <span class="iconfont" aria-hidden="true" style="color:transparent;">&#xe679;</span>
                 </a>
             </div>
-            <form userid="adduserform" action="${ctxPath}/admin/user" method="post">
+            <form id="adduserform" action="${ctxPath}/admin/user" method="post">
             <div class="modal-body">
 
                     <div class="form-group">
                         <label for="firstname">Firstname</label>
-                        <input type="text" class="form-control" userid="firstname" name="firstname" aria-describedby="firstnameHelp" placeholder="Enter firstname">
+                        <input type="text" class="form-control" id="firstname" name="firstname" aria-describedby="firstnameHelp" placeholder="Enter firstname">
                     </div>
                     <div class="form-group">
                         <label for="lastname">Lastname</label>
-                        <input type="text" class="form-control" userid="lastname" name="lastname" aria-describedby="lastnameHelp" placeholder="Enter lastname">
+                        <input type="text" class="form-control" id="lastname" name="lastname" aria-describedby="lastnameHelp" placeholder="Enter lastname">
                     </div>
                     <div class="form-group">
                         <label for="username">User ID*</label>
-                        <input type="text" class="form-control" userid="username" name="username" aria-describedby="usernameHelp" placeholder="Enter username">
-                        <small userid="usernameHelp" class="form-text text-muted">The username need be unique.</small>
+                        <input type="text" class="form-control" id="username" name="username" aria-describedby="usernameHelp" placeholder="Enter username">
+                        <small id="usernameHelp" class="form-text text-muted">The username need be unique.</small>
                     </div>
                     <div class="form-group">
                         <label for="password">Password*</label>
-                        <input type="password" class="form-control" userid="password" name="password" placeholder="Password">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                     </div>
                     <div class="form-group">
                         <label for="email">Email*</label>
-                        <input type="text" class="form-control" userid="email" name="email" placeholder="yourname@email.com">
+                        <input type="text" class="form-control" id="email" name="email" placeholder="yourname@email.com">
                     </div>
                     <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input js-switch" userid="userEnabled" checked name="userEnabled">
+                        <input type="checkbox" class="form-check-input js-switch" id="userEnabled" checked name="userEnabled">
                         <label class="form-check-label" for="userEnabled">is client enabled?</label>
                     </div>
 
@@ -141,6 +141,51 @@ var currentUser = {username:"",firstname:"",lastname:"",email:"",authorities:[]}
             <div class="modal-footer">
                 <a class="btn btn-primary form-control" onclick="submitAddUserForm(event)">ADD</a>
             </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="userEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="ModelDialogEdit" class="modal-dialog bg-light d-flex flex-column" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between">
+                <button type="button" class="close align-self-left" data-dismiss="modal" aria-label="Close">
+                    <span class="iconfont" aria-hidden="true">&#xe679;</span>
+                </button>
+                <h5 class="modal-title-blue align-self-center">Add a Client</h5>
+                <a class="modal-title-blue align-self-right" href="#">
+                    <span class="iconfont" aria-hidden="true" style="color:transparent;">&#xe679;</span>
+                </a>
+            </div>
+            <form id="edituserform" action="${ctxPath}/admin/user" method="post">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="firstname">Firstname</label>
+                        <input type="text" class="form-control" id="firstname1" name="firstname" aria-describedby="firstnameHelp" placeholder="Enter firstname">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastname">Lastname</label>
+                        <input type="text" class="form-control" id="lastname1" name="lastname" aria-describedby="lastnameHelp" placeholder="Enter lastname">
+                    </div>
+                    <div class="form-group">
+                        <label for="password1">New Password*</label>
+                        <input type="password" class="form-control" id="password1" name="password1" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="password2">Confirm Password*</label>
+                        <input type="password" class="form-control" id="password2" name="password2" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email*</label>
+                        <input type="text" class="form-control" id="email1" name="email" placeholder="yourname@email.com">
+                    </div>
+                    <input type="hidden" class="hide" id="editusername" name="editusername" value="">
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary form-control" onclick="submitEditUserForm(event)">ADD</a>
+                </div>
             </form>
         </div>
     </div>
@@ -171,6 +216,26 @@ include("../scripts.btl"){}
         $("#lastname").val("");
         $("#email").val("");
         $('#useraddModel').modal('hide');
+    }
+    var popupUserEditModal = function(uname){
+        $.ajax({
+            url:"/nest/getUserByUsername",
+            type:"POST",
+            data:{username:uname},
+            success:function (data) {
+                if(data){
+                    $("#firstname1").val(data.firstname);
+                    $("#lastname1").val(data.lastname);
+                    $("#email1").val(data.email);
+                    $("#editusername").val(data.username);
+                    $('#userEdit').modal('show');
+                }else{
+                    showPopup("Request "+uname,"User not fount.");
+                }
+
+            }
+        });
+
     }
     var onUserAuthSubmit = function () {
         $("#userAuthorities").addClass("hide");
@@ -223,21 +288,54 @@ include("../scripts.btl"){}
 
         // $('#useraddModel').on('show.bs.modal', function (event) {});
     }
-    
+    var submitEditUserForm = function(event){
+        var password = $("#password1").val();
+        var password2 = $("#password2").val();
+        if(password !== password2){
+            showPopup("error","password must match to comfirm feild.");
+            return;
+        }
+        var username = $("#editusername").val();
+
+        var firstname = $("#firstname1").val();
+        var lastname = $("#lastname1").val();
+        var email = $("#email1").val();
+        $("form").attr("disabled",true);
+        showLoading();
+        $(event.currentTarget).attr("disabled",true);
+        $(event.currentTarget).addClass("disable");
+        var postData = JSON.stringify({username:username,firstname:firstname,lastname:lastname,email:email,password:password})
+        $.ajax({
+            type:"POST",
+            contentType:"application/json",
+            url:"/nest/user/edit",
+            data:postData,
+            datType:"json",
+            success:function (data) {
+                $("form").removeAttr("disabled");
+                $("#userEdit").modal("hide");
+                $(event.currentTarget).removeAttr("disabled");
+                $(event.currentTarget).removeClass("disable");
+                removeLoading();
+                this.widows.location.href = this.widows.location.href;
+            }
+        })
+
+    }
     $(document).ready(function () {
         var jsswitchs = $(".switchery");
         for(var i=0;i<jsswitchs.length;i++){
             jswcpm = jsswitchs[i];
             jsw = jsswitchs[i].previousSibling;
-            var jswid = jsw.userid;
+            var jswid = jsw.id;
             if(jswid){
-                var userid = jswid.split("_")[1];
-                if(userid!=null){
-                    jswcpm.userid = "switcheryof_"+jsw.userid;
+                var id = jswid.split("_")[1];
+                if(id!=null){
+                    jswcpm.id = "switcheryof_"+jsw.id;
                     jswcpm.onclick = function(event) {
                         var option = event.currentTarget.previousSibling.checked?"true":"false";
                         try{
-                            var userid = event.currentTarget.userid.split("_")[2];
+                            var userid = event.currentTarget.id.split("_")[2];
                         }catch (e){
                             println(e);
                             return;

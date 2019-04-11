@@ -21,11 +21,14 @@
 package io.e2x.sparrow.nest.users;
 
 import io.e2x.sparrow.nest.users.vo.UserInformations;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserInfoRepository extends MongoRepository<UserInformations,String>{
-    Optional<UserInformations> findById(String id);
+    UserInformations findByUserDetail_Username(String s);
+    UserInformations findUserInformationsByUserDetailId(String s);
     UserInformations findByUserSocialInformations_MobilePhone(String mobilephone);
 }

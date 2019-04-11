@@ -62,7 +62,7 @@ include("../topnav.btl"){}
                         <div class="d-flex justify-content-between">
                             <div class="d-flex flex-column justify-content-center col-md-6">
 
-                                <div class="text-left" style="font-size: x-small">ID:${entry.userid}</div>
+                                <div class="text-left" style="font-size: x-small">ID:${entry.id}</div>
                                 <!--<div class="text-right"><div style="font-size: x-small">${entry.lastOp}</div></div>-->
                                 <div class="text-left"><h5>${entry.clientId}</h5></div>
                                 <!--<div class="col-md-4 text-right"><svg class="icon" width="32px" height="32.00px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M266.7 960c-10.3 0-20.5-4.4-27.6-12.9-12.8-15.2-10.8-37.9 4.4-50.7L701.7 512 243.5 127.6c-15.2-12.8-17.2-35.5-4.4-50.7 12.8-15.2 35.5-17.2 50.7-4.4l490.7 411.7c6.6 5.5 11 13.3 12.4 21.7l0.1 0.6c2.1 12.5-2.6 25.2-12.4 33.4L289.9 951.6c-6.8 5.6-15 8.4-23.2 8.4z" fill="#1296db" /></svg></div>-->
@@ -74,7 +74,7 @@ include("../topnav.btl"){}
                             </div>
                             <div class="d-flex flex-column justify-content-between col-md-2">
                                 <label class="form-check-label" for="clientEnabled">active</label>
-                                <input type="checkbox" class="form-check-input js-switch" userid="clientActive_${entry.clientId}" name="clientActive" ${isActChecked}>
+                                <input type="checkbox" class="form-check-input js-switch" id="clientActive_${entry.clientId}" name="clientActive" ${isActChecked}>
                                 <label class="form-check-label">&nbsp;</label>
                             </div>
                             <div class="d-flex flex-row-reverse col-md-1">
@@ -98,8 +98,8 @@ include("../topnav.btl"){}
             </div>
         </div>
 <!-- Modal -->
-<div class="modal fade" userid="clientaddModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div userid="ModelDialog" class="modal-dialog bg-light d-flex flex-column" role="document">
+<div class="modal fade" id="clientaddModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="ModelDialog" class="modal-dialog bg-light d-flex flex-column" role="document">
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-between">
                 <button type="button" class="close align-self-left" data-dismiss="modal" aria-label="Close">
@@ -110,24 +110,24 @@ include("../topnav.btl"){}
                     <span class="iconfont" aria-hidden="true" style="color:transparent;">&#xe679;</span>
                 </a>
             </div>
-            <form userid="addclientform" action="${ctxPath}/admin/client" method="post">
+            <form id="addclientform" action="${ctxPath}/admin/client" method="post">
             <div class="modal-body">
 
                     <div class="form-group">
                         <label for="clientid">https://localhost/client/</label>
-                        <input type="text" class="form-control" userid="clientid" name="clientid" aria-describedby="clientidHelp" placeholder="Enter clientId">
-                        <small userid="clientidHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <input type="text" class="form-control" id="clientid" name="clientid" aria-describedby="clientidHelp" placeholder="Enter clientId">
+                        <small id="clientidHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
                     <div class="form-group">
                         <label for="secret">Password</label>
-                        <input type="text" class="form-control" userid="secret" name="secret" placeholder="Secret">
+                        <input type="text" class="form-control" id="secret" name="secret" placeholder="Secret">
                     </div>
                     <div class="form-group">
                         <label for="domain">Domain</label>
-                        <input type="text" class="form-control" userid="domain" name="domain" placeholder="Domain">
+                        <input type="text" class="form-control" id="domain" name="domain" placeholder="Domain">
                     </div>
                     <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input js-switch" userid="clientEnabled" checked name="clientEnabled">
+                        <input type="checkbox" class="form-check-input js-switch" id="clientEnabled" checked name="clientEnabled">
                         <label class="form-check-label" for="clientEnabled">is client enabled?</label>
                     </div>
 
@@ -148,20 +148,20 @@ include("../scripts.btl"){}
         for(var i=0;i<jsswitchs.length;i++){
             jswcpm = jsswitchs[i];
             jsw = jsswitchs[i].previousSibling;
-            var jswid = jsw.userid;
+            var jswid = jsw.id;
             if(jswid){
-                var userid = jswid.split("_")[1];
-                if(userid!=null){
-                    jswcpm.userid = "switcheryof_"+jsw.userid;
+                var id = jswid.split("_")[1];
+                if(id!=null){
+                    jswcpm.id = "switcheryof_"+jsw.id;
                     jswcpm.onclick = function(event) {
                         var option = event.currentTarget.previousSibling.checked?"true":"false";
                         try{
-                            var userid = event.currentTarget.userid.split("_")[2];
+                            var id = event.currentTarget.id.split("_")[2];
                         }catch (e){
                             println(e);
                             return;
                         }
-                        var postData = JSON.stringify({enabled:option.toString(),clientid:userid});
+                        var postData = JSON.stringify({enabled:option.toString(),clientid:id});
                         console.log("/nest/adminSetClientActive[POST]:"+postData);
                         $.ajax({
                             type:"POST",

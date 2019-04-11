@@ -20,23 +20,35 @@
 
 package io.e2x.sparrow.nest.users.vo;
 
+import io.e2x.sparrow.nest.security.model.OUserDetail;
+import io.e2x.sparrow.nest.users.UserUtils;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.UUID;
 
 @Data
 @Document
 public class UserInformations {
-    public UserInformations(String id, UserCurrency userCurrency, UserSocialInformations userSocialInformations) {
-        this.id = id;
+    public UserInformations(OUserDetail userDetail, UserCurrency userCurrency, UserSocialInformations userSocialInformations) {
+        this.userDetail = userDetail;
         this.userCurrency = userCurrency;
         this.userSocialInformations = userSocialInformations;
     }
 
-    public UserInformations(String id) {
-        this.id = id;
+    public UserInformations(OUserDetail userDetail) {
+        this.userDetail = userDetail;
         this.userCurrency = new UserCurrency(0,0);
         this.userSocialInformations = new UserSocialInformations();
+    }
+    public UserInformations(){
+        UserUtils.generateNewUserInfo(new OUserDetail());
     }
 
     public String getId() {
@@ -48,7 +60,18 @@ public class UserInformations {
     }
 
     @Id
+    @GeneratedValue(strategy= GenerationStrategy.UNIQUE)
     private String id;
+
+    public OUserDetail getUserDetail() {
+        return userDetail;
+    }
+
+    public void setUserDetail(OUserDetail userDetail) {
+        this.userDetail = userDetail;
+    }
+    @DBRef
+    private OUserDetail userDetail;
 
     private UserCurrency userCurrency;
 

@@ -20,21 +20,26 @@
 
 package io.e2x.sparrow.crud.mongod.vo.user;
 
+import io.e2x.sparrow.crud.mongod.vo.security.OUserDetail;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Document
 public class UserInformations {
-    public UserInformations(String id, UserCurrency userCurrency, UserSocialInformations userSocialInformations) {
-        this.id = id;
+    public UserInformations(OUserDetail userDetail, UserCurrency userCurrency, UserSocialInformations userSocialInformations) {
+        this.userDetail = userDetail;
         this.userCurrency = userCurrency;
         this.userSocialInformations = userSocialInformations;
     }
 
-    public UserInformations(String id) {
-        this.id = id;
+    public UserInformations(OUserDetail userDetail) {
+        this.userDetail = userDetail;
         this.userCurrency = new UserCurrency(0,0);
         this.userSocialInformations = new UserSocialInformations();
     }
@@ -48,7 +53,19 @@ public class UserInformations {
     }
 
     @Id
+    @GeneratedValue(strategy= GenerationStrategy.UNIQUE)
     private String id;
+
+    public OUserDetail getUserDetail() {
+        return userDetail;
+    }
+
+    public void setUserDetail(OUserDetail userDetail) {
+        this.userDetail = userDetail;
+    }
+
+    @DBRef
+    private OUserDetail userDetail;
 
     private UserCurrency userCurrency;
 

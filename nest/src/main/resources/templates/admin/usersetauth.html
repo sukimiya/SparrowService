@@ -45,10 +45,10 @@ include("../topnav.btl"){}
             <div class="list-group-item d-flex flex-row justify-content-between">
                 <div class="d-flex flex-column justify-content-center">
                     <label for="titles_${entry.authority}">authority</label>
-                    <div class="text-left" userid="titles_${entry.authority}"><h5>${entry.authority}</h5></div>
+                    <div class="text-left" id="titles_${entry.authority}"><h5>${entry.authority}</h5></div>
                 </div>
                 <div class="align-self-center">
-                    <input type="checkbox" class="form-check-input js-switch" userid="authority_${entry.authority}" name="authority" ${isActChecked}>
+                    <input type="checkbox" class="form-check-input js-switch" id="authority_${entry.authority}" name="authority" ${isActChecked}>
                 </div>
             </div>
             <%}%>
@@ -65,15 +65,15 @@ include("../scripts.btl"){}
         for(var i=0;i<jsswitchs.length;i++){
             jswcpm = jsswitchs[i];
             jsw = jsswitchs[i].previousSibling;
-            var jswid = jsw.userid;
+            var jswid = jsw.id;
             if(jswid){
                 var authName = jswid.split("_")[1];
                 if(authName!=null){
-                    jswcpm.userid = "switcheryof_"+jsw.userid;
+                    jswcpm.id = "switcheryof_"+jsw.id;
                     jswcpm.onclick = function(event) {
                         var option = event.currentTarget.previousSibling.checked?true:false;
                         try{
-                            var authof = event.currentTarget.userid.split("_")[2];
+                            var authof = event.currentTarget.id.split("_")[2];
                         }catch (e){
                             println(e);
                             return;

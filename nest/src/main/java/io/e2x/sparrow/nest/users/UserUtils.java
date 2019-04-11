@@ -20,15 +20,21 @@
 
 package io.e2x.sparrow.nest.users;
 
+import io.e2x.sparrow.nest.security.model.OUserDetail;
 import io.e2x.sparrow.nest.users.vo.UserCurrency;
 import io.e2x.sparrow.nest.users.vo.UserInformations;
 import io.e2x.sparrow.nest.users.vo.UserSocialInformations;
 
+import java.util.UUID;
+
 public class UserUtils {
-    public static final UserInformations generateNewUserInfo(String id,String...attributes){
-        return new UserInformations(id,new UserCurrency(0,0),generateNewUserSocial(attributes));
+    public static final UserInformations generateNewUserInfo(OUserDetail userDetail, String...attributes){
+        return new UserInformations(userDetail, new UserCurrency(0,0),generateNewUserSocial(attributes));
     }
     public static final UserSocialInformations generateNewUserSocial(String...attributs){
+        if(attributs.length == 0){
+            return new UserSocialInformations();
+        }
         return new UserSocialInformations(attributs[0],attributs[1],attributs[2],attributs[3],attributs[4],attributs[5]);
     }
 }

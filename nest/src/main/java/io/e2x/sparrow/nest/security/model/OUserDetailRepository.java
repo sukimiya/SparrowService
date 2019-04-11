@@ -20,12 +20,15 @@
 
 package io.e2x.sparrow.nest.security.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @EnableMongoRepositories
 public interface OUserDetailRepository extends MongoRepository<OUserDetail,String> {
     OUserDetail findByUsername(String s);
+    OUserDetail findById(ObjectId id);
+    OUserDetail findOUserDetailById(String s);
 
     boolean existsByUsername(String s);
 }

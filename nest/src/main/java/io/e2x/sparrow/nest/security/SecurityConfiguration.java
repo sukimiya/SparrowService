@@ -36,6 +36,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.UUID;
+
 /**
  * Web安全配置，安全配置的第一道墙
  */
@@ -63,7 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             s_config.save(new SparrowConfiguration());
             this.s_config = s_config;
             configureLoader = new ConfigureLoader(s_config);
-            oUserDetailRepository.save(new OUserDetail(configureLoader.getAdmin_name(),configureLoader.getAdmin_password(),true,true,true,true,roles));
+            oUserDetailRepository.save(new OUserDetail(configureLoader.getAdmin_name(), UUID.randomUUID().toString(), configureLoader.getAdmin_password(),true,true,true,true,roles));
         }
     }
 
