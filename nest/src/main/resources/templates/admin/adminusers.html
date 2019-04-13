@@ -317,7 +317,7 @@ include("../scripts.btl"){}
                 $(event.currentTarget).removeAttr("disabled");
                 $(event.currentTarget).removeClass("disable");
                 removeLoading();
-                this.widows.location.href = this.widows.location.href;
+                location.reload();
             }
         })
 

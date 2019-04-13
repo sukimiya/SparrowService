@@ -50,5 +50,5 @@ public class SparrowConfiguration {
     private String siteName="Sparrow";
 
 
-    public String[] authoritiesTypes = {"USER","ADMIN","GUARDER"};
+    public String[] authoritiesTypes = {"USER","ADMIN","GUARDER","OBSERVER","DISPATCHER"};
 }

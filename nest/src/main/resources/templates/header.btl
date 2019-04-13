@@ -25,5 +25,6 @@
     <title>Any-Security | ${title}</title>
     <link href="${ctxPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="${ctxPath}/css/switchery.min.css" rel="stylesheet" type="text/css">
+    <link href="${ctxPath}/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">
     <link href="${ctxPath}/css/main.css" rel="stylesheet" type="text/css">
 <body>

@@ -36,7 +36,7 @@
                 <a class="nav-link" href="${ctxPath}/admin/users">Users</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="${ctxPath}/admin/applys">Applys</a>
+                <a class="nav-link" href="${ctxPath}/admin/chargemonitor">Charge</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="${ctxPath}/admin/bills">Bills</a>

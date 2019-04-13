@@ -151,6 +151,14 @@ public class MainController {
         model.addAttribute("key",null);
         return getPages("/admin/adminusers.html",model);
     }
+
+    @PreAuthorize("hasAuthority('OBSERVER')")
+    @GetMapping("/admin/chargemonitor")
+    public String monitorChat(final Model model){
+
+        return getPages("/m/chargelist.html",model);
+    }
+
     @PreAuthorize("hasAuthority('GUARDER')")
     @GetMapping("/admin/users/{username}/auth")
     public String adminUserAuth(@PathVariable("username") String username,Model model){

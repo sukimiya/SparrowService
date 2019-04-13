@@ -74,6 +74,9 @@ label{
 .page-header{
     height: 180px;
 }
+.gap{
+    margin-bottom: 20px;
+}
 .page-header .option-btn-group{
     margin-top: 160px;
     position: absolute;
