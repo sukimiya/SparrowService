@@ -52,7 +52,7 @@ public class AdminRestController {
     @Autowired
     public SparrowConfigurationRepository s_config;
 
-    @Value("${resource.id:spring-boot-application}")
+    @Value("${resource.ssn:spring-boot-application}")
     private String resourceId;
 
     private OAuthClientRepository oAuthClientRepository;
@@ -133,10 +133,10 @@ public class AdminRestController {
 //    @PostMapping(value = "client/{clientid}",consumes = "application/json")
 //    public OAuthClientDetail postClientById(@PathVariable("clientid") String clientid,@JsonProperty("secret") String secret){
 //        if (secret==null) secret = clientid;
-//        Integer id = UUID.randomUUID().hashCode();
+//        Integer ssn = UUID.randomUUID().hashCode();
 //        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 //        String[] scope = {"read","write"};
-//        OAuthClientDetail oAuthClientDetail = new OAuthClientDetail(id,clientid,encoder.encode(secret),scope);
+//        OAuthClientDetail oAuthClientDetail = new OAuthClientDetail(ssn,clientid,encoder.encode(secret),scope);
 //        oAuthClientDetail.setResourceIds(resourceId);
 //        oAuthClientDetail.setAuthorities("TRUSTED_CLIENT");
 //        oAuthClientRepository.save(oAuthClientDetail);

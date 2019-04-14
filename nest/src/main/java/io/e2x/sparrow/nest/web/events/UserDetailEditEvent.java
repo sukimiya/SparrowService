@@ -18,7 +18,7 @@ public class UserDetailEditEvent {
     @JsonProperty("email")
     public String email;
 
-    @JsonProperty(value = "id",required = false,access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "ssn",required = false,access = JsonProperty.Access.READ_ONLY)
     public String id;
 
     public UserDetailEditEvent(){}

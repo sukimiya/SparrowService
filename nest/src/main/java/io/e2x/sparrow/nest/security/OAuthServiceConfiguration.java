@@ -46,7 +46,7 @@ import java.util.stream.Stream;
 @EnableAuthorizationServer
 public class OAuthServiceConfiguration extends AuthorizationServerConfigurerAdapter {
 
-    @Value("${resource.id:spring-boot-application}")
+    @Value("${resource.ssn:spring-boot-application}")
     private String resourceId;
 
     @Value("${access_token.validity_period:3600}")

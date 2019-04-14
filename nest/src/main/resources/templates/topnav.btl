@@ -39,7 +39,13 @@
                 <a class="nav-link" href="${ctxPath}/admin/chargemonitor">Charge</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="${ctxPath}/admin/bills">Bills</a>
+                <a class="nav-link" href="${ctxPath}/admin/chatmonitor">Chat</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="${ctxPath}/admin/reward">Reword</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="${ctxPath}/admin/status">Status</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">

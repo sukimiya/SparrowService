@@ -60,7 +60,7 @@ public class MainController {
 
     private final int LIST_PAGE_SIZE = 20;
 
-    @Value("${resource.id:spring-boot-application}")
+    @Value("${resource.ssn:spring-boot-application}")
     private String resourceId;
 
     private OAuthClientRepository oAuthClientRepository;
@@ -157,6 +157,27 @@ public class MainController {
     public String monitorChat(final Model model){
 
         return getPages("/m/chargelist.html",model);
+    }
+
+    @PreAuthorize("hasAuthority('OBSERVER')")
+    @GetMapping("/admin/chatmonitor")
+    public String chatMonitor(final Model model){
+
+        return getPages("/m/chatlist.html",model);
+    }
+
+    @PreAuthorize("hasAuthority('DISPATCHER')")
+    @GetMapping("/admin/reward")
+    public String rewardAdmin(final Model model){
+
+        return getPages("/m/reward.html",model);
+    }
+
+    @PreAuthorize("hasAuthority('OBSERVER')")
+    @GetMapping("/admin/status")
+    public String statusMonitor(final Model model){
+
+        return getPages("/m/status.html",model);
     }
 
     @PreAuthorize("hasAuthority('GUARDER')")

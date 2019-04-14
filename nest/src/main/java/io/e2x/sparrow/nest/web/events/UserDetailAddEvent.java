@@ -20,7 +20,7 @@ public class UserDetailAddEvent {
     @JsonProperty("isenabled")
     public Boolean enabled = true;
 
-    @JsonProperty(value = "id",required = false,access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "ssn",required = false,access = JsonProperty.Access.READ_ONLY)
     public String id;
     public UserDetailAddEvent(){}
     public UserDetailAddEvent(String firstname, String lastname, String username, String password, String email, Boolean enabled, String id) {

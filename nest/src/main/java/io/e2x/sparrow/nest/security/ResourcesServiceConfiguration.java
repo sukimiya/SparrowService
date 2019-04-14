@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 @EnableResourceServer
 public class ResourcesServiceConfiguration extends ResourceServerConfigurerAdapter {
 
-    @Value("${resource.id:spring-boot-application}")
+    @Value("${resource.ssn:spring-boot-application}")
     private String resourceId;
 
     @Override

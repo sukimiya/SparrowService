@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!--
+  ~ Project:sparrow nest
+  ~ LastModified:18-4-25 下午4:44 by sukimiya
+  ~
+  ~ Copyright (C) 2018.  e2x.io
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<%
+include("../header.btl",{title:"Sparrow Nest"}){}
+%>
+<%
+include("../topnav.btl"){}
+%>
+<div class="bg-light">
+    <div class="container d-flex justify-content-between page-header">
+        <h1 class="p-2 align-self-center current-title">
+            Chats
+        </h1>
+    </div>
+</div>
+<div class="container s-page-content fully">
+    <div class="justify-content-md-center">
+
+        <form class="form-inline d-flex justify-content-between gap">
+            <div class="form-group">
+                <label for="searchOfDate">日期</label>
+                <input id="searchOfDate" type="text" class="form-control" data-date="2019/04/13" data-date-format="yyyy/mm/dd">
+            </div>
+            <div class="form-group">
+                <label for="key">角色</label>
+                <input type="text" class="form-control" id="key" name="key" placeholder="Search for..." value="">
+                <!--<span class="input-group-btn">-->
+
+                <!--</span>-->
+                <a class="btn btn-primary form-control iconfont glyphicon" onclick="refreshListData();">&#xe6a4;</a>
+            </div>
+        </form>
+        <div id="chatlist" class="list-group col-lg">
+
+        </div>
+    </div>
+</div>
+
+<%
+include("../scripts.btl"){}
+%>
+<script type="text/javascript">
+    Date.prototype.format = function(fmt)
+    { //author: meizz
+        var o = {
+            "M+" : this.getMonth()+1,                 //月份
+            "d+" : this.getDate(),                    //日
+            "h+" : this.getHours(),                   //小时
+            "m+" : this.getMinutes(),                 //分
+            "s+" : this.getSeconds(),                 //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S"  : this.getMilliseconds()             //毫秒
+        };
+        if(/(y+)/.test(fmt))
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        for(var k in o)
+            if(new RegExp("("+ k +")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        return fmt;
+    }
+    function chatListAddItem(dataitem) {
+        var hitem = '<div class="list-group-item chat-list-item"><div class="d-flex justify-content-between"><div class="d-flex flex-column justify-content-center col-md-4"><div class="text-left align-self-center" style="font-size: x-small">' +
+            dataitem.role_name +'&nbsp;ID:'+ dataitem.account_id +
+            '</div></div>' +
+            '<div class="d-flex flex-column justify-content-center col-md-4"><div class="text-left align-self-center" style="font-size: x-small">' + dataitem.timestamp +
+            '</div></div>' +
+            '<div class="d-flex flex-column justify-content-center col-md-4"><div class="text-left">' + dataitem.msg + '</div>' +
+            '</div></div></div>';
+        $('#chatlist').append(hitem);
+    }
+    function refreshListData(){
+        $.ajax({
+            url:"http://101.132.193.16:9307/chatList?date="+$('#searchOfDate').val()+"&rolename="+$('#key').val(),
+            success:function(res){
+                var data = JSON.parse(res);
+                $('.chat-list-item').remove();
+                for(var i=0;i<data.length;i++){
+                    var dataitem = data[i];
+                    var keyval = $("#key").val();
+                    if(keyval && keyval !== ""){
+                        var keyval = $("#key").val();
+                        if(dataitem.account === keyval){
+                            chatListAddItem(dataitem);
+                        }else{
+                            continue;
+                        }
+                    }else{
+                        chatListAddItem(dataitem);
+                    }
+
+                }
+            }
+        });
+    }
+    $(document).ready(function () {
+        var today = new Date();
+        $('#searchOfDate').datetimepicker({
+            minView:2,
+            autoclose:true,
+            todayBtn:true,
+            todayHighlight:true
+        });
+        $('#searchOfDate').val(today.format("yyyy/MM/dd"));
+
+        refreshListData();
+    });
+</script>
+<%
+include("../footer.btl"){}
+%>

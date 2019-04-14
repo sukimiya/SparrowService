@@ -27,8 +27,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories
 public interface OUserDetailRepository extends MongoRepository<OUserDetail,String> {
     OUserDetail findByUsername(String s);
-    OUserDetail findById(ObjectId id);
-    OUserDetail findOUserDetailById(String s);
 
     boolean existsByUsername(String s);
 }
