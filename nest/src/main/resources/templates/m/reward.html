@@ -29,11 +29,17 @@ include("../topnav.btl"){}
         <h1 class="p-2 align-self-center current-title">
             Reword
         </h1>
+        <%
+        if(isHasDispatcher){
+        %>
         <div class="option-btn-group">
             <button type="button" class="btn btn-primary p-2 justify-content-end shadow mb-5 rounded-circle option-btn" data-toggle="modal" data-target="#creatRewordModal">
                 <span class="iconfont float-btn" aria-hidden="true">&#xe6da;</span>
             </button>
         </div>
+        <%
+        }
+        %>
     </div>
 </div>
 <div class="container s-page-content fully">

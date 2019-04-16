@@ -29,6 +29,17 @@ include("../topnav.btl"){}
         <h1 class="p-2 align-self-center current-title">
             Charges
         </h1>
+        <%
+        if(isHasDispatcher){
+        %>
+        <div class="option-btn-group">
+            <button type="button" class="btn btn-primary p-2 justify-content-end shadow mb-5 rounded-circle option-btn" data-toggle="modal" data-target="#chargeModal">
+                <span class="iconfont float-btn" aria-hidden="true">&#xe6da;</span>
+            </button>
+        </div>
+        <%
+        }
+        %>
     </div>
 </div>
 <div class="container s-page-content fully">
@@ -54,17 +65,72 @@ include("../topnav.btl"){}
 
 
         </form>
+        <div class="d-flex">
+            <div class="p-2 align-self-center"><h5 id="amount" class="iconfont"></h5></div>
+        </div>
         <div id="chatlist" class="list-group col-lg">
 
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="chargeModal" tabindex="-1" role="dialog" aria-labelledby="chargeModal" aria-hidden="true">
+    <div id="ModelDialogEdit" class="modal-dialog bg-light d-flex flex-column" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between">
+                <button type="button" class="close align-self-left" data-dismiss="modal" aria-label="Close">
+                    <span class="iconfont" aria-hidden="true">&#xe679;</span>
+                </button>
+                <h5 class="modal-title-blue align-self-center">模拟充值工具</h5>
+                <a class="modal-title-blue align-self-right" href="#">
+                    <span class="iconfont" aria-hidden="true" style="color:transparent;">&#xe679;</span>
+                </a>
+            </div>
+            <form id="edituserform" action="#" method="post">
+                <div class="modal-body">
 
+                    <div class="form-group">
+                        <label for="accountId">账号ID</label>
+                        <input type="text" class="form-control" id="accountId" name="accountId" aria-describedby="账号ID" placeholder="在此输入账号ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="fee">充值金额</label>
+                        <input type="text" class="form-control" id="fee" name="fee" aria-describedby="金额" placeholder="15">
+                    </div>
+                    <div class="form-group">
+                        <label for="gold">充值元宝</label>
+                        <input type="text" class="form-control" id="gold" name="gold" placeholder="30">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary form-control" onclick="chargeHandler(event)">充值</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <%
 include("../scripts.btl"){}
 %>
 <script type="text/javascript">
-
+const APP_ID = "gm.e2x.io";
+    function chargeHandler() {
+        var fee = $('#fee').val();
+        var accountid = $('#accountId').val();
+        var gold = $('#gold').val();
+        var tc = (new Date()).getTime();
+        $.ajax({
+            url:"http://101.132.193.16:9307/charge?app="+APP_ID+"&cbi="+gold+","+accountid+"&ct="+tc+"&fee="+fee+"&pt="+tc+"&ssid="+tc+"&st=1&tcd=137657AVDEDFS&uid="+accountid+"&ver=1&sign=xxxxxxxxxxx5",
+            success:function(res){
+                console.log(res);
+                refreshListData();
+            },
+            fail:function(res){
+                console.log(res);
+            }
+        });
+        $('#chargeModal').modal("hide");
+    }
     function chatListAddItem(dataitem) {
         var hitem = '<div class="list-group-item chat-list-item"><div class="d-flex justify-content-between"><div class="d-flex flex-column justify-content-center col-md-4"><div class="text-left align-self-center" style="font-size: x-small">' +
             dataitem.account +
@@ -75,7 +141,9 @@ include("../scripts.btl"){}
             '</div></div></div>';
         $('#chatlist').append(hitem);
     }
+    var amount = 0;
     function refreshListData(){
+        amount = 0;
         $.ajax({
             url:"http://101.132.193.16:9307/chargeList?fromdate="+$('#startOfDate').val()+"&todate="+$('#endOfDate').val(),
             success:function(res){
@@ -84,18 +152,21 @@ include("../scripts.btl"){}
                 for(var i=0;i<data.length;i++){
                     var dataitem = data[i];
                     var keyval = $("#key").val();
-                    if(keyval && keyval !== ""){
-                        var keyval = $("#key").val();
-                        if(dataitem.account === keyval){
-                            chatListAddItem(dataitem);
+                    if(dataitem.app&&dataitem.app != APP_ID)
+                        if(keyval && keyval !== ""){
+                            var keyval = $("#key").val();
+                            if(dataitem.account === keyval){
+                                amount += dataitem.fee+0;
+                                chatListAddItem(dataitem);
+                            }else{
+                                continue;
+                            }
                         }else{
-                            continue;
+                            amount += dataitem.fee+0;
+                            chatListAddItem(dataitem);
                         }
-                    }else{
-                        chatListAddItem(dataitem);
-                    }
-
                 }
+                $("#amount").text(" "+amount);
             }
         });
     }

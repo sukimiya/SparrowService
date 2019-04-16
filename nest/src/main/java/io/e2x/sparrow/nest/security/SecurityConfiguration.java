@@ -77,6 +77,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/v2/api-docs",
             "/webjars/**",
             "/oauth/*",
+            "/gm/*",
             "/static/**",
             "/css/**",
             "/fonts/**",

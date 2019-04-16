@@ -21,6 +21,7 @@
 package io.e2x.sparrow.nest.web.controller;
 
 
+import java.lang.reflect.Array;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.*;
@@ -153,28 +154,28 @@ public class MainController {
     }
 
     @PreAuthorize("hasAuthority('OBSERVER')")
-    @GetMapping("/admin/chargemonitor")
+    @GetMapping("/m/chargemonitor")
     public String monitorChat(final Model model){
 
         return getPages("/m/chargelist.html",model);
     }
 
     @PreAuthorize("hasAuthority('OBSERVER')")
-    @GetMapping("/admin/chatmonitor")
+    @GetMapping("/m/chatmonitor")
     public String chatMonitor(final Model model){
 
         return getPages("/m/chatlist.html",model);
     }
 
     @PreAuthorize("hasAuthority('DISPATCHER')")
-    @GetMapping("/admin/reward")
+    @GetMapping("/m/reward")
     public String rewardAdmin(final Model model){
 
         return getPages("/m/reward.html",model);
     }
 
     @PreAuthorize("hasAuthority('OBSERVER')")
-    @GetMapping("/admin/status")
+    @GetMapping("/m/status")
     public String statusMonitor(final Model model){
 
         return getPages("/m/status.html",model);
@@ -241,9 +242,29 @@ public class MainController {
     private boolean checkLogin(Model model){
         Object principal= SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(principal!=null){
-            model.addAttribute("isAuthenticated",true);
-            return true;
+            if(principal instanceof OUserDetail){
+                model.addAttribute("isAuthenticated",true);
+                OUserDetail userDetail = (OUserDetail) principal;
+                List<GrantedAuthority> authorities = (List<GrantedAuthority>)userDetail.getAuthorities();
+                ArrayList<String> array = new ArrayList<String>();
+                for(int i=0;i<authorities.size();i++){
+                    array.add(authorities.get(i).getAuthority());
+                }
+                model.addAttribute("m78_auth",array);
+                if(array.indexOf("DISPATCHER")!=-1) model.addAttribute("isHasDispatcher",true);
+                else model.addAttribute("isHasDispatcher",false);
+                if(array.indexOf("ADMIN")!=-1) model.addAttribute("isAdmin",true);
+                else model.addAttribute("isAdmin",false);
+
+                return true;
+            }
+            model.addAttribute("isAdmin",false);
+            model.addAttribute("isHasDispatcher",false);
+            model.addAttribute("isAuthenticated",false);
+            return false;
         }
+        model.addAttribute("isAdmin",false);
+        model.addAttribute("isHasDispatcher",false);
         model.addAttribute("isAuthenticated",false);
         return false;
     }

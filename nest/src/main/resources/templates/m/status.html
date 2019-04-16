@@ -24,11 +24,387 @@ include("../header.btl",{title:"Sparrow Nest"}){}
 <%
 include("../topnav.btl"){}
 %>
+<link href="${ctxPath}/css/Chart.min.css" rel="stylesheet" type="text/css">
+<div class="bg-light">
+    <div class="container d-flex justify-content-between flex-wrap fully">
 
+    </div>
+</div>
+<div class="container s-page-content fully">
+    <div class="justify-content-md-center d-flex flex-wrap gap">
+        <div class="p-2 align-content-stretch col-md-12 panel">
+            <div class="d-flex align-content-stretch">
+                <div class="form-group">
+                    <label for="startOfDate"></label>
+                    <input id="startOfDate" type="text" class="form-control" data-date-format="yyyy/mm" aria-haspopup="false" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="p-2 align-content-stretch col-md-12 panel">
+            <canvas id="activityPlayChart" class="d-flex align-content-stretch"></canvas>
+        </div>
+        <div class="p-2 align-content-stretch col-md-12 panel">
+            <canvas id="newPlayChart" class="d-flex align-content-stretch"></canvas>
+        </div>
+    </div>
+    <div class="justify-content-md-center">
+        <%
+        if(isHasDispatcher){
+        %>
+        <form class="form-inline d-flex justify-content-between gap">
+                    <div class="form-group">
+                        <label for="accountId">ID</label>
+                        <input type="text" class="form-control" id="accountId" name="accountId" placeholder="输入要封禁的账号" value="">
+                        <!--<span class="input-group-btn">-->
+
+                        <!--</span>-->
+                        <a class="btn btn-warning form-control iconfont glyphicon" onclick="kickAccount();">&#xe846;</a>
+                    </div>
+
+
+        </form>
+
+        <div id="kicklist" class="list-group col-lg">
+
+        </div>
+        <%
+        }
+        %>
+    </div>
+</div>
+<div id="kickComfirmDialog" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog align-self-center col-md-8" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title align-self-center">封禁账号</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="kickNotifyText">确定要封禁吗?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" onclick="onKickOKClick()">封禁</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="freeComfirmDialog" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog align-self-center col-md-8" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex">
+                <h5 class="modal-title align-self-center">解封账号</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="freeNotifyText">确定要封禁吗?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="onFreeOKClick()">解封</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
 <%
 include("../scripts.btl"){}
 %>
+<script src="${ctxPath}/js/moment.min.js" type="text/javascript"></script>
+<script src="${ctxPath}/js/Chart.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+var DEST_REST_URL = "http://101.132.193.16:9307";
+Date.prototype.format = function(fmt)
+{ //author: meizz
+	var o = {
+		"M+" : this.getMonth()+1,                 //月份
+		"d+" : this.getDate(),                    //日
+		"h+" : this.getHours(),                   //小时
+		"m+" : this.getMinutes(),                 //分
+		"s+" : this.getSeconds(),                 //秒
+		"q+" : Math.floor((this.getMonth()+3)/3), //季度
+		"S"  : this.getMilliseconds()             //毫秒
+	};
+	if(/(y+)/.test(fmt))
+		fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+	for(var k in o)
+		if(new RegExp("("+ k +")").test(fmt))
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+	return fmt;
+}
+function getMouthDates(date){
+    var start = new Date(date);
+    start.setDate(1);
+    var end = new Date(start);
+    var rs = [];
+    for(i=0;i<32;i++){
+        end.setDate(start.getDate()+i);
+        if(end.getMonth() === start.getMonth()){
+            rs.push(new Date(end));
+        }else{
+            break;
+        }
+    }
+    return rs;
+}
+function getLoginLog(date){
+    return new Promise(function(resolve,reject){
+        $.ajax({
+            url:DEST_REST_URL+"/loginLog?date="+date.format("yyyy/MM/dd"),
+            datType:"json",
+            success:function(res){
+                // console.log(res);
+                resolve({res:res,date:date.format("yyyy/MM/dd")});
+            },
+            fail:function(res){
+                console.log(res);
+                reject(res);
+            }
+        });
+    });
+}
+var activityPlayChart;
+function drawActivityChart(){
+    var ctx = document.getElementById('activityPlayChart');
+    var labels = [];
+    var dataSets = [];
+    for(var a in counts){
+        labels.push(a);
+        dataSets.push(counts[a]);
+    }
+    var config = {
+        type: 'bar',
+        data:{labels:labels,datasets:[{
+            label:"# 活跃人数",
+            data:dataSets,
+            borderWidth:1
+        }]},
+        options:{
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    };
+    if(activityPlayChart){
+        activityPlayChart.reset();
+        activityPlayChart.data.datasets[0].data = dataSets;
+        activityPlayChart.data.labels = labels;
+        activityPlayChart.update(config);
+    }else{
+        activityPlayChart = new Chart(ctx, config);
+    }
 
+}
+function queryActivityPlayer(newDate){
+    var rs = getMouthDates(newDate);
+    var promises = [];
+    result = {};
+    counts = {};
+    for(var i=0;i<rs.length;i++)
+        promises.push(getLoginLog(rs[i]));
+    Promise.all(promises).then(function(res){
+        for(var i=0;i<res.length;i++){
+            var obj = JSON.parse(res[i].res);
+            console.log("queryActivityPlayer:"+res[i].date);
+            if(obj&&obj.length){
+                result[res[i].date]=obj;
+                counts[res[i].date]=obj.length;
+                // console.log(res[i].date+":logins:"+obj.length);
+            }else{
+                counts[res[i].date] = 0;
+                // console.log(res[i].date+":logins:0");
+            }
+
+        }
+    }).catch(function(res){
+        console.log(res);
+    }).finally(function(){
+        drawActivityChart();
+    });
+}
+function getNewLog(date){
+    return new Promise(function(resolve,reject){
+        $.ajax({
+            url:DEST_REST_URL+"/registerList?date="+date.format("yyyy/MM/dd"),
+            datType:"json",
+            success:function(res){
+                // console.log(res);
+                resolve({res:res,date:date.format("yyyy/MM/dd")});
+            },
+            fail:function(res){
+                console.log(res);
+                reject(res);
+            }
+        });
+    });
+}
+var newPlayChart;
+function drawNewChart(){
+    var ctx = document.getElementById('newPlayChart');
+    var labels = [];
+    var dataSets = [];
+    for(var a in newCnt){
+        labels.push(a);
+        dataSets.push(newCnt[a]);
+    }
+    var config = {
+        type: 'bar',
+        data:{labels:labels,datasets:[{
+            label:"# 注册人数",
+            data:dataSets,
+            borderWidth:1
+        }]},
+        options:{
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    };
+    if(newPlayChart){
+        newPlayChart.reset();
+        newPlayChart.data.datasets[0].data = dataSets;
+        newPlayChart.data.labels = labels;
+        newPlayChart.update();
+    }else{
+        newPlayChart = new Chart(ctx, config);
+    }
+}
+function queryNewPlayer(newDate){
+    var rs = getMouthDates(newDate);
+    var promises = [];
+    newRes = {};
+    newCnt = {};
+    for(var i=0;i<rs.length;i++)
+        promises.push(getNewLog(rs[i]));
+    Promise.all(promises).then(function(res){
+        for(var i=0;i<res.length;i++){
+            var obj = JSON.parse(res[i].res);
+            console.log(res[i].date);
+            if(obj&&obj.length){
+                newRes[res[i].date]=obj;
+                newCnt[res[i].date]=obj.length;
+                //console.log(res[i].date+":register:"+obj.length);
+            }else{
+                newCnt[res[i].date] = 0;
+                // console.log(res[i].date+":register:0");
+            }
+
+        }
+    }).catch(function(res){
+        console.log(res);
+    }).finally(function(){
+        drawNewChart();
+    });
+}
+var result = {};
+var counts = {};
+var newRes = {};
+var newCnt = {};
+function setCurrentDate(newDate){
+    $('#startOfDate').attr("data-date",newDate.format("yyyy/MM/dd"));
+    // $('#startOfDate').val(newDate.format("yyyy/MM/dd"));
+    queryActivityPlayer(newDate);
+    queryNewPlayer(newDate);
+}
+function onKickOKClick(){
+    var key = $("#accountId").val();
+    if(key && key!=""){
+        $.ajax({
+            url:DEST_REST_URL+"/forbidUser?account="+key+"&forbid=1",
+            success:function(res){
+                console.log("Kick "+key+" success");
+                refreshKickList();
+            },
+            fail:function(res){
+                console.log("Kick "+key+" :"+ res);
+            }
+        });
+    }
+    $("#kickComfirmDialog").modal("hide");
+}
+function kickAccount(){
+    $("#kickNotifyText").text("确定要封禁 "+$("#accountId").val()+" 吗?");
+    $("#kickComfirmDialog").modal("show");
+}
+function kickListAddItem(dataitem) {
+    var hitem = '<div class="list-group-item chat-list-item d-flex flex-row"><div class="d-flex justify-content-left p-2"><h5 class="text-left align-self-center">'+dataitem+'</h5></div><div class="d-flex ml-auto p-2"><a class="btn-danger btn-sm rounded-circle" onclick="setfree(\''+dataitem+'\')"><span class="iconfont" aria-hidden="true" style="color:#FFFFFF">&#xe646;</span></a></div></div>'
+    $('#kicklist').append(hitem);
+}
+var targetPlayer = "";
+function setfree(player){
+    targetPlayer = player;
+    $("#freeNotifyText").text("确定要解封 "+player+" 吗?");
+    $("#freeComfirmDialog").modal("show");
+}
+function onFreeOKClick(){
+    if(targetPlayer && targetPlayer!=""){
+        $.ajax({
+            url:DEST_REST_URL+"/forbidUser?account="+targetPlayer+"&forbid=0",
+            success:function(res){
+                console.log("Free "+targetPlayer+" success");
+                refreshKickList();
+                targetPlayer = "";
+            },
+            fail:function(res){
+                console.log("Free "+targetPlayer+" :"+ res);
+                targetPlayer = "";
+            }
+        });
+    }
+    $("#freeComfirmDialog").modal("hide");
+}
+function refreshKickList(){
+    $.ajax({
+        url:DEST_REST_URL+"/forbidList",
+        type:"GET",
+        dataType:"json",
+        success:function(data){
+            $('.chat-list-item').remove();
+            for(var i=0;i<data.length;i++){
+                var dataitem = data[i];
+                kickListAddItem(dataitem);
+            }
+        },
+        fail:function (data) {
+
+        }
+    });
+}
+$(document).ready(function () {
+    var newDate = new Date();
+    $('#startOfDate').val(newDate.format("yyyy/MM"));
+    $('#startOfDate').datetimepicker({
+        initialDate:newDate,
+        minView:3,
+        startView:3,
+        autoclose:true,
+        todayBtn:true,
+        todayHighlight:true
+    });
+    var changeDateHandler = function(ev){
+        if(ev.date.getFullYear()!=newDate.getFullYear()||ev.date.getMonth()!==newDate.getMonth()){
+            newDate = ev.date;
+            setCurrentDate(newDate);
+        }
+    };
+    $('#startOfDate').on('changeMonth', changeDateHandler);
+    $('#startOfDate').on('changeYear', changeDateHandler);
+    setCurrentDate(newDate);
+    refreshKickList();
+});
+
+</script>
 <%
 include("../footer.btl"){}
 %>

@@ -246,6 +246,11 @@ label{
     animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
     stroke-linecap: round;
 }
+.panel{
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+    background-color: #F6F7F8;
+}
 
 @-webkit-keyframes rotate {
     100% {
