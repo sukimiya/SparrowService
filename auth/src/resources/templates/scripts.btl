@@ -33,7 +33,7 @@
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
 
         elems.forEach(function(html) {
-            var switchery = new Switchery(html,{ color: '#2699FB', jackColor: '#FFFFFF' });
+            var switchery = new Switchery(html,{ color: '#482B0D', jackColor: '#FFFFFF' });
         });
 
         for(var i=0;i<$(".nav-link").length;i++){

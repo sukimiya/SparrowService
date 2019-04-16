@@ -46,7 +46,7 @@ div.logout {
     url('../fonts/iconfont.svg#iconfont') format('svg');
 }
 body{
-    color: #2699FB;
+    color: #482B0D;
     background-color:#EAEAEA;
 }
 label{
@@ -62,14 +62,14 @@ label{
     float: left;
     margin: 0px;
     opacity:1;
-    color: #2699FB;
+    color: #482B0D;
 }
 .navbar-light .navbar-brand {
-    color: #2699FB;
+    color: #482B0D;
 }
 .navbar-light .navbar-nav .active>.nav-link {
-    color: #007bff;
-    border-bottom: 2px solid #007bff;
+    color: #F24100;
+    border-bottom: 2px solid #F24100;
 }
 .page-header{
     height: 180px;
@@ -91,13 +91,13 @@ label{
     width:16px;height:16px;
 }
 .modal-title-blue{
-    color: #2699FB;
+    color: #482B0D;
 }
 .form-control {
     width: 100%;
     padding: 0.75rem 1rem;
     font-size: 0.8rem;
-    color: #2699FB;
+    color: #482B0D;
     border: 1px solid #BCE0FD;
 }
 .text-muted {
@@ -182,7 +182,7 @@ label{
     text-align: center;
     width:100%;
     height: 100%;
-    background: #2699FB;
+    background: #482B0D;
     z-index: 2000;
 }
 .warpLogo{
