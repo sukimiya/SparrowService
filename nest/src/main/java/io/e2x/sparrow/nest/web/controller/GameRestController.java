@@ -102,9 +102,9 @@ public class GameRestController {
         rewordRepository.save(dispatcherReword);
         return ResultEventTypes.OK.setReason(strbody);
     }
-    @PostMapping("createReword")
+    @PostMapping("createreword")
     public ResultEventTypes createReword(@RequestBody DispatcherReword reword){
-        DispatcherReword newReword = new DispatcherReword(new Date().getTime(),reword.role,reword.itemType,reword.itemName,reword.num);
+        DispatcherReword newReword = new DispatcherReword(new Date().getTime(),reword.role==null?"":reword.role,reword.itemType,reword.itemName,reword.num);
         rewordRepository.save(newReword);
         return ResultEventTypes.OK;
     }
