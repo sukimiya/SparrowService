@@ -1,0 +1,79 @@
+Manifest-Version: 1.0
+Class-Path: reactive-streams-1.0.2.jar spring-webflux-5.0.5.RELEASE.ja
+ r spring-security-oauth2-autoconfigure-2.0.1.RELEASE.jar jaxb-core-2.
+ 3.0.jar netty-transport-native-epoll-4.1.23.Final.jar validation-api-
+ 2.0.1.Final.jar jackson-mapper-asl-1.9.13.jar commons-logging-1.1.1.j
+ ar spring-boot-starter-2.0.1.RELEASE.jar jackson-datatype-jsr310-2.9.
+ 5.jar spring-cloud-spring-service-connector-2.0.1.RELEASE.jar beetl-2
+ .7.28.jar springfox-spi-2.8.0.jar netty-handler-proxy-4.1.23.Final.ja
+ r mongodb-driver-reactivestreams-1.7.1.jar spring-integration-core-5.
+ 0.4.RELEASE.jar nio-stream-storage-1.1.3.jar mongodb-driver-core-3.6.
+ 3.jar spring-data-commons-2.0.6.RELEASE.jar spring-tuple-1.0.0.RELEAS
+ E.jar log4j-to-slf4j-2.10.0.jar spring-aop-5.0.5.RELEASE.jar spring-s
+ ecurity-core-5.0.4.RELEASE.jar bcprov-jdk15on-1.60.jar spring-cloud-c
+ loudfoundry-connector-2.0.1.RELEASE.jar core-io-1.5.7.jar spring-boot
+ -starter-actuator-2.0.1.RELEASE.jar spring-integration-jmx-5.0.4.RELE
+ ASE.jar spring-boot-starter-security-2.0.1.RELEASE.jar bson-3.6.3.jar
+  jcip-annotations-1.0.jar spring-security-openid-5.0.4.RELEASE.jar gu
+ ava-20.0.jar tomcat-embed-core-8.5.29.jar java-client-2.5.7.jar sprin
+ g-cloud-security-2.0.1.BUILD-20190417.220101-2230.jar spring-cloud-st
+ arter-oauth2-2.0.1.BUILD-20190417.220110-2229.jar spring-cloud-starte
+ r-security-2.0.1.BUILD-20190417.220106-2229.jar javax.annotation-api-
+ 1.3.2.jar netty-transport-4.1.23.Final.jar lombok-1.16.20.jar netty-h
+ andler-4.1.23.Final.jar spring-data-couchbase-3.0.5.RELEASE.jar sprin
+ gfox-swagger2-2.8.0.jar httpclient-4.5.5.jar tomcat-embed-el-8.5.29.j
+ ar spring-boot-starter-json-2.0.1.RELEASE.jar spring-boot-starter-web
+ flux-2.0.1.RELEASE.jar antlr4-runtime-4.2.jar spring-context-5.0.5.RE
+ LEASE.jar commons-codec-1.11.jar beetlsql-2.10.19.jar kryo-shaded-3.0
+ .3.jar jackson-databind-2.9.8.jar spring-webmvc-5.0.5.BUILD-20180403.
+ 191523-164.jar spring-expression-5.0.5.RELEASE.jar spring-cloud-herok
+ u-connector-2.0.1.RELEASE.jar nio-multipart-parser-1.1.0.jar spring-d
+ ata-mongodb-2.0.6.RELEASE.jar mongodb-driver-3.6.3.jar javax.inject-1
+ .jar spring-bootstrap-0.5.0.WAR-20130604.081111-1.jar springfox-schem
+ a-2.8.0.jar mapstruct-1.2.0.Final.jar spring-security-config-5.0.4.RE
+ LEASE.jar springfox-swagger-common-2.8.0.jar antlr4-annotations-4.2.j
+ ar unbescape-1.1.6.RELEASE.jar spring-beans-5.0.5.RELEASE.jar mongodb
+ -driver-async-3.6.3.jar spring-cloud-context-2.0.4.BUILD-20190417.221
+ 002-426.jar log4j-api-2.10.0.jar org.abego.treelayout.core-1.0.1.jar 
+ reactor-netty-0.7.6.RELEASE.jar jaxb-impl-2.3.0.jar spring-cloud-comm
+ ons-2.0.4.BUILD-20190417.221053-422.jar spring-plugin-metadata-1.2.0.
+ RELEASE.jar minlog-1.3.0.jar LatencyUtils-2.0.3.jar tomcat-embed-webs
+ ocket-8.5.29.jar spring-boot-starter-logging-2.0.1.RELEASE.jar spring
+ -boot-starter-cloud-connectors-2.0.1.RELEASE.jar bcpkix-jdk15on-1.60.
+ jar swagger-models-1.5.14.jar jackson-datatype-jdk8-2.9.5.jar springf
+ ox-core-2.8.0.jar openid4java-nodeps-0.9.6.jar jcl-over-slf4j-1.7.25.
+ jar spring-security-rsa-1.0.7.RELEASE.jar spring-boot-starter-data-mo
+ ngodb-reactive-2.0.1.RELEASE.jar spring-cloud-stream-reactive-2.0.2.B
+ UILD-20181115.181429-9.jar spring-cloud-localconfig-connector-2.0.1.R
+ ELEASE.jar snakeyaml-1.19.jar reflections-0.9.11.jar spring-core-5.0.
+ 5.RELEASE.jar spring-security-jwt-1.0.9.RELEASE.jar nekohtml-1.9.22.j
+ ar jul-to-slf4j-1.7.25.jar slf4j-api-1.7.25.jar spring-cloud-connecto
+ rs-core-2.0.1.RELEASE.jar netty-resolver-4.1.23.Final.jar spring-mess
+ aging-5.0.5.RELEASE.jar xml-apis-1.4.01.jar spring-boot-actuator-2.0.
+ 1.RELEASE.jar springfox-spring-web-2.8.0.jar javassist-3.21.0-GA.jar 
+ logback-classic-1.2.3.jar jackson-core-2.9.5.jar spring-security-oaut
+ h2-2.3.0.RELEASE.jar spring-jcl-5.0.5.RELEASE.jar netty-codec-4.1.23.
+ Final.jar xercesImpl-2.11.0.jar spring-security-web-5.0.4.RELEASE.jar
+  beetl-framework-starter-1.1.45.RELEASE.jar spring-retry-1.2.2.RELEAS
+ E.jar spring-boot-starter-reactor-netty-2.0.1.RELEASE.jar jackson-mod
+ ule-parameter-names-2.9.5.jar swagger-annotations-1.5.14.jar spring-i
+ ntegration-tuple-1.0.0.RELEASE.jar spring-cloud-starter-2.0.4.BUILD-2
+ 0190417.221100-422.jar httpcore-4.4.9.jar netty-common-4.1.23.Final.j
+ ar spring-boot-starter-tomcat-2.0.1.RELEASE.jar spring-boot-starter-w
+ eb-2.0.1.RELEASE.jar jaxb-api-2.3.0.jar spring-boot-autoconfigure-2.0
+ .1.RELEASE.jar spring-boot-2.0.1.RELEASE.jar micrometer-core-1.0.3.ja
+ r reactor-core-3.1.6.RELEASE.jar commons-lang3-3.7.jar spring-cloud-s
+ tream-2.0.2.BUILD-20181115.181216-9.jar springfox-swagger-ui-2.8.0.ja
+ r classmate-1.3.4.jar logback-core-1.2.3.jar hibernate-validator-6.0.
+ 9.Final.jar jackson-core-asl-1.9.13.jar jboss-logging-3.3.2.Final.jar
+  spring-plugin-core-1.2.0.RELEASE.jar jackson-annotations-2.9.0.jar o
+ bjenesis-2.6.jar rxjava-1.3.8.jar spring-security-crypto-5.0.4.RELEAS
+ E.jar spring-bootstrap-starter-0.5.0.WAR-20130604.081144-1.jar netty-
+ codec-socks-4.1.23.Final.jar spring-boot-actuator-autoconfigure-2.0.1
+ .RELEASE.jar spring-web-5.0.5.RELEASE.jar byte-buddy-1.7.11.jar sprin
+ g-tx-5.0.5.RELEASE.jar jstl-1.2.jar guice-3.0.jar netty-buffer-4.1.23
+ .Final.jar spring-boot-starter-validation-2.0.1.RELEASE.jar netty-cod
+ ec-http-4.1.23.Final.jar HdrHistogram-2.1.10.jar netty-transport-nati
+ ve-unix-common-4.1.23.Final.jar slf4j-jdk14-1.7.25.jar
+Main-Class: io.e2x.sparrow.nest.NestApplication
+
