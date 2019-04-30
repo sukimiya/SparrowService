@@ -21,7 +21,12 @@
 package io.e2x.sparrow.nest.web.controller;
 
 
-import java.lang.reflect.Array;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.*;
@@ -37,13 +42,21 @@ import io.e2x.sparrow.nest.users.UnregistedUserRepository;
 import io.e2x.sparrow.nest.web.controller.event.AuthorityTypeSettingVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -222,6 +235,51 @@ public class MainController {
                              ){
         logger.info("POST v2x-service/terminal/data/report:\nlat:"+lat+" lng:"+lng);
         return getPages("index.html",model);
+    }
+    @RequestMapping(path = "/d/swdic", method = RequestMethod.GET)
+    public ResponseEntity<Resource> downloadDic(String param) throws IOException {
+
+
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("SensitiveWords.txt");
+        byte[] iobyte = inputStream.readAllBytes();
+        ByteArrayResource byteArrayResource = new ByteArrayResource(iobyte);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        return ResponseEntity.ok()
+                .headers(httpHeaders)
+                .contentLength(iobyte.length)
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(byteArrayResource);
+    }
+    @RequestMapping(path = "/d/art.zip", method = RequestMethod.GET)
+    public ResponseEntity<Resource> downloadArt(String param) throws IOException {
+        byte[] iobyte;
+        InputStream inputStream;
+        FileSystemResource file = new FileSystemResource("D:\\art.zip");
+        if(file.exists()){
+            inputStream = file.getInputStream();
+        }else{
+            inputStream = getClass().getClassLoader().getResourceAsStream("art.zip");
+        }
+        iobyte = inputStream.readAllBytes();
+        ByteArrayResource byteArrayResource = new ByteArrayResource(iobyte);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        return ResponseEntity.ok()
+                .headers(httpHeaders)
+                .contentLength(iobyte.length)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(byteArrayResource);
+    }
+    @GetMapping("/d/version")
+    public ResponseEntity<Resource> getGameVersion(String param) throws IOException {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("gameversion.txt");
+        byte[] iobyte = inputStream.readAllBytes();
+        ByteArrayResource byteArrayResource = new ByteArrayResource(iobyte);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        return ResponseEntity.ok()
+                .headers(httpHeaders)
+                .contentLength(iobyte.length)
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(byteArrayResource);
     }
     private boolean isContainAuth(Collection<? extends GrantedAuthority> authorities, String auth){
         List<GrantedAuthority> auths = (List<GrantedAuthority>) authorities;
