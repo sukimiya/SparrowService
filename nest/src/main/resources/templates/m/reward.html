@@ -61,7 +61,19 @@ include("../topnav.btl"){}
             </div>
         </form-->
         <div id="chatlist" class="list-group col-lg">
+            <div class="list-group-item form-group search-box">
+                <div class="input-group">
+                    <input id="key" type="text" class="form-control" name="key" placeholder="道具名" value="">
+                    <!--<span class="input-group-btn">-->
 
+                    <!--</span>-->
+                    <a class="btn btn-primary iconfont text-lg-center" onclick="searchByItemName();">&#xe65c;</a>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg">
+            <a class="btn btn-default iconfont form-control" onclick="nextPage();">&#xe79f;</a>
         </div>
     </div>
 </div>
@@ -186,6 +198,62 @@ include("../scripts.btl"){}
         CurrentSelectSSN = ssn;
         $("#sendComfirmDialog").modal("show");
 
+    }
+    function searchByItemName() {
+        if($("#key").val() && $("#key").val()!=""){
+
+        }else{
+            return;
+        }
+        var keyStr = $("#key").val();
+        currentPage = 0;
+        $.ajax({
+            url:"/gm/getrewords",
+            data:JSON.stringify({key:keyStr}),
+            type:"POST",
+            contentType:"application/json",
+            datType:"json",
+            async: false,
+            success:function(data){
+                $('.chat-list-item').remove();
+                for(var i=0;i<data.length;i++){
+                    var dataitem = data[i];
+                    chatListAddItem(dataitem);
+                }
+            },
+            fail:function (data) {
+
+            }
+        });
+    }
+    var currentPage = 0;
+    function nextPage(){
+        currentPage ++;
+        var senddata;
+        if($("#key").val() && $("#key").val()!=""){
+            senddata = {page:currentPage,key:$("#key").val()};
+        }else{
+            senddata = {page:currentPage}
+        }
+        $.ajax({
+            url:"/gm/getrewords",
+            data:JSON.stringify(senddata),
+            type:"POST",
+            contentType:"application/json",
+            datType:"json",
+            async: false,
+            success:function(data){
+                // $('.chat-list-item').remove();
+                for(var i=0;i<data.length;i++){
+                    var dataitem = data[i];
+                    chatListAddItem(dataitem);
+
+                }
+            },
+            fail:function (data) {
+                
+            }
+        });
     }
     function refreshListData(){
         // showLoading();

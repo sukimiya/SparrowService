@@ -171,16 +171,34 @@ function drawActivityChart(){
     var ctx = document.getElementById('activityPlayChart');
     var labels = [];
     var dataSets = [];
-    for(var a in counts){
+    var dataSets1 = [];
+    var a;
+    for(a in counts){
         labels.push(a);
         dataSets.push(counts[a]);
+        if(preserve[a]>0){
+            dataSets1.push(preserve[a]);
+        }else{
+            dataSets1.push(0);
+        }
+
     }
+
     var config = {
-        type: 'bar',
+        type: 'line',
         data:{labels:labels,datasets:[{
-            label:"# 活跃人数",
+            label:"活跃人数",
             data:dataSets,
-            borderWidth:1
+            borderWidth:1,
+            borderColor:"#F24100",
+            backgroundColor:"rgba(0,0,0,0)"
+        },
+        {
+            label:"三日留存",
+            data:dataSets1,
+            borderWidth:1,
+            borderColor:"#125eff",
+            backgroundColor:"rgba(0,0,0,0)"
         }]},
         options:{
             scales: {
@@ -195,6 +213,7 @@ function drawActivityChart(){
     if(activityPlayChart){
         activityPlayChart.reset();
         activityPlayChart.data.datasets[0].data = dataSets;
+        activityPlayChart.data.datasets[1].data = dataSets1;
         activityPlayChart.data.labels = labels;
         activityPlayChart.update(config);
     }else{
@@ -202,20 +221,37 @@ function drawActivityChart(){
     }
 
 }
+var dayOfPreserve = 3;
 function queryActivityPlayer(newDate){
     var rs = getMouthDates(newDate);
     var promises = [];
     result = {};
     counts = {};
+    preserve = {};
+    lastrs = [];
     for(var i=0;i<rs.length;i++)
         promises.push(getLoginLog(rs[i]));
     Promise.all(promises).then(function(res){
         for(var i=0;i<res.length;i++){
             var obj = JSON.parse(res[i].res);
-            console.log("queryActivityPlayer:"+res[i].date);
+            // console.log("queryActivityPlayer:"+res[i].date);
             if(obj&&obj.length){
                 result[res[i].date]=obj;
                 counts[res[i].date]=obj.length;
+                var logins = [];
+                var before = [];
+                preserve[res[i].date] = 0;
+                if(lastrs.length == dayOfPreserve){
+                    before = lastrs.shift();
+                }
+                for(var a in obj){
+                    var accountObj = obj[a];
+                    if(before.indexOf(accountObj.account)!=-1){
+                        preserve[res[i].date] ++;
+                    }
+                    logins.push(accountObj.account);
+                }
+                lastrs.push(logins);
                 // console.log(res[i].date+":logins:"+obj.length);
             }else{
                 counts[res[i].date] = 0;
@@ -309,6 +345,7 @@ function queryNewPlayer(newDate){
 }
 var result = {};
 var counts = {};
+var preserve = {};
 var newRes = {};
 var newCnt = {};
 function setCurrentDate(newDate){

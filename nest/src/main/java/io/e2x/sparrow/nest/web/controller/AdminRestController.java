@@ -164,14 +164,13 @@ public class AdminRestController {
 
         OUserDetail user = oUserDetailRepository.findByUsername(jdoc.username);
         if(user!=null){
-
+            if(jdoc.enabled) {
                 user.getAuthorities();
                 for(GrantedAuthority auth : user.getAuthorities()){
-                    if(auth.getAuthority() == jdoc.authority){
+                    if(auth.getAuthority().toLowerCase() == jdoc.authority.toLowerCase()){
                         return ResultEventTypes.OK.setReason("Authority exist.");
                     }
                 }
-            if(jdoc.enabled) {
                 user.addARoleWithName(jdoc.authority);
             }else {
                 user.removeARoleWithName(jdoc.authority);

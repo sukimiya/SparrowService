@@ -13,4 +13,5 @@ public interface RewordRepository extends MongoRepository <DispatcherReword, Big
     List<DispatcherReword> findAllByTimestampBetweenAndItemType(long start, long end, Integer itemType);
     List<DispatcherReword> findAllByItemType(Integer itemType);
     List<DispatcherReword> findAllByRole(String s);
+    List<DispatcherReword> findAllByItemName(String s);
 }

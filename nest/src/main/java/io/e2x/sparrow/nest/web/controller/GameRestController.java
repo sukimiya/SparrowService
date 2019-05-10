@@ -30,10 +30,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Api(value = "/gm",tags = "Game master Services")
@@ -139,16 +136,19 @@ public class GameRestController {
             if(isDig)
                 dispatcherRewordList =  rewordRepository.findAllByItemType(itemType);
             else
-                dispatcherRewordList =  rewordRepository.findAllByRole(pageEvent.key);
+                dispatcherRewordList =  rewordRepository.findAllByItemName(pageEvent.key);
         }else{
             dispatcherRewordList = rewordRepository.findAll();
 
         }
-        if(pageEvent.page!=null) {
+        Collections.reverse(dispatcherRewordList);
+        if(pageEvent.page!=0) {
             int start = pageEvent.pageSize * pageEvent.page;
             int max = dispatcherRewordList.size();
-            if(start>max){
-                start = (max - pageEvent.pageSize)>0?(max - pageEvent.pageSize):0;
+            if(start>=max){
+//                start = (max - pageEvent.pageSize)>0?(max - pageEvent.pageSize):0;
+                dispatcherRewordList.clear();
+                return dispatcherRewordList;
             }
             int end = start + pageEvent.pageSize;
             if(end>max) end = max;

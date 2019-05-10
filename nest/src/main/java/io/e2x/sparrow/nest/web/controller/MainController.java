@@ -54,6 +54,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
@@ -298,33 +299,7 @@ public class MainController {
 
 
     private boolean checkLogin(Model model){
-        Object principal= SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(principal!=null){
-            if(principal instanceof OUserDetail){
-                model.addAttribute("isAuthenticated",true);
-                OUserDetail userDetail = (OUserDetail) principal;
-                List<GrantedAuthority> authorities = (List<GrantedAuthority>)userDetail.getAuthorities();
-                ArrayList<String> array = new ArrayList<String>();
-                for(int i=0;i<authorities.size();i++){
-                    array.add(authorities.get(i).getAuthority());
-                }
-                model.addAttribute("m78_auth",array);
-                if(array.indexOf("DISPATCHER")!=-1) model.addAttribute("isHasDispatcher",true);
-                else model.addAttribute("isHasDispatcher",false);
-                if(array.indexOf("ADMIN")!=-1) model.addAttribute("isAdmin",true);
-                else model.addAttribute("isAdmin",false);
-
-                return true;
-            }
-            model.addAttribute("isAdmin",false);
-            model.addAttribute("isHasDispatcher",false);
-            model.addAttribute("isAuthenticated",false);
-            return false;
-        }
-        model.addAttribute("isAdmin",false);
-        model.addAttribute("isHasDispatcher",false);
-        model.addAttribute("isAuthenticated",false);
-        return false;
+        return UserController.checkLogin(model);
     }
     private String getPages(String page, Model model){
         checkLogin(model);

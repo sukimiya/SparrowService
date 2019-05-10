@@ -20,6 +20,8 @@
 
 package io.e2x.sparrow.nest.web.controller;
 
+import io.e2x.sparrow.nest.security.model.OUserDetail;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -41,15 +45,37 @@ public class UserController {
 
         return getPages("user/user.html",model);
     }
-    private boolean checkLogin(Model model){
+
+    public static boolean checkLogin(Model model) {
         Object principal= SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(principal!=null){
-            model.addAttribute("isAuthenticated",true);
-            return true;
+            if(principal instanceof OUserDetail){
+                model.addAttribute("isAuthenticated",true);
+                OUserDetail userDetail = (OUserDetail) principal;
+                List<GrantedAuthority> authorities = (List<GrantedAuthority>)userDetail.getAuthorities();
+                ArrayList<String> array = new ArrayList<String>();
+                for(int i=0;i<authorities.size();i++){
+                    array.add(authorities.get(i).getAuthority());
+                }
+                model.addAttribute("m78_auth",array);
+                if(array.indexOf("DISPATCHER")!=-1) model.addAttribute("isHasDispatcher",true);
+                else model.addAttribute("isHasDispatcher",false);
+                if(array.indexOf("ADMIN")!=-1) model.addAttribute("isAdmin",true);
+                else model.addAttribute("isAdmin",false);
+
+                return true;
+            }
+            model.addAttribute("isAdmin",false);
+            model.addAttribute("isHasDispatcher",false);
+            model.addAttribute("isAuthenticated",false);
+            return false;
         }
+        model.addAttribute("isAdmin",false);
+        model.addAttribute("isHasDispatcher",false);
         model.addAttribute("isAuthenticated",false);
         return false;
     }
+
     private String getPages(String page, Model model){
         checkLogin(model);
         return page;
