@@ -19,7 +19,7 @@ import java.util.Date;
 @JsonView
 public class DispatcherReword {
     public DispatcherReword(){}
-    public DispatcherReword(long timestamp, String role, Integer itemType, String itemName,Integer num){
+    public DispatcherReword(long timestamp, String role, String itemType, String itemName,Integer num){
         ssn = Long.toHexString(new Date().getTime());
         this.timestamp = timestamp;
         this.role = role;
@@ -28,6 +28,8 @@ public class DispatcherReword {
         this.num = num;
     }
     @Id
+    @GeneratedValue(strategy= GenerationStrategy.UNIQUE)
+    @JsonIgnore
     private BigInteger id;
     @JsonProperty("ssn")
     public String ssn;
@@ -36,7 +38,7 @@ public class DispatcherReword {
     @JsonProperty("role")
     public String role;
     @JsonProperty("itemType")
-    public Integer itemType;
+    public String itemType;
     @JsonProperty("itemName")
     public String itemName;
     @JsonProperty("num")

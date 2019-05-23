@@ -15,23 +15,32 @@ import io.e2x.sparrow.nest.security.model.OUserDetailRepository;
 import io.e2x.sparrow.nest.users.UserInfoRepository;
 import io.e2x.sparrow.nest.web.controller.event.ResultEventTypes;
 import io.e2x.sparrow.nest.web.controller.event.SampleWebPageEvent;
+import io.netty.util.concurrent.Promise;
 import io.swagger.annotations.Api;
+import org.bouncycastle.util.io.Streams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import springfox.documentation.spring.web.json.Json;
 
 import javax.xml.crypto.Data;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.Timestamp;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 @Api(value = "/gm",tags = "Game master Services")
 @RestController
@@ -89,15 +98,26 @@ public class GameRestController {
         if(dispatcherReword == null){
             return  ResultEventTypes.UNKWON_ERROR.setReason("找不到相应的奖励");
         }
+        String [] roles = dispatcherReword.role.split(",");
+        String [] items = dispatcherReword.itemType.split(",");
+        for(int r=0;r<roles.length;r++){
+            for(int i=0;i<items.length;i++){
+                String role = roles[r];
+                String item = items[i];
+                String url = "http://101.132.193.16:9307/reward?rolename=" + role + "&itemid=" + item + "&num=" + dispatcherReword.num.toString();
+                sendOneReword(role, item, dispatcherReword.num).subscribe(s -> System.out.println(s));
+            }
+        }
         dispatcherReword.sent = true;
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://101.132.193.16:9307/reward?rolename=" + dispatcherReword.role + "&itemid=" + dispatcherReword.itemType + "&num=" + dispatcherReword.num.toString();
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        HttpEntity<String> entity = new HttpEntity<String>(httpHeaders);
-        String strbody = restTemplate.exchange(url, HttpMethod.GET, entity, String.class).getBody();
         rewordRepository.save(dispatcherReword);
-        return ResultEventTypes.OK.setReason(strbody);
+        return ResultEventTypes.OK;
+    }
+    private Mono<String> sendOneReword(String role, String itemid, Integer num){
+            String url = "http://101.132.193.16:9307/reward?rolename=" + role + "&itemid=" + itemid + "&num=" + Integer.toString(num);
+            WebClient webClient = WebClient.create(url);
+            return webClient.get().uri(url).retrieve().bodyToMono(String.class);
+//            System.out.println("sendOneReword:"+url);
+//            return restTemplate.exchange(url, HttpMethod.GET, entity, String.class).getBody();
     }
     @PostMapping("createreword")
     public ResultEventTypes createReword(@RequestBody DispatcherReword reword){
@@ -114,8 +134,8 @@ public class GameRestController {
         Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
         if(pageEvent.key!=null)
             isDig =  pattern.matcher(pageEvent.key).matches();
-        Integer itemType = 0;
-        if(isDig) itemType = Integer.getInteger(pageEvent.key);
+        String itemType = "";
+        if(isDig) itemType = pageEvent.key;
         if(pageEvent.time1!=null){
             if(pageEvent.time2!=null){
                 startDate.setTime(Long.parseLong(pageEvent.time1));
@@ -126,17 +146,17 @@ public class GameRestController {
             }
             if(pageEvent.key!=null){
                 if(isDig)
-                    dispatcherRewordList =  rewordRepository.findAllByTimestampBetweenAndItemType(startDate.getTime(),endDate.getTime(), itemType);
+                    dispatcherRewordList =  rewordRepository.findAllByTimestampBetweenAndItemTypeIsLike(startDate.getTime(),endDate.getTime(), itemType);
                 else
-                    dispatcherRewordList =  rewordRepository.findAllByTimestampBetweenAndRole(startDate.getTime(),endDate.getTime(),pageEvent.key);
+                    dispatcherRewordList =  rewordRepository.findAllByTimestampBetweenAndRoleIsLike(startDate.getTime(),endDate.getTime(),pageEvent.key);
             }else{
                 dispatcherRewordList =  rewordRepository.findAllByTimestampBetween(startDate.getTime(),endDate.getTime());
             }
         }else if(pageEvent.key!=null){
             if(isDig)
-                dispatcherRewordList =  rewordRepository.findAllByItemType(itemType);
+                dispatcherRewordList =  rewordRepository.findAllByItemTypeIsLike(itemType);
             else
-                dispatcherRewordList =  rewordRepository.findAllByItemName(pageEvent.key);
+                dispatcherRewordList =  rewordRepository.findAllByRoleIsLike(pageEvent.key);
         }else{
             dispatcherRewordList = rewordRepository.findAll();
 

@@ -33,9 +33,9 @@ include("../topnav.btl"){}
         if(isHasDispatcher){
         %>
         <div class="option-btn-group">
-            <button type="button" class="btn btn-primary p-2 justify-content-end shadow mb-5 rounded-circle option-btn" data-toggle="modal" data-target="#creatRewordModal">
+            <a class="btn btn-primary p-2 justify-content-end shadow mb-5 rounded-circle option-btn" data-toggle="modal" data-target="#creatRewordModal">
                 <span class="iconfont float-btn" aria-hidden="true">&#xe6da;</span>
-            </button>
+            </a>
         </div>
         <%
         }
@@ -94,12 +94,14 @@ include("../topnav.btl"){}
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label for="role">角色</label>
-                        <input type="text" class="form-control" id="role" name="role" aria-describedby="角色" placeholder="角色名称">
+                        <label for="role" title="可以用多个角色，中间用, 号分开">角色</label>
+                        <textarea class="form-control" id="role" name="role" rows="4"></textarea>
+<!--                        <input type="text" class="form-control" id="role" name="role" aria-describedby="可以用多个角色，中间用, 号分开" rows="12" placeholder="角色名称">-->
                     </div>
                     <div class="form-group">
-                        <label for="itemType">道具ID</label>
-                        <input type="text" class="form-control" id="itemType" name="itemType" aria-describedby="道具类型ID" placeholder="输入道具类型ID">
+                        <label for="itemType" title="可以用多个道具，中间用, 号分开">道具ID</label>
+                        <textarea class="form-control" id="itemType" name="itemType" rows="4"></textarea>
+<!--                        <input type="text" class="form-control" id="itemType" name="itemType" aria-describedby="可以用多个道具，中间用, 号分开" rows="12" placeholder="输入道具类型ID">-->
                     </div>
                     <div class="form-group">
                         <label for="itemName">道具名称</label>
@@ -158,7 +160,7 @@ include("../scripts.btl"){}
         $('#chatlist').append(hitem);
     }
     function createReword(event) {
-        var typeId = parseInt($("#itemType").val());
+        var typeId = $("#itemType").val();
         var num = parseInt($("#num").val());
         var typeName = $("#itemName").val();
         var role = $("#role").val();
@@ -187,8 +189,12 @@ include("../scripts.btl"){}
                 url:"/gm/sendReword?ssn="+CurrentSelectSSN,
                 type:"POST",
                 success:function (res) {
-                    var data = JSON.parse(res);
-                    console.log(res);
+                    // try{
+                    //     var data = JSON.parse(res);
+                    //     console.log(res);
+                    // }catch(e){
+                    //     console.log(e);
+                    // }
                     refreshListData();
                 }
             });
@@ -256,7 +262,7 @@ include("../scripts.btl"){}
         });
     }
     function refreshListData(){
-        // showLoading();
+        showLoading();
         $.ajax({
             url:"/gm/getrewords",
             data:JSON.stringify({}),
@@ -266,6 +272,7 @@ include("../scripts.btl"){}
             async: false,
             success:function(data){
                 $('.chat-list-item').remove();
+                console.log("refreshListData"+data.length);
                 for(var i=0;i<data.length;i++){
                     var dataitem = data[i];
                     //var keyval = $("#key").val();
@@ -281,10 +288,10 @@ include("../scripts.btl"){}
                     // }
 
                 }
-                // removeLoading();
+                removeLoading();
             },
             fail:function (data) {
-                // removeLoading();
+                removeLoading();
             }
         });
     }
